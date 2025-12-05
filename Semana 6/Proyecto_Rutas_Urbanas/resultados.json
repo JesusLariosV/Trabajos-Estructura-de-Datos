@@ -1,0 +1,78 @@
+{
+  "routes": [
+    {
+      "origen": "Centro Histórico",
+      "destino": "Aeropuerto",
+      "camino": [
+        "Centro Histórico",
+        "Hospital Central",
+        "Aeropuerto"
+      ],
+      "distancia": 11.3
+    },
+    {
+      "origen": "Universidad",
+      "destino": "Zona Industrial",
+      "camino": [
+        "Universidad",
+        "Zona Industrial"
+      ],
+      "distancia": 5.5
+    },
+    {
+      "origen": "Zona Residencial",
+      "destino": "Hospital Central",
+      "camino": [
+        "Zona Residencial",
+        "Parque Central",
+        "Centro Histórico",
+        "Hospital Central"
+      ],
+      "distancia": 6.8
+    },
+    {
+      "origen": "Parque Central",
+      "destino": "Aeropuerto",
+      "camino": [
+        "Parque Central",
+        "Centro Histórico",
+        "Hospital Central",
+        "Aeropuerto"
+      ],
+      "distancia": 12.8
+    },
+    {
+      "origen": "Centro Histórico",
+      "destino": "Estación de Tren",
+      "camino": [
+        "Centro Histórico",
+        "Parque Central",
+        "Estación de Tren"
+      ],
+      "distancia": 4.7
+    }
+  ],
+  "analysis": {
+    "diameter": 15.3,
+    "avg_distance": 6.403571428571429,
+    "central_nodes": [
+      [
+        "Parque Central",
+        4.828571428571428
+      ],
+      [
+        "Centro Histórico",
+        5.257142857142857
+      ],
+      [
+        "Estación de Tren",
+        5.257142857142857
+      ]
+    ]
+  },
+  "traffic_impact": {
+    "baseline_avg": 6.403571428571429,
+    "traffic_avg": 6.960714285714283,
+    "increase_pct": 8.700501952035635
+  }
+}

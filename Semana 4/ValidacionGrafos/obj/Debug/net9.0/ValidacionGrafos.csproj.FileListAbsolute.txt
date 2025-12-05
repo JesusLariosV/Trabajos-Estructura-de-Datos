@@ -1,0 +1,14 @@
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 4\ValidacionGrafos\bin\Debug\net9.0\ValidacionGrafos.exe
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 4\ValidacionGrafos\bin\Debug\net9.0\ValidacionGrafos.deps.json
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 4\ValidacionGrafos\bin\Debug\net9.0\ValidacionGrafos.runtimeconfig.json
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 4\ValidacionGrafos\bin\Debug\net9.0\ValidacionGrafos.dll
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 4\ValidacionGrafos\bin\Debug\net9.0\ValidacionGrafos.pdb
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 4\ValidacionGrafos\obj\Debug\net9.0\ValidacionGrafos.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 4\ValidacionGrafos\obj\Debug\net9.0\ValidacionGrafos.AssemblyInfoInputs.cache
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 4\ValidacionGrafos\obj\Debug\net9.0\ValidacionGrafos.AssemblyInfo.cs
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 4\ValidacionGrafos\obj\Debug\net9.0\ValidacionGrafos.csproj.CoreCompileInputs.cache
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 4\ValidacionGrafos\obj\Debug\net9.0\ValidacionGrafos.dll
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 4\ValidacionGrafos\obj\Debug\net9.0\refint\ValidacionGrafos.dll
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 4\ValidacionGrafos\obj\Debug\net9.0\ValidacionGrafos.pdb
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 4\ValidacionGrafos\obj\Debug\net9.0\ValidacionGrafos.genruntimeconfig.cache
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 4\ValidacionGrafos\obj\Debug\net9.0\ref\ValidacionGrafos.dll

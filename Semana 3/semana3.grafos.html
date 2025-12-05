@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Semana 3: Teoría de Grafos — Representación y Modelado</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height:1.6;color:#2c3e50;
+      background:linear-gradient(135deg,#f5f7fa 0%,#c3cfe2 100%);
+      min-height:100vh
+    }
+    .container{max-width:1200px;margin:0 auto;padding:20px}
+    header{
+      text-align:center;margin-bottom:40px;background:#fff;
+      padding:30px;border-radius:15px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.1)
+    }
+    h1{font-size:2.4em;margin-bottom:8px}
+    .subtitle{font-size:1.1em;color:#7f8c8d;font-weight:300}
+    nav{
+      background:#fff;padding:15px;border-radius:10px;margin-bottom:30px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.08);position:sticky;top:20px;z-index:100
+    }
+    nav ul{list-style:none;display:flex;justify-content:center;flex-wrap:wrap;gap:12px}
+    nav a{text-decoration:none;color:#34495e;padding:10px 18px;border-radius:22px;transition:all .3s ease;font-weight:500}
+    nav a:hover, nav a.active{background:#3498db;color:#fff;transform:translateY(-2px)}
+    .section{background:#fff;margin-bottom:30px;padding:28px;border-radius:15px;box-shadow:0 8px 25px rgba(0,0,0,0.1);display:none}
+    .section.active{display:block}
+    .section h2{color:#2c3e50;margin-bottom:18px;font-size:1.7em;border-bottom:3px solid #3498db;padding-bottom:8px}
+    .challenge{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;padding:18px;border-radius:10px;margin:18px 0}
+    .activity{background:#f8f9fa;border-left:5px solid #28a745;padding:18px;margin:18px 0;border-radius:0 8px 8px 0}
+    .activity h4{color:#28a745;margin-bottom:8px}
+    .code-container{background:#2c3e50;border-radius:10px;overflow:hidden;margin:18px 0;box-shadow:0 5px 15px rgba(0,0,0,0.2)}
+    .code-header{background:#34495e;color:#fff;padding:10px 16px;font-weight:bold;display:flex;justify-content:space-between;align-items:center}
+    .code-content{padding:18px;color:#ecf0f1;font-family:'Courier New', monospace;font-size:14px;line-height:1.45;overflow-x:auto;white-space:pre}
+    .keyword{color:#3498db}.string{color:#e74c3c}.comment{color:#95a5a6;font-style:italic}.number{color:#f39c12}
+    .comparison-table{width:100%;border-collapse:collapse;margin:16px 0;overflow:hidden;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.1)}
+    .comparison-table th,.comparison-table td{padding:14px;text-align:left;border-bottom:1px solid #e9ecef}
+    .comparison-table th{background:#3498db;color:#fff;font-weight:600}
+    .comparison-table tr:nth-child(even){background:#f8f9fa}
+    .progress-bar{background:#ecf0f1;height:6px;border-radius:3px;margin-top:14px;overflow:hidden}
+    .progress-fill{background:linear-gradient(90deg,#3498db,#2ecc71);height:100%;width:0%;transition:width .3s ease}
+    .btn{background:#3498db;color:#fff;border:none;padding:11px 22px;border-radius:24px;cursor:pointer;font-size:15px;transition:all .3s ease;margin:8px 4px}
+    .btn:hover{background:#2980b9;transform:translateY(-2px);box-shadow:0 5px 15px rgba(52,152,219,0.4)}
+    .btn-success{background:#27ae60}.btn-success:hover{background:#229954}
+    .tag{display:inline-block;background:#eef6ff;color:#1f5faa;border:1px solid #cfe3ff;border-radius:999px;padding:4px 10px;margin:4px 6px 0 0;font-size:12px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .note{font-size:.95em;color:#566573}
+    @media (max-width: 900px){.grid{grid-template-columns:1fr}}
+    .fade-in{animation:fadeIn .6s ease-in}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🌐 Semana 3 — Teoría de Grafos: Representación y Modelado</h1>
+      <p class="subtitle">Vértices, aristas, grados y cómo elegir la representación correcta</p>
+      <p>Estructuras de Datos Avanzadas (c) 2025</p>
+      <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+      <div style="margin-top:10px">
+        <span class="tag">Grafos</span>
+        <span class="tag">Matriz de Adyacencia</span>
+        <span class="tag">Lista de Adyacencia</span>
+        <span class="tag">Modelado</span>
+        <span class="tag">Análisis de Trade-offs</span>
+      </div>
+    </header>
+
+    <nav>
+      <ul>
+        <li><a href="#" onclick="showSection('introduccion')" class="nav-link active">Introducción</a></li>
+        <li><a href="#" onclick="showSection('conceptos')" class="nav-link">Conceptos</a></li>
+        <li><a href="#" onclick="showSection('representaciones')" class="nav-link">Representaciones</a></li>
+        <li><a href="#" onclick="showSection('cs')" class="nav-link">Implementación C#</a></li>
+        <li><a href="#" onclick="showSection('py')" class="nav-link">Implementación Python</a></li>
+        <li><a href="#" onclick="showSection('actividades')" class="nav-link">Actividades</a></li>
+        <li><a href="#" onclick="showSection('comparacion')" class="nav-link">Comparación</a></li>
+        <li><a href="#" onclick="showSection('proyecto')" class="nav-link">Proyecto</a></li>
+        <li><a href="#" onclick="showSection('reflexion')" class="nav-link">Reflexión</a></li>
+      </ul>
+    </nav>
+
+    <!-- INTRODUCCIÓN -->
+    <section id="introduccion" class="section active fade-in">
+      <h2>🎯 Objetivos de la Semana</h2>
+      <div class="activity">
+        <h4>¿Qué lograrás hoy?</h4>
+        <ul>
+          <li>Reconocer elementos de un grafo: vértices, aristas, pesos, dirección.</li>
+          <li>Comparar <strong>matriz</strong> vs <strong>lista de adyacencia</strong> con criterios de memoria y tiempo.</li>
+          <li>Implementar una <strong>clase Grafo</strong> en C# usando listas de adyacencia.</li>
+          <li>Construir grafo en Python a partir de un <em>archivo de aristas</em>.</li>
+        </ul>
+      </div>
+      <div class="challenge">
+        <h3>Mapa Mental</h3>
+        <p>Problema real → Modelado como grafo → Elección de representación → Implementación</p>
+      </div>
+      <button class="btn" onclick="showSection('conceptos')">Continuar → Conceptos</button>
+    </section>
+
+    <!-- CONCEPTOS -->
+    <section id="conceptos" class="section">
+      <h2>🧩 Conceptos clave</h2>
+      <div class="grid">
+        <div class="activity">
+          <h4>Definiciones</h4>
+          <ul>
+            <li><strong>Vértices (nodos):</strong> entidades (intersecciones, bodegas, usuarios).</li>
+            <li><strong>Aristas:</strong> conexiones (calles, enlaces). Pueden ser dirigidas o no.</li>
+            <li><strong>Peso:</strong> costo/distancia/tiempo asociado a una arista.</li>
+            <li><strong>Grado:</strong> número de aristas incidentes (in/out en dirigidos).</li>
+          </ul>
+        </div>
+        <div class="activity">
+          <h4>Tipos comunes</h4>
+          <ul>
+            <li>No dirigido / Dirigido</li>
+            <li>Ponderado / No ponderado</li>
+            <li>Disperso (sparse) / Denso (dense)</li>
+          </ul>
+        </div>
+      </div>
+      <p class="note">Nota: la elección de representación afecta complejidad de operaciones (búsqueda de adyacentes, ver si existe arista u(i,j), insertar/borrar aristas).</p>
+      <button class="btn" onclick="showSection('representaciones')">Ir a Representaciones →</button>
+    </section>
+
+    <!-- REPRESENTACIONES -->
+    <section id="representaciones" class="section">
+      <h2>🗺️ Representaciones: Matriz vs Lista</h2>
+      <div class="grid">
+        <div class="activity">
+          <h4>Matriz de Adyacencia</h4>
+          <ul>
+            <li>Arreglo n×n. <code>mat[i][j]</code> indica arista i→j (peso o booleano).</li>
+            <li><strong>Memoria:</strong> O(n²).</li>
+            <li><strong>O(1)</strong> para consultar si existe arista (i,j).</li>
+            <li><strong>Costosa</strong> si el grafo es disperso.</li>
+          </ul>
+        </div>
+        <div class="activity">
+          <h4>Lista de Adyacencia</h4>
+          <ul>
+            <li>Arreglo/tabla donde cada vértice guarda lista de vecinos (y pesos).</li>
+            <li><strong>Memoria:</strong> O(n + m) para n vértices y m aristas.</li>
+            <li>Enumerar adyacentes es eficiente.</li>
+            <li>Consultar existencia (i,j) cuesta O(grado(i))</li>
+          </ul>
+        </div>
+      </div>
+
+      <table class="comparison-table">
+        <thead><tr><th>Operación</th><th>Matriz</th><th>Lista</th></tr></thead>
+        <tbody>
+          <tr><td>Memoria (sparse)</td><td>Mala: O(n²)</td><td>Buena: O(n+m)</td></tr>
+          <tr><td>¿Existe arista (u,v)?</td><td>O(1)</td><td>O(grado(u))</td></tr>
+          <tr><td>Agregar arista</td><td>O(1)</td><td>O(1)</td></tr>
+          <tr><td>Eliminar arista</td><td>O(1)</td><td>O(grado(u))</td></tr>
+          <tr><td>Recorrer vecinos de u</td><td>O(n)</td><td>O(grado(u))</td></tr>
+        </tbody>
+      </table>
+
+      <button class="btn" onclick="showSection('cs')">Implementación en C# →</button>
+    </section>
+
+    <!-- IMPLEMENTACIÓN C# -->
+    <section id="cs" class="section">
+      <h2>💻 Implementación de Grafo (C# • Lista de Adyacencia)</h2>
+      <div class="code-container">
+        <div class="code-header"><span>C# • Grafo genérico dirigido ponderado</span><span>Listas de adyacencia</span></div>
+        <div class="code-content"><span class="keyword">using</span> System;
+<span class="keyword">using</span> System.Collections.Generic;
+
+<span class="keyword">public</span> <span class="keyword">class</span> Graph&lt;T&gt; {
+    <span class="keyword">private</span> <span class="keyword">readonly</span> Dictionary&lt;T, List&lt;(T to, <span class="keyword">double</span> w)&gt;&gt; adj = <span class="keyword">new</span>();
+
+    <span class="keyword">public</span> <span class="keyword">void</span> AddVertex(T v){ <span class="keyword">if</span>(!adj.ContainsKey(v)) adj[v] = <span class="keyword">new</span> List&lt;(T,<span class="keyword">double</span>)&gt;(); }
+
+    <span class="keyword">public</span> <span class="keyword">void</span> AddEdge(T u, T v, <span class="keyword">double</span> w = <span class="number">1</span>, <span class="keyword">bool</span> directed = <span class="keyword">true</span>){
+        AddVertex(u); AddVertex(v);
+        adj[u].Add((v,w));
+        <span class="keyword">if</span>(!directed) adj[v].Add((u,w));
+    }
+
+    <span class="keyword">public</span> IEnumerable&lt;T&gt; Vertices() =&gt; adj.Keys;
+
+    <span class="keyword">public</span> IEnumerable&lt;(T to,<span class="keyword">double</span> w)&gt; Neighbors(T u) =&gt; adj.TryGetValue(u, out <span class="keyword">var</span> list) ? list : <span class="keyword">new</span> List&lt;(T,<span class="keyword">double</span>)&gt;();
+
+    <span class="keyword">public</span> <span class="keyword">bool</span> HasEdge(T u, T v){
+        <span class="keyword">if</span>(!adj.ContainsKey(u)) <span class="keyword">return</span> <span class="keyword">false</span>;
+        <span class="keyword">foreach</span>(<span class="keyword">var</span> e <span class="keyword">in</span> adj[u]) <span class="keyword">if</span>(EqualityComparer&lt;T&gt;.Default.Equals(e.to, v)) <span class="keyword">return</span> <span class="keyword">true</span>;
+        <span class="keyword">return</span> <span class="keyword">false</span>;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">int</span> OutDegree(T u) =&gt; adj.ContainsKey(u) ? adj[u].Count : <span class="number">0</span>;
+}</div>
+      </div>
+
+      <div class="activity">
+        <h4>Prueba rápida</h4>
+        <pre class="note">var g = new Graph&lt;string&gt;();
+g.AddEdge("A","B", 4, directed:true);
+g.AddEdge("A","C", 2);
+g.AddEdge("B","C", 5);
+Console.WriteLine(g.HasEdge("A","B")); // True
+Console.WriteLine(g.OutDegree("A"));   // 2</pre>
+      </div>
+      <button class="btn" onclick="showSection('py')">Implementación en Python →</button>
+    </section>
+
+    <!-- IMPLEMENTACIÓN PYTHON -->
+    <section id="py" class="section">
+      <h2>🐍 Construcción de Grafo desde archivo (Python)</h2>
+      <div class="activity">
+        <h4>Formato de entrada</h4>
+        <pre class="note"># archivo: edges.txt (uno por línea)
+# u v w   (u y v son vértices; w es peso opcional)
+A B 4
+A C 2
+B C 5
+C D 1</pre>
+      </div>
+
+      <div class="code-container">
+        <div class="code-header"><span>Python • Carga de aristas</span><span>Lista de adyacencia</span></div>
+        <div class="code-content"><span class="keyword">from</span> collections <span class="keyword">import</span> defaultdict
+
+<span class="keyword">def</span> load_graph(path: <span class="keyword">str</span>, directed: <span class="keyword">bool</span> = <span class="keyword">True</span>):
+    adj = defaultdict(<span class="keyword">list</span>)
+    <span class="keyword">with</span> open(path, <span class="string">'r'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> f:
+        <span class="keyword">for</span> line <span class="keyword">in</span> f:
+            line = line.strip()
+            <span class="keyword">if</span> <span class="keyword">not</span> line or line.startswith(<span class="string">'#'</span>): <span class="keyword">continue</span>
+            parts = line.split()
+            u, v = parts[<span class="number">0</span>], parts[<span class="number">1</span>]
+            w = <span class="keyword">float</span>(parts[<span class="number">2</span>]) <span class="keyword">if</span> <span class="keyword">len</span>(parts) &gt; <span class="number">2</span> <span class="keyword">else</span> <span class="number">1.0</span>
+            adj[u].append((v,w))
+            <span class="keyword">if</span> <span class="keyword">not</span> directed:
+                adj[v].append((u,w))
+    <span class="keyword">return</span> adj
+
+<span class="keyword">def</span> neighbors(adj, u):
+    <span class="keyword">return</span> adj.get(u, [])
+
+<span class="keyword">def</span> has_edge(adj, u, v):
+    <span class="keyword">return</span> <span class="keyword">any</span>(x==v <span class="keyword">for</span>, w <span class="keyword">in</span> adj.get(u, []))</div>
+      </div>
+
+      <div class="activity">
+        <h4>Prueba rápida</h4>
+        <pre class="note">adj = load_graph("edges.txt", directed=True)
+print(neighbors(adj, "A"))  # [('B',4.0), ('C',2.0)]</pre>
+      </div>
+
+      <button class="btn" onclick="showSection('actividades')">Actividades →</button>
+    </section>
+
+    <!-- ACTIVIDADES -->
+    <section id="actividades" class="section">
+      <h2>🧪 Actividades Guiadas</h2>
+      <div class="activity">
+        <h4>1) Diseño en papel</h4>
+        <p>Dibuja un mapa simplificado de 6–10 intersecciones (nodos) y calles (aristas). Indica dirección (si aplica) y un peso (distancia o tiempo).</p>
+      </div>
+
+      <div class="activity">
+        <h4>2) Implementación</h4>
+        <ol>
+          <li>Implementa tu grafo en C# usando la clase propuesta.</li>
+          <li>Exporta tus aristas a <code>edges.txt</code> y cárgalas en Python.</li>
+          <li>Imprime para cada vértice su grado de salida y su lista de vecinos.</li>
+        </ol>
+      </div>
+
+      <div class="activity">
+        <h4>3) Extensión (opcional)</h4>
+        <ul>
+          <li>Agrega soporte para grafo <em>no dirigido</em> con un flag.</li>
+          <li>Permite eliminar aristas/vértices y observa efectos en los grados.</li>
+          <li>Prepara tu estructura para integrar BFS/DFS la próxima semana.</li>
+        </ul>
+      </div>
+
+      <button class="btn" onclick="showSection('comparacion')">Comparación →</button>
+    </section>
+
+    <!-- COMPARACIÓN -->
+    <section id="comparacion" class="section">
+      <h2>⚖️ Matriz vs Lista — Trade-offs</h2>
+      <table class="comparison-table">
+        <thead><tr><th>Criterio</th><th>Matriz</th><th>Lista</th></tr></thead>
+        <tbody>
+          <tr><td>Escenarios ideales</td><td>Grafos densos, consultas de existencia frecuentes</td><td>Grafos dispersos, recorridos de vecinos</td></tr>
+          <tr><td>Memoria</td><td>O(n²)</td><td>O(n+m)</td></tr>
+          <tr><td>Consulta (u,v)</td><td>O(1)</td><td>O(grado(u))</td></tr>
+          <tr><td>Enumerar vecinos</td><td>O(n)</td><td>O(grado(u))</td></tr>
+          <tr><td>Facilidad de implementación</td><td>Alta</td><td>Media</td></tr>
+        </tbody>
+      </table>
+      <div class="challenge">
+        <h3>Decisión informada</h3>
+        <p>Para n grande y m relativamente pequeño, la lista de adyacencia es preferible (memoria y rendimiento en recorridos).</p>
+      </div>
+      <button class="btn" onclick="showSection('proyecto')">Conexión con Proyecto →</button>
+    </section>
+
+    <!-- PROYECTO -->
+    <section id="proyecto" class="section">
+      <h2>🧭 Conexión al Proyecto Integrador</h2>
+      <div class="activity">
+        <h4>Avance 1 (Entregable)</h4>
+        <ul>
+          <li>Define las clases para el grafo en C# y genera una carga inicial de un mapa de prueba.</li>
+          <li>Produce un archivo <code>edges.txt</code> con al menos 12 aristas y cárgalo en Python.</li>
+          <li>Incluye breve reporte con: tipo de grafo elegido (dirigido/no), criterio de pesos, justificación de la representación.</li>
+        </ul>
+      </div>
+      <div class="challenge">
+        <h3>Checklist</h3>
+        <ul>
+          <li>Modelo del mapa correcto.</li>
+          <li>Representación elegida y justificada.</li>
+          <li>Implementación y pruebas mínimas.</li>
+        </ul>
+      </div>
+      <button class="btn" onclick="showSection('reflexion')">Reflexión →</button>
+    </section>
+
+    <!-- REFLEXIÓN -->
+    <section id="reflexion" class="section">
+      <h2>🎭 Reflexión y Cierre</h2>
+      <div class="activity">
+        <h4>Preguntas guía</h4>
+        <ol>
+          <li>¿Qué perderías si cambias de lista a matriz en tu caso?</li>
+          <li>¿Cómo afecta la dirección o el peso a tus decisiones de diseño?</li>
+          <li>¿Qué cambios harías para soportar grafos no ponderados?</li>
+        </ol>
+      </div>
+      <div style="text-align:center;margin-top:10px">
+        <button class="btn btn-success" onclick="resetLesson()">🔄 Recomenzar</button>
+        <button class="btn" onclick="showSection('introduccion')">📚 Volver al inicio</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    let currentSection = 'introduccion';
+    const sections = ['introduccion','conceptos','representaciones','cs','py','actividades','comparacion','proyecto','reflexion'];
+
+    function showSection(name){
+      document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+      document.getElementById(name).classList.add('active','fade-in');
+      document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+      document.querySelector(`[onclick="showSection('${name}')"]`).classList.add('active');
+      updateProgress(name);
+      currentSection=name;
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+    function updateProgress(name){
+      const i = sections.indexOf(name);
+      const progress = ((i+1)/sections.length)*100;
+      document.getElementById('progress').style.width = progress + '%';
+    }
+    function resetLesson(){ showSection('introduccion'); }
+
+    // Navegación con teclado
+    document.addEventListener('keydown',(e)=>{
+      const i = sections.indexOf(currentSection);
+      if(e.key==='ArrowRight' && i < sections.length-1) showSection(sections[i+1]);
+      else if(e.key==='ArrowLeft' && i>0) showSection(sections[i-1]);
+    });
+
+    // Easter egg
+    let seq=[]; const KONAMI=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','KeyB','KeyA'];
+    document.addEventListener('keydown',(e)=>{
+      seq.push(e.code); if(seq.length>KONAMI.length) seq.shift();
+      if(seq.join(',')===KONAMI.join(',')){
+        alert('🎮 Tip Grafos: elige la representación según n (vértices) y m (aristas). Listas para sparse, matrices para dense.');
+        seq=[];
+      }
+    });
+
+    updateProgress('introduccion');
+  </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 3\ProyectoGrafos\bin\Debug\net9.0\ProyectoGrafos.exe
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 3\ProyectoGrafos\bin\Debug\net9.0\ProyectoGrafos.deps.json
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 3\ProyectoGrafos\bin\Debug\net9.0\ProyectoGrafos.runtimeconfig.json
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 3\ProyectoGrafos\bin\Debug\net9.0\ProyectoGrafos.dll
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 3\ProyectoGrafos\bin\Debug\net9.0\ProyectoGrafos.pdb
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 3\ProyectoGrafos\obj\Debug\net9.0\ProyectoGrafos.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 3\ProyectoGrafos\obj\Debug\net9.0\ProyectoGrafos.AssemblyInfoInputs.cache
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 3\ProyectoGrafos\obj\Debug\net9.0\ProyectoGrafos.AssemblyInfo.cs
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 3\ProyectoGrafos\obj\Debug\net9.0\ProyectoGrafos.csproj.CoreCompileInputs.cache
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 3\ProyectoGrafos\obj\Debug\net9.0\ProyectoGrafos.dll
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 3\ProyectoGrafos\obj\Debug\net9.0\refint\ProyectoGrafos.dll
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 3\ProyectoGrafos\obj\Debug\net9.0\ProyectoGrafos.pdb
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 3\ProyectoGrafos\obj\Debug\net9.0\ProyectoGrafos.genruntimeconfig.cache
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 3\ProyectoGrafos\obj\Debug\net9.0\ref\ProyectoGrafos.dll

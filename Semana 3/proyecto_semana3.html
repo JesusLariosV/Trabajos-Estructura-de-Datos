@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌍 Proyecto Semana 3 — Modelando un Mapa de Tráfico con Grafos Dirigidos y No Dirigidos</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: 1.6; 
+            margin: 0; 
+            padding: 20px; 
+            background-color: #f8f9fa; 
+            color: #333; 
+        }
+        h1, h2, h3 { color: #2c3e50; }
+        h1 { 
+            text-align: center; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            margin-bottom: 10px;
+        }
+        .subtitle { 
+            text-align: center; 
+            font-style: italic; 
+            color: #7f8c8d; 
+            margin-bottom: 20px; 
+        }
+        nav { 
+            display: flex; 
+            justify-content: center; 
+            margin: 20px 0; 
+            flex-wrap: wrap; 
+            gap: 5px;
+        }
+        nav button { 
+            background: #3498db; 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            margin: 2px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            transition: all 0.3s ease;
+        }
+        nav button:hover { 
+            background: #2980b9; 
+            transform: translateY(-2px);
+        }
+        nav button.active {
+            background: #27ae60;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+        }
+        section { 
+            margin: 20px 0; 
+            padding: 25px; 
+            background: white; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+            display: none;
+        }
+        section.active { display: block; }
+        
+        .emoji { font-size: 1.5em; }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin: 15px 0; 
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 12px 8px; 
+            text-align: left; 
+        }
+        th { 
+            background: linear-gradient(135deg, #3498db, #2980b9); 
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) { background-color: #f8f9fa; }
+        tr:hover { background-color: #e8f4fd; }
+        
+        pre { 
+            background: #2c3e50; 
+            color: #ecf0f1; 
+            padding: 20px; 
+            border-radius: 8px; 
+            overflow-x: auto; 
+            border-left: 4px solid #3498db;
+            font-family: 'Courier New', monospace;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        /* Código simple sin syntax highlighting para evitar superposiciones */
+        .codigo-simple {
+            background: #f8f9fa;
+            color: #2c3e50;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border-left: 4px solid #3498db;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        code { 
+            background: #f4f4f4; 
+            padding: 3px 6px; 
+            border-radius: 4px; 
+            font-family: 'Courier New', monospace;
+        }
+        
+        .actividad { 
+            background: linear-gradient(135deg, #e8f5e8, #f0f8f0); 
+            padding: 18px; 
+            border-left: 5px solid #27ae60; 
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 2px 6px rgba(39, 174, 96, 0.1);
+        }
+        .actividad h3, .actividad h4 { 
+            color: #27ae60; 
+            margin-top: 0; 
+        }
+        
+        .reflexion { 
+            background: linear-gradient(135deg, #fff3cd, #fef9e7); 
+            padding: 18px; 
+            border-left: 5px solid #ffc107; 
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .reflexion h3, .reflexion h4 { 
+            color: #856404; 
+            margin-top: 0; 
+        }
+        
+        .checkpoint {
+            background: linear-gradient(135deg, #e1f5fe, #f0f9ff);
+            padding: 18px;
+            border-left: 5px solid #03a9f4;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .checkpoint h4 { 
+            color: #0277bd; 
+            margin-top: 0; 
+        }
+        
+        .conexion {
+            background: linear-gradient(135deg, #fff3cd, #fef9e7);
+            padding: 15px;
+            border-left: 5px solid #ffc107;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .conexion h4 { 
+            color: #856404; 
+            margin-top: 0; 
+        }
+        
+        .mapa-mental { 
+            text-align: center; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: white; 
+            padding: 15px; 
+            margin: 20px 0; 
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        .mapa-mental h4 { 
+            color: white; 
+            margin-top: 0; 
+        }
+        
+        .evaluacion {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            padding: 18px;
+            border-left: 5px solid #dc3545;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .evaluacion h3, .evaluacion h4 { 
+            color: #721c24; 
+            margin-top: 0; 
+        }
+        
+        .grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px; 
+            margin: 20px 0; 
+        }
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            nav { flex-direction: column; align-items: center; }
+        }
+        
+        .nivel-basico { border-left-color: #28a745; background: linear-gradient(135deg, #d4edda, #d1ecf1); }
+        .nivel-intermedio { border-left-color: #ffc107; background: linear-gradient(135deg, #fff3cd, #fef9e7); }
+        .nivel-avanzado { border-left-color: #dc3545; background: linear-gradient(135deg, #f8d7da, #f5c6cb); }
+        
+        details {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            background: #f8f9fa;
+        }
+        summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: #0066cc;
+            padding: 5px 0;
+        }
+        summary:hover { color: #004499; }
+        
+        .codigo-error { 
+            background: #f8d7da; 
+            border-left: 4px solid #dc3545; 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 0 6px 6px 0;
+        }
+        .codigo-correcto { 
+            background: #d4edda; 
+            border-left: 4px solid #28a745; 
+            padding: 10px; 
+            margin: 10px 0; 
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+        .btn-success { background: #27ae60; }
+        .btn-success:hover { background: #229954; }
+    </style>
+</head>
+<body>
+
+    <h1>🌍 Proyecto Semana 3 — Modelando un Mapa de Tráfico con Grafos Dirigidos y No Dirigidos</h1>
+    <p class="subtitle">Estructuras de Datos Avanzadas • Proyecto Práctico Integrador</p>
+
+    <nav>
+        <button onclick="showSection('intro')" class="nav-btn active">Introducción</button>
+        <button onclick="showSection('objetivos')" class="nav-btn">Objetivos</button>
+        <button onclick="showSection('diseno')" class="nav-btn">Diseño</button>
+        <button onclick="showSection('csharp')" class="nav-btn">C#</button>
+        <button onclick="showSection('python')" class="nav-btn">Python</button>
+        <button onclick="showSection('analisis')" class="nav-btn">Análisis</button>
+        <button onclick="showSection('evaluacion')" class="nav-btn">Evaluación</button>
+        <button onclick="showSection('diferenciacion')" class="nav-btn">Niveles</button>
+        <button onclick="showSection('reflexion')" class="nav-btn">Reflexión</button>
+    </nav>
+
+    <section id="intro" class="active">
+        <h2>🚀 Introducción: ¡Bienvenidos al Proyecto Práctico!</h2>
+        <p>¡Hola, estudiantes! Seguimos trabajando en Estructuras de Datos Avanzadas. Hoy, vamos a aplicar todo lo que aprendimos en la Semana 3 sobre <strong>Teoría de Grafos</strong>. Imaginen que estamos construyendo un <em>mapa de una ciudad pequeña</em>: intersecciones (como nodos en una red) y calles (como conexiones). Usaremos grafos para modelarlo de forma simple y realista.</p>
+        
+        <p>En términos generales, un grafo es como un "mapa de relaciones": ¿cómo se conectan las cosas? Aquí, crearemos <strong>dos versiones</strong>: una con calles que van en <em>ambos sentidos</em> (no dirigido, como una avenida libre) y otra con calles de <em>un solo sentido</em> (dirigido, como una calle con flecha de tráfico). Lo haremos paso a paso, con explicaciones <em>simples y amplias</em>, como si estuviéramos en clase charlando con un café en mano.</p>
+        
+        <p><strong>¿Por qué esto importa?</strong> En la vida real, apps como Google Maps usan grafos para calcular rutas. ¡Ustedes lo construirán hoy! Al final, tendrán código en C# y Python, y un reporte listo para entregar.</p>
+        
+        <div class="mapa-mental">
+            <h4>🧭 Mapa Mental del Proyecto</h4>
+            <p>Idea Real (Mapa de Ciudad) → Modelado (Vértices = Intersecciones, Aristas = Calles) → Elección (Lista de Adyacencia, porque es eficiente) → Implementación (Código + Pruebas) → Análisis (Grados y Vecinos)</p>
+        </div>
+        
+        <p>¡Continuemos! Sigan leyendo sección por sección.</p>
+        
+        <button class="btn" onclick="showSection('objetivos')">Continuar → Objetivos</button>
+    </section>
+
+    <section id="objetivos">
+        <h2>🎯 Objetivos de la Sesión: ¿Qué Lograrán Hoy?</h2>
+        <p>Piensen en esto como una receta de cocina: cada paso nos lleva a un plato delicioso (¡su proyecto!). Al final de esta guía:</p>
+        
+        <div class="grid">
+            <div class="actividad">
+                <h4>📚 Objetivos Conceptuales</h4>
+                <ul>
+                    <li><strong>Entenderán grafos dirigidos vs. no dirigidos</strong>: Con ejemplos cotidianos, como "puedes ir y volver" (no dirigido) vs. "solo adelante" (dirigido)</li>
+                    <li><strong>Dominarán listas de adyacencia</strong>: ¿Por qué son eficientes para grafos dispersos?</li>
+                    <li><strong>Analizarán trade-offs</strong>: Memoria vs. tiempo de consulta</li>
+                </ul>
+            </div>
+            <div class="actividad">
+                <h4>💻 Objetivos Prácticos</h4>
+                <ul>
+                    <li><strong>Modelarán un mapa realista</strong>: Con 8 intersecciones y 12 calles, usando pesos (distancias en km)</li>
+                    <li><strong>Implementarán en C# y Python</strong>: Verán cómo los lenguajes se complementan</li>
+                    <li><strong>Entregarán un reporte profesional</strong>: Justificando sus decisiones técnicas</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="actividad">
+            <h4>💡 Consejo Pedagógico</h4>
+            <p>Tómense 5 minutos para dibujar su propio mapa en papel antes de codificar. ¡Ayuda muchísimo a visualizar los conceptos!</p>
+        </div>
+
+        <div class="mapa-mental">
+            <h4>🧭 Hoja de Ruta del Proyecto</h4>
+            <p>
+                <strong>Acabas de ver:</strong> Los objetivos y el "¿por qué?" del proyecto<br>
+                <strong>Sigues con:</strong> Diseño del mapa (el "¿qué?" vamos a construir)<br>
+                <strong>Después:</strong> Implementación (el "¿cómo?" lo programamos)
+            </p>
+        </div>
+        
+        <button class="btn" onclick="showSection('diseno')">Continuar → Diseño del Mapa</button>
+    </section>
+
+    <section id="diseno">
+        <h2>🧩 Diseño del Mapa: Visualización Paso a Paso</h2>
+        <p>Antes de tocar código, diseñemos en papel. Imaginen una ciudad chiquita: el <strong>Centro (A)</strong> conectado al <strong>Norte (B)</strong>, <strong>Sur (C)</strong>, etc. Usamos letras simples para vértices (nodos).</p>
+
+        <div class="grid">
+            <div class="actividad">
+                <h3>🏛️ Vértices (Intersecciones)</h3>
+                <table>
+                    <tr><th>ID</th><th>Descripción</th></tr>
+                    <tr><td><strong>A</strong></td><td>Centro Comercial</td></tr>
+                    <tr><td><strong>B</strong></td><td>Zona Norte</td></tr>
+                    <tr><td><strong>C</strong></td><td>Zona Sur</td></tr>
+                    <tr><td><strong>D</strong></td><td>Este Industrial</td></tr>
+                    <tr><td><strong>E</strong></td><td>Oeste Residencial</td></tr>
+                    <tr><td><strong>F</strong></td><td>Zona Industrial</td></tr>
+                    <tr><td><strong>G</strong></td><td>Hospital</td></tr>
+                    <tr><td><strong>H</strong></td><td>Estadio</td></tr>
+                </table>
+            </div>
+            
+            <div class="actividad">
+                <h3>🛣️ Aristas (Calles)</h3>
+                <div style="margin-bottom: 15px;">
+                    <h4 style="color: #27ae60;">↔️ No Dirigidas (Bidireccionales)</h4>
+                    <ul style="font-family: monospace; font-size: 14px;">
+                        <li>A ↔ B: 2.0 km</li>
+                        <li>A ↔ C: 3.0 km</li>
+                        <li>B ↔ D: 1.0 km</li>
+                        <li>C ↔ E: 4.0 km</li>
+                        <li>D ↔ F: 5.0 km</li>
+                        <li>E ↔ F: 2.0 km</li>
+                        <li>G ↔ H: 6.0 km</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 style="color: #e74c3c;">→ Dirigidas (Un solo sentido)</h4>
+                    <ul style="font-family: monospace; font-size: 14px;">
+                        <li>A → G: 1.0 km (al hospital)</li>
+                        <li>B → H: 3.0 km (al estadio)</li>
+                        <li>C → D: 2.0 km</li>
+                        <li>F → E: 4.0 km</li>
+                        <li>H → A: 5.0 km (vuelta al centro)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="actividad">
+            <h3>🗺️ Diagrama Simplificado</h3>
+            <pre style="background: #f8f9fa; color: #333; padding: 15px; font-family: monospace; font-size: 12px; line-height: 1.3; border-left: 4px solid #3498db;">
+    B(Norte) ←→ A(Centro) ←→ C(Sur)
+    ↓ 1km         ↓ 1km         ↓ 2km
+    D(Este)       G(Hospital)   E(Oeste)
+    ↓ 5km                       ↑ 4km
+    F(Industrial) ←←←←←←←←←←← (F→E: 4km)
+    
+    H(Estadio) ←→ G(Hospital) (6km)
+    ↑
+    └─── A(Centro) (H→A: 5km)
+            </pre>
+            <p style="font-size: 0.9em; color: #666;">
+                <strong>Leyenda:</strong> ←→ bidireccional, → unidireccional
+            </p>
+        </div>
+
+        <div class="actividad" style="background: #fff3cd; border-left: 5px solid #ffc107;">
+            <h3>✏️ Actividad Práctica (5 min)</h3>
+            <ol>
+                <li>Dibuja este mapa en papel usando círculos para vértices</li>
+                <li>Usa líneas con doble flecha (↔) para no dirigidas</li>
+                <li>Usa líneas con una flecha (→) para dirigidas</li>
+                <li>Etiqueta cada arista con su peso</li>
+                <li><strong>Pregunta clave:</strong> ¿Cuántas conexiones totales tiene el vértice A?</li>
+            </ol>
+            <details style="margin-top: 10px;">
+                <summary><strong>💡 Ver respuesta</strong></summary>
+                <div style="margin-top: 10px; padding: 10px; background: #f0f8ff; border-radius: 5px;">
+                    <strong>Respuesta:</strong> El vértice A tiene:<br>
+                    • <strong>No dirigidas:</strong> A↔B, A↔C (2 conexiones bidireccionales)<br>
+                    • <strong>Dirigidas:</strong> A→G (1 conexión saliente)<br>
+                    • <strong>Total grado de salida:</strong> 3 conexiones
+                </div>
+            </details>
+        </div>
+
+        <p><em>Explicación técnica:</em> En no dirigido, el grafo es "simétrico" (si hay arista de u a v, también de v a u). En dirigido, es "con flechas" (puede haber solo una dirección, como en aeropuertos con pistas). Mezclamos para un mapa real: ~60% bidireccional. El grafo es <em>disperso</em> (pocas conexiones directas), por eso elegimos listas de adyacencia: ¡ahorra espacio en la "memoria" del programa!</p>
+
+        <div class="checkpoint">
+            <h4>✅ Checkpoint: ¿Listos para Codificar?</h4>
+            <p>Antes de pasar al código, asegúrate de que:</p>
+            <ul>
+                <li>✅ Entiendes la diferencia entre A↔B (bidireccional) y A→B (unidireccional)</li>
+                <li>✅ Sabes por qué elegimos listas de adyacencia (memoria eficiente para grafos dispersos)</li>
+                <li>✅ Tienes claro el diseño de 8 vértices y 12 aristas</li>
+            </ul>
+            <p><strong>👉 Siguiente paso:</strong> Implementar la clase Graph en C# que materialice este diseño</p>
+        </div>
+        
+        <button class="btn" onclick="showSection('csharp')">Continuar → Implementación C#</button>
+    </section>
+
+    <section id="csharp">
+        <h2>💻 Implementación en C#: Construyendo el Grafo</h2>
+        <p>Ahora, ¡manos a la obra! Usamos una clase <code>Graph&lt;T&gt;</code> genérica y robusta. Piensen en C# como un "constructor de edificios": sólido y estructurado.</p>
+        
+        <div class="actividad">
+            <h4>🔧 Características de Nuestra Implementación</h4>
+            <ul>
+                <li><strong>Genérica:</strong> Funciona con cualquier tipo de dato (string, int, etc.)</li>
+                <li><strong>Flexible:</strong> Soporta grafos dirigidos y no dirigidos</li>
+                <li><strong>Eficiente:</strong> Usa listas de adyacencia para memoria optimizada</li>
+                <li><strong>Robusta:</strong> Manejo de errores y validaciones incluidas</li>
+            </ul>
+        </div>
+
+        <div class="codigo-correcto">
+            <h4>✅ Código C# Corregido y Mejorado</h4>
+        </div>
+
+<div class="codigo-simple">
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+public class Graph<T> where T : IComparable<T>
+{
+    private readonly Dictionary<T, List<(T to, double weight)>> adjacencyList = new();
+    
+    // Agregar un vértice al grafo
+    public void AddVertex(T vertex)
+    {
+        if (!adjacencyList.ContainsKey(vertex))
+        {
+            adjacencyList[vertex] = new List<(T, double)>();
+        }
+    }
+    
+    // Agregar una arista (dirigida o no dirigida)
+    public void AddEdge(T from, T to, double weight = 1.0, bool isDirected = true)
+    {
+        AddVertex(from);
+        AddVertex(to);
+        
+        adjacencyList[from].Add((to, weight));
+        
+        if (!isDirected)
+        {
+            adjacencyList[to].Add((from, weight));
+        }
+    }
+    
+    // CORREGIDO: Exportar a archivo con deduplicación mejorada
+    public void ExportToFile(string filename, bool includeWeights = true, bool deduplicateUndirected = false)
+    {
+        try
+        {
+            using var writer = new StreamWriter(filename);
+            var processedEdges = new HashSet<string>();
+
+            foreach (var vertex in adjacencyList.Keys.OrderBy(v => v))
+            {
+                foreach (var (neighbor, weight) in adjacencyList[vertex])
+                {
+                    if (deduplicateUndirected)
+                    {
+                        // Para grafos no dirigidos, crear clave única ordenada
+                        var vertexStr = vertex?.ToString() ?? "";
+                        var neighborStr = neighbor?.ToString() ?? "";
+                        
+                        var edgeKey = vertex.CompareTo(neighbor) <= 0
+                            ? $"{vertexStr}→{neighborStr}"
+                            : $"{neighborStr}→{vertexStr}";
+                        
+                        if (!processedEdges.Add(edgeKey))
+                            continue; // Saltar si ya fue procesada
+                    }
+                    
+                    // Escribir la arista al archivo
+                    var line = includeWeights 
+                        ? $"{vertex} {neighbor} {weight:F1}"
+                        : $"{vertex} {neighbor}";
+                    writer.WriteLine(line);
+                }
+            }
+            Console.WriteLine($"✅ Archivo '{filename}' exportado exitosamente.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ Error al exportar archivo: {ex.Message}");
+        }
+    }
+    
+    public IEnumerable<T> GetVertices() => adjacencyList.Keys;
+    
+    public IEnumerable<(T neighbor, double weight)> GetNeighbors(T vertex)
+    {
+        return adjacencyList.TryGetValue(vertex, out var neighbors) 
+            ? neighbors 
+            : Enumerable.Empty<(T, double)>();
+    }
+    
+    public bool HasEdge(T from, T to)
+    {
+        return adjacencyList.TryGetValue(from, out var neighbors) && 
+               neighbors.Any(edge => EqualityComparer<T>.Default.Equals(edge.to, to));
+    }
+    
+    public int GetOutDegree(T vertex)
+    {
+        return adjacencyList.TryGetValue(vertex, out var neighbors) ? neighbors.Count : 0;
+    }
+    
+    public int GetInDegree(T vertex)
+    {
+        return adjacencyList.Values
+            .SelectMany(neighbors => neighbors)
+            .Count(edge => EqualityComparer<T>.Default.Equals(edge.to, vertex));
+    }
+    
+    public void PrintGraph()
+    {
+        Console.WriteLine("=== Estructura del Grafo ===");
+        foreach (var vertex in adjacencyList.Keys.OrderBy(v => v))
+        {
+            var neighbors = string.Join(", ", 
+                adjacencyList[vertex].Select(edge => $"{edge.to}({edge.weight:F1})"));
+            Console.WriteLine($"{vertex}: [{neighbors}]");
+        }
+    }
+}
+
+// Programa principal con el mapa de la ciudad
+class Program
+{
+    static void Main()
+    {
+        Console.WriteLine("🌍 === Generando Mapa de Tráfico === 🌍");
+
+        // Grafo No Dirigido (calles bidireccionales)
+        var undirected = new Graph<string>();
+        Console.WriteLine("\n🛣️ Agregando calles bidireccionales...");
+        
+        undirected.AddEdge("A", "B", 2.0, false);
+        undirected.AddEdge("A", "C", 3.0, false);
+        undirected.AddEdge("B", "D", 1.0, false);
+        undirected.AddEdge("C", "E", 4.0, false);
+        undirected.AddEdge("D", "F", 5.0, false);
+        undirected.AddEdge("E", "F", 2.0, false);
+        undirected.AddEdge("G", "H", 6.0, false);
+        
+        undirected.ExportToFile("edges_undirected.txt", includeWeights: true, deduplicateUndirected: true);
+
+        // Grafo Dirigido (todas las aristas)
+        var directed = new Graph<string>();
+        Console.WriteLine("\n🚦 Creando mapa completo con calles direccionales...");
+        
+        // Aristas dirigidas específicas
+        directed.AddEdge("A", "G", 1.0, true);
+        directed.AddEdge("B", "H", 3.0, true);
+        directed.AddEdge("C", "D", 2.0, true);
+        directed.AddEdge("F", "E", 4.0, true);
+        directed.AddEdge("H", "A", 5.0, true);
+        
+        // Agregar también las bidireccionales como dirigidas
+        directed.AddEdge("A", "B", 2.0, true);
+        directed.AddEdge("B", "A", 2.0, true);
+        directed.AddEdge("A", "C", 3.0, true);
+        directed.AddEdge("C", "A", 3.0, true);
+        directed.AddEdge("B", "D", 1.0, true);
+        directed.AddEdge("D", "B", 1.0, true);
+        directed.AddEdge("C", "E", 4.0, true);
+        directed.AddEdge("E", "C", 4.0, true);
+        directed.AddEdge("D", "F", 5.0, true);
+        directed.AddEdge("F", "D", 5.0, true);
+        directed.AddEdge("E", "F", 2.0, true);
+        directed.AddEdge("F", "E", 2.0, true);
+        directed.AddEdge("G", "H", 6.0, true);
+        directed.AddEdge("H", "G", 6.0, true);
+        
+        directed.ExportToFile("edges_directed.txt", includeWeights: true, deduplicateUndirected: false);
+
+        // Pruebas de funcionalidad
+        Console.WriteLine("\n🧪 === Pruebas de Funcionalidad ===");
+        Console.WriteLine($"Grado de A (no dirigido): {undirected.GetOutDegree("A")} (esperado: 2)");
+        Console.WriteLine($"¿Existe A↔B no dirigido? {undirected.HasEdge("A", "B")} (esperado: True)");
+        Console.WriteLine($"¿Existe B↔A no dirigido? {undirected.HasEdge("B", "A")} (esperado: True)");
+        
+        Console.WriteLine($"\nGrado salida A (dirigido): {directed.GetOutDegree("A")}");
+        Console.WriteLine($"Grado entrada A (dirigido): {directed.GetInDegree("A")}");
+        Console.WriteLine($"¿Existe A→G dirigido? {directed.HasEdge("A", "G")} (esperado: True)");
+        Console.WriteLine($"¿Existe G→A dirigido? {directed.HasEdge("G", "A")} (esperado: False)");
+        
+        Console.WriteLine("\n🎉 ¡Proyecto C# completado exitosamente!");
+    }
+}
+</div>
+
+        <div class="actividad">
+            <h4>🔧 Mejoras Aplicadas</h4>
+            <ul>
+                <li>✅ <strong>Deduplicación corregida:</strong> Usa CompareTo para ordenar vértices consistentemente</li>
+                <li>✅ <strong>Manejo de errores:</strong> Try-catch en exportación de archivos</li>
+                <li>✅ <strong>Métodos adicionales:</strong> GetInDegree() y PrintGraph() para análisis completo</li>
+                <li>✅ <strong>Validación robusta:</strong> TryGetValue() en lugar de acceso directo al diccionario</li>
+                <li>✅ <strong>Salida informativa:</strong> Mensajes claros para debugging</li>
+            </ul>
+        </div>
+
+        <div class="conexion">
+            <h4>🔄 Conexión C# → Python</h4>
+            <p>
+                <strong>Lo que acabas de construir:</strong> Una clase Graph que puede exportar datos a archivos .txt<br>
+                <strong>Lo que harás ahora:</strong> Usar Python para cargar esos archivos y analizar el grafo<br>
+                <strong>¿Por qué esta combinación?</strong> C# es excelente para estructuras de datos robustas, Python es perfecto para análisis y visualización de datos.
+            </p>
+        </div>
+        
+        <button class="btn" onclick="showSection('python')">Continuar → Análisis Python</button>
+    </section>
+
+    <section id="python">
+        <h2>🐍 Análisis en Python: Cargando y Explorando</h2>
+        <p>Python es como un "explorador curioso": lee el archivo y te cuenta todo. Usamos <code>defaultdict</code> para listas automáticas y manejo robusto de errores.</p>
+
+        <div class="codigo-correcto">
+            <h4>✅ Código Python Corregido y Mejorado</h4>
+        </div>
+
+<div class="codigo-simple">
+from collections import defaultdict
+from typing import Dict, List, Tuple
+import os
+
+def load_graph(file_path: str, is_directed: bool = True) -> Dict[str, List[Tuple[str, float]]]:
+    """
+    Carga un grafo desde un archivo de texto con manejo robusto de errores.
+    
+    Args:
+        file_path: Ruta al archivo de aristas
+        is_directed: True para grafo dirigido, False para no dirigido
+    
+    Returns:
+        Diccionario con lista de adyacencia
+    """
+    adjacency_list = defaultdict(list)
+    
+    if not os.path.exists(file_path):
+        print(f"❌ Error: El archivo '{file_path}' no existe.")
+        return adjacency_list
+    
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            for line_num, line in enumerate(file, 1):
+                line = line.strip()
+                
+                # Ignorar líneas vacías y comentarios
+                if not line or line.startswith('#'):
+                    continue
+                
+                parts = line.split()
+                if len(parts) < 2:
+                    print(f"⚠️  Línea {line_num}: '{line}' ignorada (faltan vértices)")
+                    continue
+                
+                from_vertex, to_vertex = parts[0], parts[1]
+                
+                # Procesar peso con validación
+                try:
+                    weight = float(parts[2]) if len(parts) > 2 else 1.0
+                except (ValueError, IndexError):
+                    print(f"⚠️  Línea {line_num}: peso inválido, usando 1.0")
+                    weight = 1.0
+                
+                # Agregar arista
+                adjacency_list[from_vertex].append((to_vertex, weight))
+                
+                # Si es no dirigido, agregar arista inversa
+                if not is_directed:
+                    adjacency_list[to_vertex].append((from_vertex, weight))
+                    
+    except FileNotFoundError:
+        print(f"❌ Error: No se encontró el archivo '{file_path}'")
+    except Exception as e:
+        print(f"❌ Error inesperado al leer '{file_path}': {e}")
+    
+    return dict(adjacency_list)
+
+def get_neighbors(graph: Dict[str, List[Tuple[str, float]]], vertex: str) -> List[Tuple[str, float]]:
+    """Obtiene la lista de vecinos de un vértice."""
+    return graph.get(vertex, [])
+
+def has_edge(graph: Dict[str, List[Tuple[str, float]]], from_vertex: str, to_vertex: str) -> bool:
+    """
+    CORREGIDO: Verifica si existe una arista de from_vertex a to_vertex.
+    Sintaxis corregida para desempaquetado de tuplas.
+    """
+    neighbors = graph.get(from_vertex, [])
+    return any(neighbor == to_vertex for neighbor, _ in neighbors)
+
+def get_out_degree(graph: Dict[str, List[Tuple[str, float]]], vertex: str) -> int:
+    """Calcula el grado de salida de un vértice."""
+    return len(graph.get(vertex, []))
+
+def get_in_degree(graph: Dict[str, List[Tuple[str, float]]], vertex: str) -> int:
+    """Calcula el grado de entrada de un vértice."""
+    in_degree = 0
+    for neighbors in graph.values():
+        in_degree += sum(1 for neighbor, _ in neighbors if neighbor == vertex)
+    return in_degree
+
+def analyze_graph(graph: Dict[str, List[Tuple[str, float]]], graph_type: str):
+    """Analiza y muestra estadísticas detalladas del grafo."""
+    print(f"\n{'='*50}")
+    print(f"🔍 Análisis del Grafo {graph_type}")
+    print(f"{'='*50}")
+    
+    if not graph:
+        print("⚠️  El grafo está vacío")
+        return
+    
+    vertices = sorted(graph.keys())
+    total_edges = sum(len(neighbors) for neighbors in graph.values())
+    
+    print(f"📊 Estadísticas generales:")
+    print(f"   • Vértices: {len(vertices)}")
+    print(f"   • Aristas: {total_edges}")
+    
+    # Calcular densidad (para grafos dirigidos)
+    max_possible_edges = len(vertices) * (len(vertices) - 1)
+    if max_possible_edges > 0:
+        density = total_edges / max_possible_edges
+        print(f"   • Densidad: {density:.3f}")
+    
+    print(f"\n🔍 Detalles por vértice:")
+    for vertex in vertices:
+        out_deg = get_out_degree(graph, vertex)
+        in_deg = get_in_degree(graph, vertex)
+        neighbors = get_neighbors(graph, vertex)
+        
+        neighbor_str = ", ".join([f"{neighbor}({weight:.1f}km)" for neighbor, weight in neighbors])
+        
+        print(f"   {vertex}: Out-degree={out_deg}, In-degree={in_deg}")
+        print(f"      └─ Vecinos: [{neighbor_str}]")
+
+def find_most_connected_vertex(graph: Dict[str, List[Tuple[str, float]]]) -> str:
+    """Encuentra el vértice con mayor grado total (entrada + salida)."""
+    if not graph:
+        return ""
+    
+    max_degree = 0
+    most_connected = ""
+    
+    for vertex in graph.keys():
+        total_degree = get_out_degree(graph, vertex) + get_in_degree(graph, vertex)
+        if total_degree > max_degree:
+            max_degree = total_degree
+            most_connected = vertex
+    
+    return most_connected
+
+# Programa principal
+def main():
+    """Función principal para análisis de grafos."""
+    print("🌍 === Análisis de Mapas de Tráfico - Proyecto Semana 3 ===")
+    
+    # Analizar grafo no dirigido
+    undirected_graph = load_graph("edges_undirected.txt", is_directed=False)
+    analyze_graph(undirected_graph, "No Dirigido")
+    
+    # Analizar grafo dirigido
+    directed_graph = load_graph("edges_directed.txt", is_directed=True)
+    analyze_graph(directed_graph, "Dirigido")
+    
+    # Pruebas de conectividad
+    print(f"\n{'='*50}")
+    print("🔗 Pruebas de Conectividad")
+    print(f"{'='*50}")
+    
+    if directed_graph:
+        print(f"¿A→G dirigido? {has_edge(directed_graph, 'A', 'G')} (esperado: True)")
+        print(f"¿G→A dirigido? {has_edge(directed_graph, 'G', 'A')} (esperado: False)")
+        
+        if 'A' in directed_graph:
+            print(f"Grado de salida de A: {get_out_degree(directed_graph, 'A')}")
+            print(f"Grado de entrada de A: {get_in_degree(directed_graph, 'A')}")
+        
+        # Análisis adicional
+        most_connected = find_most_connected_vertex(directed_graph)
+        if most_connected:
+            print(f"Vértice más conectado: {most_connected}")
+    
+    print("\n🎉 ¡Análisis completado exitosamente!")
+
+if __name__ == "__main__":
+    main()
+</div>
+
+        <div class="actividad">
+            <h4>🔧 Correcciones y Mejoras Aplicadas</h4>
+            <ul>
+                <li>✅ <strong>Error sintáctico corregido:</strong> <code>has_edge</code> ahora desempaqueta correctamente las tuplas</li>
+                <li>✅ <strong>Manejo robusto de errores:</strong> Validación de archivos, líneas malformadas y pesos inválidos</li>
+                <li>✅ <strong>Funciones adicionales:</strong> <code>get_in_degree()</code> y <code>find_most_connected_vertex()</code></li>
+                <li>✅ <strong>Documentación mejorada:</strong> Docstrings claros y comentarios explicativos</li>
+                <li>✅ <strong>Salida formateada:</strong> Emojis y formato claro para mejor legibilidad</li>
+                <li>✅ <strong>Análisis avanzado:</strong> Cálculo de densidad y vértice más conectado</li>
+            </ul>
+        </div>
+
+        <div class="actividad">
+            <h4>🧪 Ejemplo de Salida Esperada</h4>
+            <pre style="background: #f8f9fa; color: #333; padding: 15px; border-left: 4px solid #28a745;">
+🌍 === Análisis de Mapas de Tráfico - Proyecto Semana 3 ===
+✅ Archivo 'edges_undirected.txt' cargado exitosamente.
+
+==================================================
+🔍 Análisis del Grafo No Dirigido
+==================================================
+📊 Estadísticas generales:
+   • Vértices: 8
+   • Aristas: 14
+   • Densidad: 0.250
+
+🔍 Detalles por vértice:
+   A: Out-degree=2, In-degree=2
+      └─ Vecinos: [B(2.0km), C(3.0km)]
+   B: Out-degree=2, In-degree=2
+      └─ Vecinos: [A(2.0km), D(1.0km)]
+   ...
+            </pre>
+        </div>
+
+        <div class="checkpoint">
+            <h4>🔄 De Implementación a Análisis</h4>
+            <p>
+                <strong>Ya tienes:</strong> Código que funciona en ambos lenguajes<br>
+                <strong>Ahora necesitas:</strong> Entender las implicaciones de tus decisiones de diseño<br>
+                <strong>Pregunta clave:</strong> ¿Fue buena idea usar listas de adyacencia? ¡Vamos a analizarlo!
+            </p>
+        </div>
+        
+        <button class="btn" onclick="showSection('analisis')">Continuar → Análisis Trade-offs</button>
+    </section>
+
+    <section id="analisis">
+        <h2>⚖️ Análisis de Trade-offs: ¿Por Qué Así?</h2>
+        <p>Ahora que tenemos nuestro grafo funcionando, analicemos las decisiones técnicas. Como buenos ingenieros, siempre debemos justificar nuestras elecciones.</p>
+
+        <div class="actividad">
+            <h4>🤔 La Gran Pregunta</h4>
+            <p><strong>¿Por qué elegimos listas de adyacencia en lugar de matriz de adyacencia?</strong></p>
+            <p>La respuesta no es "porque sí" – hay razones técnicas sólidas que veremos en la siguiente tabla.</p>
+        </div>
+
+        <table>
+            <tr>
+                <th>Criterio</th>
+                <th>Lista de Adyacencia (Nuestra Elección)</th>
+                <th>Matriz de Adyacencia (Alternativa)</th>
+            </tr>
+            <tr>
+                <td><strong>Memoria para nuestro grafo</strong><br>(n=8, m=12)</td>
+                <td style="background: #d4edda;">✅ <strong>Excelente:</strong> O(20) elementos<br>Solo guarda conexiones reales</td>
+                <td style="background: #f8d7da;">❌ <strong>Desperdicio:</strong> O(64) elementos<br>Tabla 8×8 completa, mayoría vacía</td>
+            </tr>
+            <tr>
+                <td><strong>¿Existe arista u→v?</strong></td>
+                <td style="background: #fff3cd;">⚠️ <strong>Aceptable:</strong> O(grado de u)<br>~2-3 pasos para nuestro mapa</td>
+                <td style="background: #d4edda;">✅ <strong>Instantáneo:</strong> O(1)<br>Acceso directo matriz[u][v]</td>
+            </tr>
+            <tr>
+                <td><strong>Recorrer vecinos de u</strong></td>
+                <td style="background: #d4edda;">✅ <strong>Eficiente:</strong> O(grado de u)<br>Solo toca vecinos reales</td>
+                <td style="background: #f8d7da;">❌ <strong>Lento:</strong> O(n=8)<br>Revisa toda la fila, incluso vacíos</td>
+            </tr>
+            <tr>
+                <td><strong>Agregar/eliminar arista</strong></td>
+                <td style="background: #d4edda;">✅ <strong>Rápido:</strong> O(1) agregar<br>O(grado) eliminar</td>
+                <td style="background: #d4edda;">✅ <strong>Rápido:</strong> O(1)<br>Ambas operaciones</td>
+            </tr>
+            <tr>
+                <td><strong>Escenario ideal</strong></td>
+                <td style="background: #d4edda;">🌍 <strong>Mapas dispersos</strong><br>Ciudades reales, redes sociales</td>
+                <td style="background: #fff3cd;">🔗 <strong>Grafos densos</strong><br>Redes completas, pequeñas</td>
+            </tr>
+        </table>
+
+        <div class="mapa-mental">
+            <h4>🧠 Conclusión Técnica</h4>
+            <p><strong>Para nuestro proyecto:</strong> Lista de adyacencia es la elección correcta porque tenemos un grafo <em>disperso</em> (pocas conexiones por vértice) y necesitamos eficiencia en recorridos (ideal para algoritmos futuros como BFS/DFS).</p>
+        </div>
+
+        <div class="grid">
+            <div class="actividad">
+                <h4>📊 Análisis Cuantitativo</h4>
+                <p><strong>Nuestro grafo específico:</strong></p>
+                <ul>
+                    <li>Densidad ≈ 0.25 (25% de conexiones posibles)</li>
+                    <li>Grado promedio ≈ 3 conexiones por vértice</li>
+                    <li>Memoria usada: ~20 elementos vs 64 en matriz</li>
+                    <li><strong>Ahorro de memoria: 69%</strong></li>
+                </ul>
+            </div>
+            <div class="actividad">
+                <h4>🔮 Escalabilidad Futura</h4>
+                <p><strong>Si nuestro mapa crece:</strong></p>
+                <ul>
+                    <li>100 intersecciones → Lista: O(300), Matriz: O(10,000)</li>
+                    <li>1000 intersecciones → Lista: O(3,000), Matriz: O(1,000,000)</li>
+                    <li><strong>La diferencia se vuelve dramática</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="reflexion">
+            <h4>💭 Pregunta de Reflexión</h4>
+            <p><strong>¿Cuándo elegirías matriz de adyacencia?</strong></p>
+            <details>
+                <summary>💡 Ver respuesta</summary>
+                <div style="margin-top: 10px; padding: 15px; background: #f0f8ff; border-radius: 5px;">
+                    <p><strong>Matriz sería mejor cuando:</strong></p>
+                    <ul>
+                        <li>Grafo muy denso (>50% de conexiones posibles)</li>
+                        <li>Consultas frecuentes de "¿existe arista X→Y?"</li>
+                        <li>Operaciones matriciales (multiplicación, potencias)</li>
+                        <li>Grafos pequeños donde la memoria no importa</li>
+                    </ul>
+                    <p><em>Ejemplo:</em> Red de vuelos directos entre 10 ciudades principales (muchas conexiones).</p>
+                </div>
+            </details>
+        </div>
+        
+        <button class="btn" onclick="showSection('evaluacion')">Continuar → Criterios de Evaluación</button>
+    </section>
+
+    <section id="evaluacion">
+        <h2>📊 Criterios de Evaluación y Entregables</h2>
+        <p>Ahora que tienen el código funcionando, veamos exactamente qué necesitan entregar y cómo será evaluado su proyecto.</p>
+
+        <div class="evaluacion">
+            <h3>📋 Entregables Requeridos</h3>
+            <div class="grid">
+                <div>
+                    <h4>💻 Archivos de Código</h4>
+                    <ul>
+                        <li>✅ <code>Graph.cs</code> - Clase genérica funcional</li>
+                        <li>✅ <code>Program.cs</code> - Programa principal que genera archivos</li>
+                        <li>✅ <code>analysis.py</code> - Script de análisis completo</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>📄 Archivos de Datos</h4>
+                    <ul>
+                        <li>✅ <code>edges_undirected.txt</code> - 7 aristas bidireccionales</li>
+                        <li>✅ <code>edges_directed.txt</code> - 17 aristas totales</li>
+                        <li>✅ Ambos con formato: <code>origen destino peso</code></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="actividad">
+            <h3>📖 Reporte Técnico (2-3 páginas PDF)</h3>
+            <h4><strong>Sección 1: Diseño del Modelo (25% - 25 puntos)</strong></h4>
+            <ul>
+                <li><strong>Descripción del mapa:</strong> ¿Qué representa cada vértice? ¿Por qué elegiste esas conexiones?</li>
+                <li><strong>Justificación de aristas:</strong> ¿Por qué algunas son bidireccionales y otras no?</li>
+                <li><strong>Criterio de pesos:</strong> ¿Cómo asignaste las distancias? ¿Son realistas?</li>
+                <li><strong>Diagrama:</strong> Incluye tu dibujo del mapa con etiquetas claras</li>
+            </ul>
+
+            <h4><strong>Sección 2: Decisiones de Implementación (40% - 40 puntos)</strong></h4>
+            <ul>
+                <li><strong>Lista vs Matriz:</strong> ¿Por qué elegiste listas de adyacencia? Análisis con números concretos</li>
+                <li><strong>Manejo de direccionalidad:</strong> ¿Cómo tu código diferencia dirigido vs no dirigido?</li>
+                <li><strong>Trade-offs identificados:</strong> ¿Qué perdiste y qué ganaste con tu elección?</li>
+                <li><strong>Escalabilidad:</strong> ¿Cómo se comportaría tu solución con 100+ vértices?</li>
+            </ul>
+
+            <h4><strong>Sección 3: Resultados y Validación (25% - 25 puntos)</strong></h4>
+            <ul>
+                <li><strong>Screenshots de ejecución:</strong> Salida de ambos programas</li>
+                <li><strong>Verificación manual:</strong> Comprueba 2-3 cálculos de grado a mano</li>
+                <li><strong>Casos de prueba:</strong> ¿Qué aristas probaste que existen/no existen?</li>
+            </ul>
+
+            <h4><strong>Sección 4: Reflexión Personal (10% - 10 puntos)</strong></h4>
+            <ul>
+                <li>¿Qué fue lo más desafiante del proyecto?</li>
+                <li>¿Cómo aplicarías grafos en un problema real de tu interés?</li>
+                <li>¿Qué cambiarías en tu implementación si empezaras de nuevo?</li>
+            </ul>
+        </div>
+
+        <table style="margin-top: 20px;">
+            <tr><th>Criterio</th><th>Excelente (90-100)</th><th>Bueno (80-89)</th><th>Satisfactorio (70-79)</th><th>Insuficiente (&lt;70)</th></tr>
+            <tr>
+                <td><strong>Código</strong></td>
+                <td>Limpio, comentado, sin errores, extensiones implementadas</td>
+                <td>Funcional, comentarios básicos, requisitos cumplidos</td>
+                <td>Funciona con errores menores, documentación mínima</td>
+                <td>No compila o errores mayores</td>
+            </tr>
+            <tr>
+                <td><strong>Análisis</strong></td>
+                <td>Profundo, con números, insights originales</td>
+                <td>Correcto, ejemplos concretos, razonamiento sólido</td>
+                <td>Básico pero correcto, análisis superficial</td>
+                <td>Incorrecto o faltante</td>
+            </tr>
+            <tr>
+                <td><strong>Reporte</strong></td>
+                <td>Profesional, bien estructurado, diagrama claro</td>
+                <td>Claro, secciones completas, buena presentación</td>
+                <td>Información básica, estructura aceptable</td>
+                <td>Incompleto o confuso</td>
+            </tr>
+        </table>
+
+        <div class="checkpoint">
+            <h4>⚠️ Errores Comunes a Evitar</h4>
+            <ul>
+                <li>❌ No manejar archivos inexistentes en Python</li>
+                <li>❌ Duplicar aristas en exportación de grafos no dirigidos</li>
+                <li>❌ Confundir grado de entrada vs salida</li>
+                <li>❌ Análisis superficial sin números concretos</li>
+                <li>❌ Reporte sin diagrama o screenshots</li>
+            </ul>
+        </div>
+
+        <div class="actividad">
+            <h4>📦 Formato de Entrega</h4>
+            <p><strong>Archivo ZIP:</strong> <code>ProyectoS3_[Apellido]_[Nombre].zip</code></p>
+            <p><strong>Contenido del ZIP:</strong></p>
+            <ul>
+                <li><code>codigo/</code> - Carpeta con todos los archivos .cs y .py</li>
+                <li><code>datos/</code> - Carpeta con archivos .txt generados</li>
+                <li><code>Reporte_[Apellido].pdf</code> - Tu reporte técnico</li>
+                <li><code>README.txt</code> - Instrucciones para ejecutar tu código</li>
+            </ul>
+            <p><strong>Fecha límite:</strong> [Especificar fecha según calendario académico]</p>
+        </div>
+        
+        <button class="btn" onclick="showSection('diferenciacion')">Ver Niveles de Dificultad →</button>
+    </section>
+
+    <section id="diferenciacion">
+        <h2>🎯 Actividades Diferenciadas por Nivel</h2>
+        <p>Reconocemos que cada estudiante tiene diferentes fortalezas y experiencia previa. Aquí hay opciones adaptadas a distintos niveles de comodidad con la programación.</p>
+
+        <div class="actividad nivel-basico">
+            <h3>🟢 Nivel Básico - "Empezando con Confianza"</h3>
+            <h4>Para estudiantes que se sienten menos cómodos con programación</h4>
+            
+            <div class="grid">
+                <div>
+                    <h4>📝 Simplificaciones Aplicadas</h4>
+                    <ul>
+                        <li><strong>Grafo más pequeño:</strong> 5-6 vértices en lugar de 8</li>
+                        <li><strong>Solo no dirigido:</strong> Evitar confusión con direcciones</li>
+                        <li><strong>Pesos enteros:</strong> Usar 1, 2, 3 en lugar de decimales</li>
+                        <li><strong>Plantilla proporcionada:</strong> Código base pre-escrito</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>🤝 Apoyo Adicional</h4>
+                    <ul>
+                        <li><strong>Tutorías programadas:</strong> Sesiones extra de ayuda</li>
+                        <li><strong>Pair programming:</strong> Trabajar con compañero más avanzado</li>
+                        <li><strong>Checklist detallado:</strong> Pasos específicos a seguir</li>
+                        <li><strong>Ejemplos trabajados:</strong> Casos paso a paso</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="actividad">
+                <h4>✏️ Actividad de Refuerzo</h4>
+                <p><strong>Tracing Manual:</strong> Antes de programar, ejecuta en papel:</p>
+                <ol>
+                    <li>Dibuja un grafo de 4 vértices: A, B, C, D</li>
+                    <li>Agrega aristas: A-B (peso 2), B-C (peso 1), A-D (peso 3)</li>
+                    <li>Simula <code>AddEdge("A", "B", 2, false)</code> paso a paso</li>
+                    <li>Calcula manualmente el grado de cada vértice</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="actividad nivel-intermedio">
+            <h3>🟡 Nivel Intermedio - "Proyecto Estándar"</h3>
+            <h4>Para la mayoría de estudiantes con conocimientos básicos sólidos</h4>
+            
+            <p><strong>Mantén el proyecto como está especificado:</strong></p>
+            <ul>
+                <li>✅ 8 vértices con mezcla dirigido/no dirigido</li>
+                <li>✅ Implementación en C# y Python</li>
+                <li>✅ Análisis de trade-offs completo</li>
+                <li>✅ Reporte técnico de 2-3 páginas</li>
+            </ul>
+
+            <div class="actividad">
+                <h4>💡 Consejos para el Éxito</h4>
+                <ul>
+                    <li><strong>Empieza temprano:</strong> No dejes todo para el último día</li>
+                    <li><strong>Prueba frecuentemente:</strong> Verifica cada función antes de continuar</li>
+                    <li><strong>Documenta mientras codificas:</strong> Anota decisiones importantes</li>
+                    <li><strong>Busca ayuda cuando la necesites:</strong> Oficinas de horario, foros, compañeros</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="actividad nivel-avanzado">
+            <h3>🔴 Nivel Avanzado - "Desafíos Adicionales"</h3>
+            <h4>Para estudiantes que buscan ir más allá</h4>
+            
+            <div class="grid">
+                <div>
+                    <h4>🚀 Extensiones Técnicas</h4>
+                    <ul>
+                        <li><strong>Algoritmos adicionales:</strong>
+                            <br><code>FindShortestPath(start, end)</code> con BFS</li>
+                        <li><strong>Detección de ciclos:</strong>
+                            <br><code>HasCycles()</code> para grafos dirigidos</li>
+                        <li><strong>Análisis de centralidad:</strong>
+                            <br>Encuentra vértices más "importantes"</li>
+                        <li><strong>Persistencia avanzada:</strong>
+                            <br>Carga/guarda en JSON o XML</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>📊 Análisis Profundo</h4>
+                    <ul>
+                        <li><strong>Visualización:</strong> Generar archivo .dot para Graphviz</li>
+                        <li><strong>Métricas avanzadas:</strong> Diámetro, excentricidad</li>
+                        <li><strong>Comparación empírica:</strong> Medir tiempos de ejecución</li>
+                        <li><strong>Optimizaciones:</strong> Implementar con diferentes estructuras</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="codigo-correcto">
+                <h4>💻 Ejemplo de Extensión: Detección de Ciclos</h4>
+                <pre><code><span style="color: #3498db;">public</span> <span style="color: #3498db;">bool</span> HasCycles()
+{
+    <span style="color: #3498db;">var</span> visited = <span style="color: #3498db;">new</span> HashSet&lt;T&gt;();
+    <span style="color: #3498db;">var</span> recursionStack = <span style="color: #3498db;">new</span> HashSet&lt;T&gt;();
+    
+    <span style="color: #3498db;">foreach</span> (<span style="color: #3498db;">var</span> vertex <span style="color: #3498db;">in</span> GetVertices())
+    {
+        <span style="color: #3498db;">if</span> (!visited.Contains(vertex))
+        {
+            <span style="color: #3498db;">if</span> (HasCycleDFS(vertex, visited, recursionStack))
+                <span style="color: #3498db;">return</span> <span style="color: #3498db;">true</span>;
+        }
+    }
+    <span style="color: #3498db;">return</span> <span style="color: #3498db;">false</span>;
+}</code></pre>
+            </div>
+
+            <div class="actividad">
+                <h4>🏆 Criterios de Evaluación Avanzada</h4>
+                <p><strong>Para obtener calificación sobresaliente (95-100):</strong></p>
+                <ul>
+                    <li>Implementar al menos 2 extensiones adicionales</li>
+                    <li>Análisis comparativo con métricas de rendimiento</li>
+                    <li>Reporte extendido (4-5 páginas) con sección de optimizaciones</li>
+                    <li>Código bien documentado con ejemplos de uso</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mapa-mental">
+            <h4>🎯 Elección de Nivel</h4>
+            <p><strong>Recuerda:</strong> El objetivo es aprender, no impresionar. Elige el nivel donde te sientes desafiado pero no abrumado. Siempre puedes hacer extensiones después de completar los requisitos básicos.</p>
+        </div>
+        
+        <button class="btn" onclick="showSection('reflexion')">Continuar → Reflexión Final</button>
+    </section>
+
+    <section id="reflexion">
+        <div class="reflexion">
+            <h2>🎭 Reflexión Final: ¡Piensen en Voz Alta!</h2>
+            
+            <div class="grid">
+                <div class="actividad">
+                    <h4>💭 Preguntas de Reflexión Individual</h4>
+                    <ol>
+                        <li><strong>Trade-offs técnicos:</strong> ¿Qué pasaría si cambiaras de lista a matriz en tu mapa específico? ¿Cuánta memoria adicional necesitarías?</li>
+                        <li><strong>Escalabilidad:</strong> Si tu ciudad creciera a 1000 intersecciones, ¿seguirías usando la misma representación?</li>
+                        <li><strong>Simplicidad vs funcionalidad:</strong> ¿Cómo cambiaría el diseño si no necesitaras pesos en las aristas?</li>
+                        <li><strong>Extensiones futuras:</strong> ¿Qué funcionalidad agregarías para la próxima semana cuando veamos algoritmos de búsqueda?</li>
+                    </ol>
+                </div>
+                
+                <div class="actividad">
+                    <h4>👥 Discusión en Parejas (10 min)</h4>
+                    <p><strong>Intercambien ideas sobre:</strong></p>
+                    <ul>
+                        <li>¿Cuál fue la parte más desafiante del proyecto?</li>
+                        <li>¿En qué otros problemas reales usarían grafos?</li>
+                        <li>¿Qué harían diferente si empezaran de nuevo?</li>
+                        <li>¿Cómo conecta esto con lo que vieron en semanas anteriores?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="checkpoint">
+                <h4>🧠 Conexiones Conceptuales</h4>
+                <p><strong>Este proyecto conecta con:</strong></p>
+                <ul>
+                    <li><strong>Semana 1-2:</strong> Estructuras de datos básicas (listas, diccionarios) que usamos en la implementación</li>
+                    <li><strong>Semana 4:</strong> Algoritmos BFS/DFS se construirán sobre esta base de grafos</li>
+                    <li><strong>Semana 5:</strong> Algoritmos de caminos mínimos usarán los pesos que implementamos</li>
+                    <li><strong>Proyecto final:</strong> Esta será la base para el sistema de navegación completo</li>
+                </ul>
+            </div>
+
+            <div class="actividad">
+                <h4>📝 Autoevaluación Honesta</h4>
+                <p><strong>Antes de entregar, pregúntate:</strong></p>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <p>✅ <strong>¿Mi código compila y ejecuta sin errores?</strong></p>
+                    <p>✅ <strong>¿Probé casos extremos? (archivos inexistentes, vértices sin conexiones)</strong></p>
+                    <p>✅ <strong>¿Mi análisis incluye números concretos y no solo teoría?</strong></p>
+                    <p>✅ <strong>¿Justifiqué técnicamente mis decisiones de diseño?</strong></p>
+                    <p>✅ <strong>¿Mi reporte es profesional y está bien estructurado?</strong></p>
+                </div>
+            </div>
+
+            <div class="mapa-mental">
+                <h4>🎉 ¡Felicitaciones!</h4>
+                <p>Has completado un proyecto complejo que combina teoría de grafos, programación en múltiples lenguajes, y análisis técnico. Estas habilidades son fundamentales en ciencias de la computación y te servirán en tu carrera profesional.</p>
+            </div>
+
+            <div class="actividad">
+                <h4>🔗 Recursos Adicionales</h4>
+                <ul>
+                    <li><strong>Visualización de grafos:</strong> <a href="https://graphviz.org/" target="_blank">Graphviz</a> para crear diagramas automáticamente</li>
+                    <li><strong>Lecturas complementarias:</strong> "Introduction to Algorithms" (Cormen) - Capítulo 22</li>
+                    <li><strong>Aplicaciones reales:</strong> Estudiar cómo Google Maps implementa algoritmos de grafos</li>
+                    <li><strong>Práctica adicional:</strong> LeetCode - problemas etiquetados como "Graph"</li>
+                </ul>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <p><strong>¡Excelente trabajo! Entreguen su código y reporte.</strong></p>
+                <p>Si tienen dudas, pregunten en clase o en horarios de oficina.</p>
+                
+                <div style="margin: 20px 0;">
+                    <button class="btn btn-success" onclick="resetProject()">🔄 Recomenzar Proyecto</button>
+                    <button class="btn" onclick="showSection('intro')">📚 Volver al Inicio</button>
+                </div>
+                
+                <p style="font-size: 0.9em; color: #666; margin-top: 20px;">
+                    <em>Proyecto desarrollado para Estructuras de Datos Avanzadas • Versión 2025</em>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Variables globales para navegación
+        let currentSection = 'intro';
+        const sections = ['intro', 'objetivos', 'diseno', 'csharp', 'python', 'analisis', 'evaluacion', 'diferenciacion', 'reflexion'];
+
+        // Función principal para mostrar secciones
+        function showSection(sectionId) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostrar la sección seleccionada
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                currentSection = sectionId;
+            }
+            
+            // Actualizar botones de navegación
+            updateNavigationButtons(sectionId);
+            
+            // Scroll suave al inicio
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Actualizar estados de botones de navegación
+        function updateNavigationButtons(activeSection) {
+            document.querySelectorAll('.nav-btn').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Encontrar y activar el botón correspondiente
+            const activeButton = document.querySelector(`[onclick="showSection('${activeSection}')"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+        }
+
+        // Función para reiniciar el proyecto
+        function resetProject() {
+            showSection('intro');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Navegación con teclado
+        document.addEventListener('keydown', function(event) {
+            const currentIndex = sections.indexOf(currentSection);
+            
+            if (event.key === 'ArrowRight' && currentIndex < sections.length - 1) {
+                showSection(sections[currentIndex + 1]);
+            } else if (event.key === 'ArrowLeft' && currentIndex > 0) {
+                showSection(sections[currentIndex - 1]);
+            }
+        });
+
+        // Funcionalidad para details/summary (expandir/contraer)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Asegurar que la primera sección esté activa
+            showSection('intro');
+            
+            // Mejorar accesibilidad de los details
+            document.querySelectorAll('details').forEach(detail => {
+                detail.addEventListener('toggle', function() {
+                    if (this.open) {
+                        // Scroll suave para ver el contenido expandido
+                        setTimeout(() => {
+                            this.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }, 100);
+                    }
+                });
+            });
+        });
+
+        // Easter egg para estudiantes curiosos
+        let keySequence = [];
+        const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
+        
+        document.addEventListener('keydown', function(event) {
+            keySequence.push(event.code);
+            
+            if (keySequence.length > konamiCode.length) {
+                keySequence.shift();
+            }
+            
+            if (keySequence.join(',') === konamiCode.join(',')) {
+                alert('🎮 ¡Easter Egg encontrado! \n\nTip de Grafos: La elección entre lista y matriz depende de la densidad. \n\n📊 Regla práctica:\n• Lista: si aristas < vértices²/2\n• Matriz: si aristas > vértices²/2\n\n¡Sigue explorando!');
+                keySequence = [];
+            }
+        });
+
+        // Progreso visual (opcional)
+        function updateProgress() {
+            const currentIndex = sections.indexOf(currentSection);
+            const progress = ((currentIndex + 1) / sections.length) * 100;
+            
+            // Si existe una barra de progreso, actualizarla
+            const progressBar = document.querySelector('.progress-fill');
+            if (progressBar) {
+                progressBar.style.width = progress + '%';
+            }
+        }
+
+        // Llamar a updateProgress cuando cambie de sección
+        const originalShowSection = showSection;
+        showSection = function(sectionId) {
+            originalShowSection(sectionId);
+            updateProgress();
+        };
+
+        // Funcionalidad adicional: marcar completado
+        function markAsCompleted(sectionId) {
+            const button = document.querySelector(`[onclick="showSection('${sectionId}')"]`);
+            if (button && !button.classList.contains('completed')) {
+                button.classList.add('completed');
+                button.innerHTML += ' ✅';
+            }
+        }
+
+        // Auto-marcar secciones como completadas después de cierto tiempo
+        let sectionTimers = {};
+        
+        function startSectionTimer(sectionId) {
+            if (sectionTimers[sectionId]) {
+                clearTimeout(sectionTimers[sectionId]);
+            }
+            
+            sectionTimers[sectionId] = setTimeout(() => {
+                markAsCompleted(sectionId);
+            }, 60000); // Marcar como completado después de 1 minuto
+        }
+
+        // Integrar timer con showSection
+        const originalShowSectionWithTimer = showSection;
+        showSection = function(sectionId) {
+            originalShowSectionWithTimer(sectionId);
+            startSectionTimer(sectionId);
+        };
+    </script>
+
+</body>
+</html>

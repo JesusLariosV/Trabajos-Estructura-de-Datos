@@ -1,0 +1,3161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔍 Semana 5 – Algoritmos de Exploración y Búsqueda: BFS y DFS</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; margin: 0; padding: 20px; background-color: #f9f9f9; color: #333; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        h1, h2, h3 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        h1 { text-align: center; background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 20px; border-radius: 10px; }
+        .section { margin-bottom: 40px; }
+        .objectives { background: #e8f4fd; padding: 20px; border-left: 5px solid #3498db; }
+        .concepts { background: #fff3cd; padding: 20px; border-left: 5px solid #ffc107; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #3498db; color: white; }
+        ul, ol { padding-left: 20px; }
+        code { background: #f4f4f4; padding: 2px 4px; border-radius: 4px; font-family: 'Courier New', monospace; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        .emoji { font-size: 1.2em; }
+        .checklist { background: #d4edda; padding: 15px; border-left: 5px solid #28a745; }
+        .warning { background: #f8d7da; padding: 15px; border-left: 5px solid #dc3545; }
+        .project { background: #d1ecf1; padding: 20px; border-left: 5px solid #17a2b8; }
+        .ia-activity { background: #e7d4f7; padding: 20px; border-left: 5px solid #9b59b6; margin: 20px 0; border-radius: 5px; }
+        .ia-prompt { background: #f8f9fa; padding: 15px; border: 2px dashed #9b59b6; border-radius: 5px; margin: 10px 0; font-family: 'Courier New', monospace; font-size: 0.9em; white-space: pre-wrap;}
+        .visualization { background: #e8f8f5; padding: 20px; border-left: 5px solid #1abc9c; margin: 20px 0; }
+        .comparison { background: #fef5e7; padding: 20px; border-left: 5px solid #f39c12; margin: 20px 0; }
+        .application { background: #ebf5fb; padding: 20px; border-left: 5px solid #5dade2; margin: 20px 0; }
+        .prompt-number { background: #9b59b6; color: white; padding: 4px 10px; border-radius: 50%; font-weight: bold; margin-right: 10px; }
+        @media (max-width: 768px) {
+            .container { padding: 20px; }
+            nav ul { flex-direction: column; }
+            nav li { margin: 5px 0; }
+            table { font-size: 0.9em; }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({ startOnLoad: true, theme: 'default' });</script>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Semana 5 – Algoritmos de Exploración y Búsqueda: BFS y DFS</h1>
+        
+        <p><em>Estructuras de Datos Avanzadas © 2025 | Versión Mejorada con Actividades IA</em></p>
+        
+        <nav>
+            <ul style="list-style: none; padding: 0; display: flex; justify-content: space-around; background: #ecf0f1; padding: 10px; border-radius: 5px; flex-wrap: wrap;">
+                <li><a href="#intro">Introducción</a></li>
+                <li><a href="#bfs">BFS</a></li>
+                <li><a href="#dfs">DFS</a></li>
+                <li><a href="#comparison">Comparación</a></li>
+                <li><a href="#solution-cs">Código C#</a></li>
+                <li><a href="#solution-py">Código Python</a></li>
+                <li><a href="#applications">Aplicaciones</a></li>
+                <li><a href="#test-cases">Casos de Prueba</a></li>
+                <li><a href="#ia-activities">Actividades IA</a></li>
+                <li><a href="#project">Proyecto</a></li>
+            </ul>
+        </nav>
+
+        <!-- INTRODUCCIÓN -->
+        <section id="intro" class="section">
+            <h2>🎯 Objetivos de la Semana</h2>
+            <div class="objectives">
+                <h3>¿Qué lograrás hoy?</h3>
+                <ul>
+                    <li>Comprender y aplicar el algoritmo de <strong>Búsqueda en Amplitud (BFS)</strong> para encontrar caminos más cortos y explorar por niveles.</li>
+                    <li>Dominar la <strong>Búsqueda en Profundidad (DFS)</strong> para detectar ciclos, analizar componentes conectadas y explorar caminos.</li>
+                    <li>Implementar ambos algoritmos en <strong>C#</strong> y <strong>Python</strong> con eficiencia óptima.</li>
+                    <li>Analizar comparativamente cuándo usar BFS vs DFS según las características del problema.</li>
+                    <li>Aplicar estos algoritmos a problemas reales: redes sociales, sistemas de recomendación, detección de dependencias circulares.</li>
+                    <li>Desarrollar competencias avanzadas en uso de IA para optimización algorítmica.</li>
+                </ul>
+            </div>
+            <div class="concepts">
+                <h3>Enfoque Pedagógico</h3>
+                <p><strong>Flujo de Aprendizaje:</strong> Fundamentos Teóricos → Visualización Paso a Paso → Implementación Dual (C#/Python) → Aplicaciones Prácticas → Análisis Comparativo → Potenciación con IA.</p>
+                <p><em>💡 Filosofía: "BFS y DFS son los cimientos de casi todos los algoritmos de grafos avanzados. Domínalos hoy, úsalos toda tu carrera profesional."</em></p>
+                <p><strong>Conexión con Semanas Previas:</strong> Los grafos validados en Semana 4 son ahora explorables sistemáticamente. Las técnicas de recursión de Semana 1-2 se aplican naturalmente en DFS.</p>
+            </div>
+            <p><a href="#bfs">Continuar → BFS</a></p>
+        </section>
+
+        <!-- BFS -->
+        <section id="bfs" class="section">
+            <h2>🌊 2.2.1. Búsqueda en Amplitud (BFS)</h2>
+            
+            <h3>Concepto Fundamental</h3>
+            <p><span class="emoji">🔵</span> <strong>BFS (Breadth-First Search)</strong> explora un grafo <em>nivel por nivel</em>, visitando primero todos los vecinos de un nodo antes de avanzar a los vecinos de los vecinos. Es análogo a una onda expansiva desde un punto inicial.</p>
+            
+            <div class="concepts">
+                <h4>Características Clave de BFS</h4>
+                <ul>
+                    <li><strong>Estructura de Datos:</strong> <code>Cola (Queue)</code> – FIFO (First In, First Out)</li>
+                    <li><strong>Orden de Exploración:</strong> Por niveles/capas desde el nodo inicial</li>
+                    <li><strong>Garantía Crítica:</strong> Encuentra el <em>camino más corto</em> (en términos de número de aristas) en grafos NO ponderados</li>
+                    <li><strong>Complejidad Temporal:</strong> O(V + E) donde V = vértices, E = aristas</li>
+                    <li><strong>Complejidad Espacial:</strong> O(V) para la cola y el conjunto de visitados</li>
+                </ul>
+            </div>
+
+            <h3>Algoritmo BFS Paso a Paso</h3>
+            <ol>
+                <li><strong>Inicialización:</strong> 
+                    <ul>
+                        <li>Crear cola vacía y conjunto de nodos visitados</li>
+                        <li>Encolar el nodo inicial y marcarlo como visitado</li>
+                    </ul>
+                </li>
+                <li><strong>Bucle Principal:</strong> Mientras la cola no esté vacía:
+                    <ul>
+                        <li>Desencolar nodo actual</li>
+                        <li>Procesar el nodo (imprimirlo, almacenarlo, etc.)</li>
+                        <li>Para cada vecino NO visitado del nodo actual:
+                            <ul>
+                                <li>Marcarlo como visitado</li>
+                                <li>Encolarlo</li>
+                                <li>(Opcional) Guardar distancia/padre para reconstruir caminos</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><strong>Finalización:</strong> Cuando la cola esté vacía, se habrán visitado todos los nodos alcanzables desde el inicial</li>
+            </ol>
+
+            <div class="visualization">
+                <h4>🎨 Visualización BFS</h4>
+                <p>Grafo de ejemplo: Red social simplificada donde aristas = amistad</p>
+                
+                <div class="mermaid" data-alt="Diagrama de grafo no dirigido con 7 nodos (A-G) coloreados por nivel BFS. Rojo: nodo inicial A (nivel 0). Azul: nodos B y C (nivel 1). Verde: nodos D, E y F (nivel 2). Naranja: nodo G (nivel 3)">
+                graph TD
+                    A((A)) --- B((B))
+                    A --- C((C))
+                    B --- D((D))
+                    B --- E((E))
+                    C --- F((F))
+                    E --- G((G))
+                    
+                    style A fill:#e74c3c,stroke:#c0392b,stroke-width:4px,color:#fff
+                    style B fill:#3498db,stroke:#2980b9,stroke-width:3px,color:#fff
+                    style C fill:#3498db,stroke:#2980b9,stroke-width:3px,color:#fff
+                    style D fill:#2ecc71,stroke:#27ae60,stroke-width:2px,color:#fff
+                    style E fill:#2ecc71,stroke:#27ae60,stroke-width:2px,color:#fff
+                    style F fill:#2ecc71,stroke:#27ae60,stroke-width:2px,color:#fff
+                    style G fill:#f39c12,stroke:#e67e22,stroke-width:2px,color:#fff
+                </div>
+                
+                <p><strong>Ejecución BFS desde A:</strong></p>
+                <table>
+                    <tr>
+                        <th>Iteración</th>
+                        <th>Cola</th>
+                        <th>Nodo Actual</th>
+                        <th>Visitados</th>
+                        <th>Nivel</th>
+                    </tr>
+                    <tr>
+                        <td>0 (inicio)</td>
+                        <td>[A]</td>
+                        <td>-</td>
+                        <td>{A}</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>[B, C]</td>
+                        <td>A</td>
+                        <td>{A, B, C}</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>[C, D, E]</td>
+                        <td>B</td>
+                        <td>{A, B, C, D, E}</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>[D, E, F]</td>
+                        <td>C</td>
+                        <td>{A, B, C, D, E, F}</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>[E, F]</td>
+                        <td>D</td>
+                        <td>{A, B, C, D, E, F}</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>[F, G]</td>
+                        <td>E</td>
+                        <td>{A, B, C, D, E, F, G}</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>[G]</td>
+                        <td>F</td>
+                        <td>{A, B, C, D, E, F, G}</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>[]</td>
+                        <td>G</td>
+                        <td>{A, B, C, D, E, F, G}</td>
+                        <td>FIN</td>
+                    </tr>
+                </table>
+                
+                <p><strong>Resultado:</strong> Orden BFS: <code>A → B → C → D → E → F → G</code></p>
+                <p><strong>Distancias desde A:</strong> A=0, B=1, C=1, D=2, E=2, F=2, G=3</p>
+            </div>
+
+            <div class="concepts" style="background: #ffe6f0; padding: 15px; border-left: 5px solid #e91e63; margin: 20px 0;">
+                <h4>⏸️ PUNTO DE PAUSA: Ejercicio Manual</h4>
+                <p><strong>Antes de continuar, realiza este ejercicio en papel (5-10 minutos):</strong></p>
+                <ol>
+                    <li>Dibuja el grafo de la visualización anterior (A-B-C-D-E-F-G) en una hoja</li>
+                    <li>Simula <strong>manualmente</strong> 4 iteraciones de BFS desde el nodo A:
+                        <ul style="margin-top: 5px;">
+                            <li>Escribe el estado de la cola en cada paso</li>
+                            <li>Marca los nodos visitados con colores</li>
+                            <li>Registra el nivel de cada nodo</li>
+                        </ul>
+                    </li>
+                    <li><strong>Pregunta reflexiva:</strong> ¿Por qué BFS visita D antes que F? ¿Qué propiedad garantiza esto?</li>
+                </ol>
+                <p><em>Este ejercicio refuerza tu comprensión del algoritmo antes de ver el código. No continúes hasta completarlo.</em></p>
+            </div>
+
+            <div class="application">
+                <h4>📱 Aplicación: Redes Sociales y Sistemas de Recomendación</h4>
+                
+                <h5>Caso de Uso 1: "Personas que Quizás Conozcas" (Facebook/LinkedIn)</h5>
+                <p><strong>Problema:</strong> Recomendar nuevos amigos basándose en amigos mutuos.</p>
+                <p><strong>Solución BFS:</strong></p>
+                <ul>
+                    <li>Ejecutar BFS desde el usuario objetivo hasta nivel 2</li>
+                    <li>Nivel 1 = amigos directos (ya conectados)</li>
+                    <li>Nivel 2 = amigos de amigos (candidatos para recomendación)</li>
+                    <li>Ordenar candidatos por número de conexiones mutuas</li>
+                </ul>
+                
+                <h5>Caso de Uso 2: Grado de Separación (ej. "Seis Grados de Separación")</h5>
+                <p><strong>Problema:</strong> ¿Cuál es la distancia más corta entre dos personas en una red social?</p>
+                <p><strong>Solución BFS:</strong></p>
+                <ul>
+                    <li>BFS desde persona A hasta encontrar persona B</li>
+                    <li>La distancia encontrada es el número mínimo de intermediarios</li>
+                    <li>Se puede reconstruir el camino guardando punteros "padre"</li>
+                </ul>
+                
+                <h5>Caso de Uso 3: Difusión de Información/Viralidad</h5>
+                <p><strong>Problema:</strong> Modelar cómo se propaga una noticia o meme en una red.</p>
+                <p><strong>Solución BFS:</strong></p>
+                <ul>
+                    <li>Cada nivel de BFS = una "generación" de propagación</li>
+                    <li>Permite estimar alcance y velocidad de viralización</li>
+                    <li>Identificar nodos "influencers" (alto grado en niveles tempranos)</li>
+                </ul>
+            </div>
+
+            <p><a href="#dfs">Continuar → DFS</a></p>
+        </section>
+
+        <!-- DFS -->
+        <section id="dfs" class="section">
+            <h2>🌲 2.2.2. Búsqueda en Profundidad (DFS)</h2>
+            
+            <h3>Concepto Fundamental</h3>
+            <p><span class="emoji">🟢</span> <strong>DFS (Depth-First Search)</strong> explora un grafo <em>en profundidad</em>, avanzando lo más lejos posible por una rama antes de retroceder. Es análogo a explorar un laberinto siguiendo un camino hasta el final antes de probar alternativas.</p>
+            
+            <div class="concepts">
+                <h4>Características Clave de DFS</h4>
+                <ul>
+                    <li><strong>Estructura de Datos:</strong> <code>Pila (Stack)</code> – LIFO (Last In, First Out), o recursión (pila implícita)</li>
+                    <li><strong>Orden de Exploración:</strong> En profundidad, explorando ramas completas</li>
+                    <li><strong>Ventajas:</strong> Eficiente en memoria, ideal para detectar ciclos, componentes conectadas, ordenamiento topológico</li>
+                    <li><strong>Complejidad Temporal:</strong> O(V + E) igual que BFS</li>
+                    <li><strong>Complejidad Espacial:</strong> O(V) peor caso para la pila de recursión</li>
+                </ul>
+            </div>
+
+            <h3>Algoritmo DFS (Versión Recursiva)</h3>
+            <pre><code>DFS(nodo, visitados):
+    marcar nodo como visitado
+    procesar(nodo)
+    
+    para cada vecino de nodo:
+        si vecino NO está en visitados:
+            DFS(vecino, visitados)</code></pre>
+
+            <h3>Algoritmo DFS (Versión Iterativa con Pila)</h3>
+            <ol>
+                <li><strong>Inicialización:</strong> 
+                    <ul>
+                        <li>Crear pila vacía y conjunto de nodos visitados</li>
+                        <li>Apilar el nodo inicial</li>
+                    </ul>
+                </li>
+                <li><strong>Bucle Principal:</strong> Mientras la pila no esté vacía:
+                    <ul>
+                        <li>Desapilar nodo actual</li>
+                        <li>Si ya fue visitado, continuar (saltar)</li>
+                        <li>Marcarlo como visitado y procesarlo</li>
+                        <li>Apilar todos sus vecinos NO visitados</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <div class="visualization">
+                <h4>🎨 Visualización DFS</h4>
+                <p>Usando el mismo grafo que BFS para comparar:</p>
+                
+                <div class="mermaid" data-alt="Diagrama de grafo no dirigido con 7 nodos (A-G) coloreados por orden de visita DFS. Rojo: A (primero), Morado: B (segundo), Azul: D (tercero), Verde: E (cuarto), Naranja: G (quinto), Turquesa: C (sexto), Gris: F (séptimo)">
+                graph TD
+                    A((A)) --- B((B))
+                    A --- C((C))
+                    B --- D((D))
+                    B --- E((E))
+                    C --- F((F))
+                    E --- G((G))
+                    
+                    style A fill:#e74c3c,stroke:#c0392b,stroke-width:4px,color:#fff
+                    style B fill:#9b59b6,stroke:#8e44ad,stroke-width:3px,color:#fff
+                    style D fill:#3498db,stroke:#2980b9,stroke-width:2px,color:#fff
+                    style E fill:#2ecc71,stroke:#27ae60,stroke-width:2px,color:#fff
+                    style G fill:#f39c12,stroke:#e67e22,stroke-width:2px,color:#fff
+                    style C fill:#1abc9c,stroke:#16a085,stroke-width:2px,color:#fff
+                    style F fill:#34495e,stroke:#2c3e50,stroke-width:2px,color:#fff
+                </div>
+                
+                <p><strong>Ejecución DFS desde A (recursivo, asumiendo vecinos ordenados alfabéticamente):</strong></p>
+                <table>
+                    <tr>
+                        <th>Paso</th>
+                        <th>Llamada Recursiva</th>
+                        <th>Nodo Actual</th>
+                        <th>Visitados Acumulados</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>DFS(A)</td>
+                        <td>A</td>
+                        <td>{A}</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>DFS(B) ← desde A</td>
+                        <td>B</td>
+                        <td>{A, B}</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>DFS(D) ← desde B</td>
+                        <td>D</td>
+                        <td>{A, B, D}</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Retorno a B, probar E</td>
+                        <td>E</td>
+                        <td>{A, B, D, E}</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>DFS(G) ← desde E</td>
+                        <td>G</td>
+                        <td>{A, B, D, E, G}</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Retorno a A, probar C</td>
+                        <td>C</td>
+                        <td>{A, B, D, E, G, C}</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>DFS(F) ← desde C</td>
+                        <td>F</td>
+                        <td>{A, B, D, E, G, C, F}</td>
+                    </tr>
+                </table>
+                
+                <p><strong>Resultado:</strong> Orden DFS: <code>A → B → D → E → G → C → F</code></p>
+                <p><em>Nota: El orden exacto depende de cómo se ordenen los vecinos en la lista de adyacencia.</em></p>
+            </div>
+
+            <div class="concepts" style="background: #f3e5f5; padding: 15px; border-left: 5px solid #9c27b0; margin: 20px 0;">
+                <h4>⏸️ PUNTO DE PAUSA: Compara BFS vs DFS</h4>
+                <p><strong>Ejercicio comparativo (5 minutos):</strong></p>
+                <p>Has visto que BFS y DFS recorren el MISMO grafo (A-B-C-D-E-F-G) pero en orden diferente:</p>
+                <ul style="margin-top: 10px;">
+                    <li><strong>BFS:</strong> A → B → C → D → E → F → G</li>
+                    <li><strong>DFS:</strong> A → B → D → E → G → C → F</li>
+                </ul>
+                
+                <p><strong>Pregunta 1:</strong> ¿Por qué BFS visita C (nivel 1) antes que D (nivel 2), pero DFS visita D antes que C?</p>
+                <p><strong>Pregunta 2:</strong> Si necesitas encontrar a G desde A, ¿cuál algoritmo lo encuentra "más rápido" en términos de nodos explorados?</p>
+                <p><strong>Pregunta 3:</strong> Dibuja el "árbol de exploración" de ambos algoritmos. ¿Qué diferencia estructural observas?</p>
+                <p><strong>Pregunta 4 (Cuantitativa):</strong> Calcula el uso máximo de memoria para cada algoritmo en este grafo específico:</p>
+                <ul style="margin-top: 5px;">
+                    <li><strong>BFS:</strong> ¿Cuál es el tamaño máximo de la cola durante la ejecución?</li>
+                    <li><strong>DFS:</strong> ¿Cuál es la profundidad máxima de la pila recursiva?</li>
+                    <li>¿Esto confirma la relación teórica O(V) vs O(h)?</li>
+                </ul>
+                
+                <details style="margin-top: 10px; padding: 10px; background: white; border-radius: 5px;">
+                    <summary style="cursor: pointer; font-weight: bold;">Ver respuestas</summary>
+                    <ul style="margin-top: 10px;">
+                        <li><strong>R1:</strong> BFS explora nivel por nivel (primero todos los vecinos de A: B y C, luego vecinos de vecinos). DFS explora en profundidad (sigue rama B→D→E→G antes de volver a probar C).</li>
+                        <li><strong>R2:</strong> Depende de la suerte. BFS exploró 6 nodos antes de G. DFS exploró 5. En general, ninguno es "más rápido" sin información adicional sobre la estructura.</li>
+                        <li><strong>R3:</strong> BFS crea árbol "ancho y bajo". DFS crea árbol "delgado y alto".</li>
+                        <li><strong>R4 (Cálculo detallado):</strong>
+                            <table style="font-size: 0.85em; margin-top: 10px;">
+                                <tr>
+                                    <th>Algoritmo</th>
+                                    <th>Iteración</th>
+                                    <th>Estado</th>
+                                    <th>Tamaño</th>
+                                </tr>
+                                <tr>
+                                    <td rowspan="5"><strong>BFS</strong></td>
+                                    <td>Inicial</td>
+                                    <td>Cola: [A]</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Tras procesar A</td>
+                                    <td>Cola: [B, C]</td>
+                                    <td>2</td>
+                                </tr>
+                                <tr>
+                                    <td>Tras procesar B</td>
+                                    <td>Cola: [C, D, E]</td>
+                                    <td><strong>3 (máximo)</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Tras procesar C</td>
+                                    <td>Cola: [D, E, F]</td>
+                                    <td><strong>3 (máximo)</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Subsecuente</td>
+                                    <td>Cola: [E, F], [F, G], [G], []</td>
+                                    <td>≤2</td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="4"><strong>DFS</strong></td>
+                                    <td>Camino más profundo</td>
+                                    <td>Pila: [A, B, E, G]</td>
+                                    <td><strong>4 (máximo)</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Backtrack a A</td>
+                                    <td>Pila: [A, C, F]</td>
+                                    <td>3</td>
+                                </tr>
+                                <tr>
+                                    <td>Nota</td>
+                                    <td colspan="2">La rama A→B→D→E→G tiene profundidad 4</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Conclusión</strong></td>
+                                    <td colspan="2">BFS: 3 nodos (O(ancho) ≈ O(√V)), DFS: 4 nodos (O(profundidad) = O(h))</td>
+                                </tr>
+                            </table>
+                            <p style="margin-top: 10px;"><strong>Verificación teórica:</strong> Este grafo tiene V=7 nodos y profundidad máxima h=4. BFS usó 3 nodos (43% de V), DFS usó 4 (57% de V, pero igual a h). Confirma que:</p>
+                            <ul>
+                                <li>BFS es O(V) en peor caso, pero aquí O(ancho del nivel más ancho)</li>
+                                <li>DFS es O(h) donde h=profundidad máxima</li>
+                                <li>En este grafo específico, <strong>DFS usa más memoria que BFS</strong> (4 vs 3)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </details>
+            </div>
+
+            <div class="application">
+                <h4>🔍 Aplicación: Detección de Ciclos y Análisis de Dependencias</h4>
+                
+                <h5>Caso de Uso 1: Detección de Ciclos en Grafos Dirigidos</h5>
+                <p><strong>Problema:</strong> Verificar si existe un ciclo en un grafo dirigido (ej. dependencias circulares en software).</p>
+                <p><strong>Solución DFS Modificado:</strong></p>
+                <ul>
+                    <li>Mantener 3 estados por nodo: <code>NO_VISITADO</code>, <code>EN_PROCESO</code>, <code>COMPLETADO</code></li>
+                    <li>Si durante DFS encontramos un nodo <code>EN_PROCESO</code>, hay un ciclo</li>
+                    <li>Complejidad: O(V + E)</li>
+                </ul>
+                <pre><code>DetectarCiclo(nodo, estado):
+    estado[nodo] = EN_PROCESO
+    
+    para cada vecino de nodo:
+        si estado[vecino] == EN_PROCESO:
+            return True  // ¡Ciclo detectado!
+        si estado[vecino] == NO_VISITADO:
+            si DetectarCiclo(vecino, estado):
+                return True
+    
+    estado[nodo] = COMPLETADO
+    return False</code></pre>
+                
+                <div class="visualization" style="margin: 20px 0;">
+                    <h5>Ejemplo Visual: Grafo Dirigido con Ciclo</h5>
+                    <p><strong>Grafo de dependencias con ciclo:</strong> Módulo 1 → Módulo 2 → Módulo 3 → Módulo 1 (¡ciclo!)</p>
+                    
+                    <div class="mermaid" data-alt="Diagrama de grafo dirigido con ciclo. Cuatro nodos: 1→2→3→1 (ciclo), y 3→4 (sin ciclo). Nodo 1 en rojo, nodos 2 y 3 en amarillo (EN_PROCESO durante detección), nodo 4 en verde">
+                    graph TD
+                        N1((1<br/>Módulo A)) --> N2((2<br/>Módulo B))
+                        N2 --> N3((3<br/>Módulo C))
+                        N3 --> N1
+                        N3 --> N4((4<br/>Módulo D))
+                        
+                        style N1 fill:#e74c3c,stroke:#c0392b,stroke-width:3px,color:#fff
+                        style N2 fill:#f39c12,stroke:#e67e22,stroke-width:2px,color:#fff
+                        style N3 fill:#f39c12,stroke:#e67e22,stroke-width:2px,color:#fff
+                        style N4 fill:#2ecc71,stroke:#27ae60,stroke-width:2px,color:#fff
+                    </div>
+                    
+                    <p><strong>Traza de Detección de Ciclo (DFS desde nodo 1):</strong></p>
+                    <table style="font-size: 0.9em;">
+                        <tr>
+                            <th>Paso</th>
+                            <th>Nodo Actual</th>
+                            <th>Estado del Nodo</th>
+                            <th>Acción</th>
+                            <th>Observación</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>NO_VISITADO → EN_PROCESO</td>
+                            <td>Marcar 1 como EN_PROCESO</td>
+                            <td>Inicio DFS</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>2</td>
+                            <td>NO_VISITADO → EN_PROCESO</td>
+                            <td>Explorar vecino 2 desde 1</td>
+                            <td>Recursión</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>3</td>
+                            <td>NO_VISITADO → EN_PROCESO</td>
+                            <td>Explorar vecino 3 desde 2</td>
+                            <td>Recursión</td>
+                        </tr>
+                        <tr style="background: #ffe6e6;">
+                            <td>4</td>
+                            <td>1</td>
+                            <td>EN_PROCESO (¡encontrado!)</td>
+                            <td>Intentar explorar vecino 1 desde 3</td>
+                            <td><strong>🔴 CICLO DETECTADO: 1→2→3→1</strong></td>
+                        </tr>
+                    </table>
+                    
+                    <p><strong>Conclusión:</strong> El algoritmo detecta que al intentar visitar el nodo 1 desde el nodo 3, el nodo 1 ya está <code>EN_PROCESO</code>, lo que significa que está en la pila de recursión actual, confirmando un ciclo.</p>
+                </div>
+                
+                <h5>Caso de Uso 2: Análisis de Dependencias (Build Systems, Package Managers)</h5>
+                <p><strong>Problema:</strong> Determinar orden de compilación de módulos con dependencias.</p>
+                <p><strong>Solución: Ordenamiento Topológico con DFS</strong></p>
+                <ul>
+                    <li>Ejecutar DFS en grafo de dependencias</li>
+                    <li>Al completar un nodo (backtrack), agregarlo a una pila</li>
+                    <li>La pila invertida es el orden topológico válido</li>
+                    <li>Si se detecta ciclo, no existe orden válido</li>
+                </ul>
+                
+                <h5>Caso de Uso 3: Análisis de Componentes Fuertemente Conectadas (Algoritmo de Tarjan/Kosaraju)</h5>
+                <p><strong>Problema:</strong> Encontrar grupos de nodos donde todos son mutuamente alcanzables.</p>
+                <p><strong>Aplicaciones:</strong></p>
+                <ul>
+                    <li>Análisis de redes sociales (comunidades fuertemente conectadas)</li>
+                    <li>Optimización de código (identificar módulos acoplados)</li>
+                    <li>Análisis de páginas web (clusters de sitios relacionados)</li>
+                </ul>
+            </div>
+
+            <div class="concepts" style="background: #e8f4fd; padding: 20px; border-left: 5px solid #3498db; margin: 20px 0;">
+                <h4>🔗 Conexión con Unidad I: DFS con Memoización y Programación Dinámica</h4>
+                <p><strong>Recordatorio de 1.4.4:</strong> Vimos cómo la <em>memoización</em> y la <em>programación dinámica</em> optimizan algoritmos recursivos evitando recalcular subproblemas.</p>
+                
+                <p><strong>Aplicación a DFS:</strong> Muchos problemas de grafos con estructura recursiva se benefician de estas técnicas:</p>
+                
+                <h5>Ejemplo 1: Camino Más Largo en un DAG</h5>
+                <pre><code>// Sin memoización: O(2^V) - recalcula caminos múltiples veces
+// Con memoización: O(V + E) - cada nodo se procesa una vez
+
+Dictionary&lt;int, int&gt; memo = new Dictionary&lt;int, int&gt;();
+
+int CaminoMasLargo(int nodo) {
+    if (memo.ContainsKey(nodo))
+        return memo[nodo];  // ✅ Subproblema ya resuelto
+    
+    int maxLongitud = 0;
+    foreach (var vecino in adjacencyList[nodo]) {
+        maxLongitud = Math.Max(maxLongitud, 1 + CaminoMasLargo(vecino));
+    }
+    
+    memo[nodo] = maxLongitud;
+    return maxLongitud;
+}</code></pre>
+                
+                <h5>Ejemplo 2: Conteo de Caminos en DAG (Programación Dinámica Bottom-Up)</h5>
+                <p>Problema: ¿Cuántos caminos diferentes existen de A a B?</p>
+                <pre><code>int[] dp = new int[numNodos];
+dp[destino] = 1;  // Un camino para llegar al destino desde sí mismo
+
+// Procesar nodos en orden topológico inverso
+foreach (var nodo in ordenTopologico.Reverse()) {
+    foreach (var vecino in adjacencyList[nodo]) {
+        dp[nodo] += dp[vecino];
+    }
+}
+
+return dp[origen];  // Número total de caminos</code></pre>
+                
+                <p><strong>💡 Insight Clave:</strong> DFS + Memoización = Base de muchos algoritmos avanzados:</p>
+                <ul>
+                    <li><strong>Floyd-Warshall</strong> (Semana 6-7): DP sobre todos los pares de nodos</li>
+                    <li><strong>Bellman-Ford</strong>: DP para caminos más cortos con aristas negativas</li>
+                    <li><strong>Algoritmos de Flujo Máximo</strong>: DFS con memorización de capacidades residuales</li>
+                </ul>
+                
+                <p><em>Esta conexión muestra por qué la Unidad I (Recursividad) es fundamental: DFS es recursión sobre grafos, y las optimizaciones recursivas (memoización, DP) se aplican directamente aquí.</em></p>
+            </div>
+
+            <div class="warning">
+                <h4>⚠️ Cuidado con DFS en Grafos Grandes</h4>
+                <ul>
+                    <li><strong>Stack Overflow:</strong> La versión recursiva puede causar desbordamiento de pila en grafos con caminos muy profundos (>10,000 nodos). Solución: usar versión iterativa.</li>
+                    <li><strong>Grafos Desconectados:</strong> DFS desde un nodo no garantiza visitar todo el grafo. Debes ejecutar DFS desde múltiples nodos no visitados.</li>
+                    <li><strong>Orden No Determinista:</strong> El orden de visita depende del orden de los vecinos en la lista de adyacencia.</li>
+                </ul>
+            </div>
+
+            <p><a href="#comparison">Continuar → Análisis Comparativo</a></p>
+        </section>
+
+        <!-- COMPARACIÓN BFS VS DFS -->
+        <section id="comparison" class="section">
+            <h2>⚖️ 2.2.3. Análisis Comparativo de Estrategias de Búsqueda</h2>
+            
+            <div class="comparison">
+                <h3>Tabla Comparativa Exhaustiva</h3>
+                <table>
+                    <tr>
+                        <th>Criterio</th>
+                        <th>BFS (Búsqueda en Amplitud)</th>
+                        <th>DFS (Búsqueda en Profundidad)</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Estructura de Datos</strong></td>
+                        <td>Cola (Queue) - FIFO</td>
+                        <td>Pila (Stack) - LIFO o Recursión</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Orden de Exploración</strong></td>
+                        <td>Por niveles (horizontal)</td>
+                        <td>En profundidad (vertical)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Complejidad Temporal</strong></td>
+                        <td>O(V + E)</td>
+                        <td>O(V + E)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Complejidad Espacial (Peor Caso)</strong></td>
+                        <td>O(V) - cuando todos los nodos están en la cola (grafo completo o ancho)</td>
+                        <td>O(h) donde h=profundidad máxima - en grafo lineal O(V), en árbol balanceado O(log V)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Garantía de Camino Corto</strong></td>
+                        <td>✅ SÍ (en grafos no ponderados)</td>
+                        <td>❌ NO</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mejor para Detección de Ciclos</strong></td>
+                        <td>Posible, pero menos natural</td>
+                        <td>✅ Excelente (con estados EN_PROCESO)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Componentes Conectadas</strong></td>
+                        <td>✅ Eficiente</td>
+                        <td>✅ Eficiente</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ordenamiento Topológico</strong></td>
+                        <td>❌ No aplicable directamente</td>
+                        <td>✅ Método estándar</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Uso de Memoria (Práctica)</strong></td>
+                        <td>Alto en grafos anchos (muchos vecinos por nivel)</td>
+                        <td>Alto en grafos profundos (caminos largos)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Implementación</strong></td>
+                        <td>Siempre iterativa (cola)</td>
+                        <td>Recursiva (elegante) o Iterativa (pila explícita)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Casos de Uso Típicos</strong></td>
+                        <td>
+                            • Camino más corto (no ponderado)<br>
+                            • Niveles en red social<br>
+                            • Difusión/propagación<br>
+                            • Puzzle solving (estado mínimo)
+                        </td>
+                        <td>
+                            • Detección de ciclos<br>
+                            • Ordenamiento topológico<br>
+                            • Backtracking (puzzles)<br>
+                            • Análisis de dependencias
+                        </td>
+                    </tr>
+                </table>
+                
+                <div class="concepts" style="margin-top: 20px; background: #fff3cd; padding: 15px; border-left: 5px solid #f39c12;">
+                    <h4>📐 Mini-Ejercicio: Análisis Cuantitativo de Memoria</h4>
+                    <p><strong>Contexto:</strong> Considera el grafo visualizado anteriormente en la sección de BFS (A-B-C-D-E-F-G).</p>
+                    
+                    <p><strong>Tarea:</strong> Calcula manualmente el uso máximo de memoria para BFS y DFS:</p>
+                    <ol>
+                        <li><strong>BFS desde A:</strong> ¿Cuál es el tamaño máximo de la cola durante la ejecución?
+                            <ul style="margin-top: 5px;">
+                                <li>Nivel 0: [A] → tamaño 1</li>
+                                <li>Nivel 1: [B, C] → tamaño 2</li>
+                                <li>Nivel 2: [D, E, F] → tamaño <strong>3 (máximo)</strong></li>
+                                <li>Nivel 3: [G] → tamaño 1</li>
+                            </ul>
+                        </li>
+                        <li><strong>DFS recursivo desde A:</strong> ¿Cuál es la profundidad máxima de la pila de recursión?
+                            <ul style="margin-top: 5px;">
+                                <li>Camino más largo: A → B → E → G</li>
+                                <li>Profundidad máxima: <strong>4 llamadas apiladas</strong></li>
+                            </ul>
+                        </li>
+                    </ol>
+                    
+                    <p><strong>Análisis Comparativo:</strong></p>
+                    <table style="font-size: 0.9em; margin-top: 10px;">
+                        <tr>
+                            <th>Escenario</th>
+                            <th>BFS Memoria</th>
+                            <th>DFS Memoria</th>
+                            <th>Ganador</th>
+                        </tr>
+                        <tr>
+                            <td>Grafo "Ancho" (ej. red social, grado promedio alto)</td>
+                            <td>O(V) - todos los vecinos en cola</td>
+                            <td>O(h) - solo camino actual, h << V</td>
+                            <td>🏆 DFS (más eficiente)</td>
+                        </tr>
+                        <tr>
+                            <td>Grafo "Profundo" (ej. árbol binario desbalanceado)</td>
+                            <td>O(1) o O(log V) - pocos nodos por nivel</td>
+                            <td>O(V) - pila crece linealmente</td>
+                            <td>🏆 BFS (más eficiente)</td>
+                        </tr>
+                        <tr>
+                            <td>Grafo completo K₇ (todos conectados con todos)</td>
+                            <td>O(V) ≈ 7 nodos</td>
+                            <td>O(V) ≈ 7 niveles recursión</td>
+                            <td>⚖️ Empate</td>
+                        </tr>
+                    </table>
+                    
+                    <p style="margin-top: 10px;"><strong>💡 Conexión con Unidad I (Recursión):</strong> Este análisis de memoria es idéntico al análisis de pila que vimos en <strong>1.3 Gestión de Memoria en Algoritmos Recursivos</strong>. DFS recursivo sufre los mismos trade-offs que cualquier función recursiva: elegancia vs. riesgo de stack overflow en grafos profundos.</p>
+                </div>
+            </div>
+
+            <div class="concepts">
+                <h3>🧠 Guía de Decisión: ¿Cuándo Usar Cada Algoritmo?</h3>
+                
+                <h4>Usa BFS cuando:</h4>
+                <ul>
+                    <li>✅ Necesitas el <strong>camino más corto</strong> en términos de número de aristas</li>
+                    <li>✅ El problema requiere <strong>exploración por niveles</strong> (ej. niveles de amistad)</li>
+                    <li>✅ Necesitas calcular <strong>distancias desde un origen</strong></li>
+                    <li>✅ El grafo es <strong>"ancho"</strong> (muchos vecinos por nodo, poca profundidad)</li>
+                    <li>✅ Quieres encontrar <strong>todos los nodos a distancia k</strong></li>
+                </ul>
+
+                <h4>Usa DFS cuando:</h4>
+                <ul>
+                    <li>✅ Necesitas <strong>detectar ciclos</strong> en un grafo</li>
+                    <li>✅ Requieres <strong>ordenamiento topológico</strong></li>
+                    <li>✅ Estás resolviendo <strong>problemas de backtracking</strong> (ej. Sudoku, N-Queens)</li>
+                    <li>✅ El grafo es <strong>"profundo"</strong> (pocos vecinos, caminos largos)</li>
+                    <li>✅ Necesitas analizar <strong>componentes conectadas o fuertemente conectadas</strong></li>
+                    <li>✅ La recursión simplifica significativamente el código</li>
+                </ul>
+
+                <h4>Considera Ambos cuando:</h4>
+                <ul>
+                    <li>🔄 Necesitas <strong>componentes conectadas</strong> (ambos son O(V+E))</li>
+                    <li>🔄 Estás haciendo <strong>verificación de conectividad</strong></li>
+                    <li>🔄 El problema no tiene preferencia clara (prueba ambos)</li>
+                </ul>
+            </div>
+
+            <div class="visualization">
+                <h3>📊 Comparación Visual: Misma Entrada, Diferente Resultado</h3>
+                
+                <h4>Escenario: Encontrar camino de A a F</h4>
+                <div class="mermaid" data-alt="Diagrama de grafo no dirigido con 6 nodos (A-F) mostrando múltiples caminos de A a F. Nodo A en rojo (origen), nodo F en verde (destino). Conexiones: A-B-D-F, A-C-D-F, A-C-E-F">
+                graph LR
+                    A((A)) --- B((B))
+                    A --- C((C))
+                    B --- D((D))
+                    C --- D
+                    D --- F((F))
+                    C --- E((E))
+                    E --- F
+                    
+                    style A fill:#e74c3c,stroke:#c0392b,stroke-width:3px,color:#fff
+                    style F fill:#2ecc71,stroke:#27ae60,stroke-width:3px,color:#fff
+                </div>
+                
+                <table>
+                    <tr>
+                        <th>Algoritmo</th>
+                        <th>Camino Encontrado</th>
+                        <th>Longitud</th>
+                        <th>Nodos Explorados (orden)</th>
+                    </tr>
+                    <tr>
+                        <td><strong>BFS</strong></td>
+                        <td>A → C → E → F</td>
+                        <td>3 aristas</td>
+                        <td>A, B, C, D, E, F</td>
+                    </tr>
+                    <tr>
+                        <td><strong>DFS</strong></td>
+                        <td>A → B → D → F (primer camino encontrado)</td>
+                        <td>3 aristas</td>
+                        <td>A, B, D, F</td>
+                    </tr>
+                </table>
+                
+                <p><strong>Observación:</strong> En este caso, ambos encuentran caminos de longitud 3, pero BFS <em>garantiza</em> que es el más corto, mientras que DFS solo encontró <em>un</em> camino.</p>
+            </div>
+
+            <p><a href="#solution-cs">Continuar → Implementaciones en Código</a></p>
+        </section>
+
+        <!-- PUNTO DE PAUSA ANTES DE CÓDIGO -->
+        <section class="section" style="background: #fffbea; padding: 25px; border: 3px dashed #f39c12; border-radius: 10px; margin: 30px 0;">
+            <h3 style="color: #e67e22; border-bottom: none;">⏸️ CHECKPOINT: Autoevaluación Pre-Código</h3>
+            <p><strong>Antes de revisar las implementaciones, verifica que comprendes los fundamentos:</strong></p>
+            
+            <h4>Test Rápido (2 minutos):</h4>
+            <ol>
+                <li>Sin mirar arriba: ¿Qué estructura de datos usa BFS? ¿Y DFS?</li>
+                <li>Verdadero o Falso: "DFS siempre encuentra el camino más corto"</li>
+                <li>¿En qué tipo de grafo es esencial usar DFS para ordenamiento topológico?</li>
+                <li>Escribe en pseudocódigo los 3 pasos principales de BFS</li>
+            </ol>
+            
+            <h4>Desafío Conceptual:</h4>
+            <p>Dado un grafo con 1000 nodos organizados en forma de lista lineal (1→2→3→...→1000):</p>
+            <ul>
+                <li>¿Cuál es la complejidad espacial de BFS desde el nodo 1? <em>(Pista: ¿cuántos nodos máximo hay en la cola?)</em></li>
+                <li>¿Y la de DFS recursivo?</li>
+                <li>¿Cuál usarías y por qué?</li>
+            </ul>
+            
+            <p style="margin-top: 15px;"><strong>Respuestas:</strong></p>
+            <details style="margin-top: 10px; padding: 10px; background: white; border-radius: 5px;">
+                <summary style="cursor: pointer; font-weight: bold;">Haz clic para ver respuestas</summary>
+                <ol style="margin-top: 10px;">
+                    <li>BFS: Cola (Queue). DFS: Pila (Stack) o recursión</li>
+                    <li>FALSO. DFS no garantiza camino más corto; BFS sí (en grafos no ponderados)</li>
+                    <li>Grafo Dirigido Acíclico (DAG)</li>
+                    <li>
+                        <pre style="font-size: 0.85em;">1. Encolar nodo inicial, marcar visitado
+2. Mientras cola no vacía:
+   - Desencolar nodo actual
+   - Para cada vecino no visitado:
+     * Marcar visitado, encolar
+3. Retornar orden de visita</pre>
+                    </li>
+                </ol>
+                <p><strong>Desafío:</strong></p>
+                <ul>
+                    <li><strong>BFS espacial:</strong> O(1) - la cola solo tiene 1 nodo a la vez (grafo lineal)</li>
+                    <li><strong>DFS espacial:</strong> O(1000) - la pila recursiva crece linealmente con la profundidad</li>
+                    <li><strong>Usar BFS</strong> para grafo lineal (mucho más eficiente en memoria)</li>
+                </ul>
+            </details>
+            
+            <p style="margin-top: 20px; font-style: italic; color: #e67e22;">
+                ✅ Si respondiste correctamente 3/4 preguntas, estás listo para el código.<br>
+                ❌ Si no, revisa las secciones teóricas antes de continuar.
+            </p>
+        </section>
+
+        <!-- IMPLEMENTACIÓN C# -->
+        <section id="solution-cs" class="section">
+            <h2>💻 Implementación en C#</h2>
+            
+            <h3>Clase GraphTraversal Completa</h3>
+            <pre><code>using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace DataStructures.Week5
+{
+    /// &lt;summary&gt;
+    /// Clase que implementa algoritmos de exploración y búsqueda en grafos.
+    /// Incluye BFS, DFS (recursivo e iterativo), y aplicaciones prácticas.
+    /// &lt;/summary&gt;
+    public class GraphTraversal
+    {
+        // Representación del grafo usando lista de adyacencia
+        private Dictionary&lt;int, List&lt;int&gt;&gt; adjacencyList;
+        
+        /// &lt;summary&gt;
+        /// Constructor: inicializa el grafo vacío.
+        /// &lt;/summary&gt;
+        public GraphTraversal()
+        {
+            adjacencyList = new Dictionary&lt;int, List&lt;int&gt;&gt;();
+        }
+        
+        /// &lt;summary&gt;
+        /// Agrega una arista no dirigida entre dos nodos.
+        /// &lt;/summary&gt;
+        public void AddEdge(int u, int v)
+        {
+            if (!adjacencyList.ContainsKey(u))
+                adjacencyList[u] = new List&lt;int&gt;();
+            if (!adjacencyList.ContainsKey(v))
+                adjacencyList[v] = new List&lt;int&gt;();
+            
+            adjacencyList[u].Add(v);
+            adjacencyList[v].Add(u);
+        }
+        
+        /// &lt;summary&gt;
+        /// Agrega una arista dirigida de u a v.
+        /// &lt;/summary&gt;
+        public void AddDirectedEdge(int u, int v)
+        {
+            if (!adjacencyList.ContainsKey(u))
+                adjacencyList[u] = new List&lt;int&gt;();
+            
+            adjacencyList[u].Add(v);
+            
+            // Asegurar que v existe en el grafo
+            if (!adjacencyList.ContainsKey(v))
+                adjacencyList[v] = new List&lt;int&gt;();
+        }
+        
+        // ========================================
+        // BÚSQUEDA EN AMPLITUD (BFS)
+        // ========================================
+        
+        /// &lt;summary&gt;
+        /// Realiza BFS desde un nodo inicial y retorna el orden de visita.
+        /// Complejidad: O(V + E)
+        /// &lt;/summary&gt;
+        /// &lt;exception cref="ArgumentException"&gt;Si el nodo inicial no existe en el grafo&lt;/exception&gt;
+        public List&lt;int&gt; BFS(int start)
+        {
+            // Validación de caso límite: nodo inexistente
+            if (!adjacencyList.ContainsKey(start))
+                throw new ArgumentException($"El nodo {start} no existe en el grafo");
+            
+            var visited = new HashSet&lt;int&gt;();
+            var result = new List&lt;int&gt;();
+            var queue = new Queue&lt;int&gt;();
+            
+            queue.Enqueue(start);
+            visited.Add(start);
+            
+            while (queue.Count &gt; 0)
+            {
+                int current = queue.Dequeue();
+                result.Add(current);
+                
+                // Explorar vecinos no visitados
+                if (adjacencyList.ContainsKey(current))
+                {
+                    foreach (int neighbor in adjacencyList[current])
+                    {
+                        if (!visited.Contains(neighbor))
+                        {
+                            visited.Add(neighbor);
+                            queue.Enqueue(neighbor);
+                        }
+                    }
+                }
+            }
+            
+            return result;
+        }
+        
+        /// &lt;summary&gt;
+        /// BFS que retorna distancias desde el nodo inicial.
+        /// Útil para encontrar caminos más cortos en grafos no ponderados.
+        /// &lt;/summary&gt;
+        public Dictionary&lt;int, int&gt; BFSDistances(int start)
+        {
+            var distances = new Dictionary&lt;int, int&gt;();
+            var queue = new Queue&lt;int&gt;();
+            
+            queue.Enqueue(start);
+            distances[start] = 0;
+            
+            while (queue.Count &gt; 0)
+            {
+                int current = queue.Dequeue();
+                
+                if (adjacencyList.ContainsKey(current))
+                {
+                    foreach (int neighbor in adjacencyList[current])
+                    {
+                        if (!distances.ContainsKey(neighbor))
+                        {
+                            distances[neighbor] = distances[current] + 1;
+                            queue.Enqueue(neighbor);
+                        }
+                    }
+                }
+            }
+            
+            return distances;
+        }
+        
+        /// &lt;summary&gt;
+        /// BFS que reconstruye el camino más corto de start a end.
+        /// Retorna null si no hay camino.
+        /// &lt;/summary&gt;
+        public List&lt;int&gt; BFSShortestPath(int start, int end)
+        {
+            var parent = new Dictionary&lt;int, int&gt;();
+            var visited = new HashSet&lt;int&gt;();
+            var queue = new Queue&lt;int&gt;();
+            
+            queue.Enqueue(start);
+            visited.Add(start);
+            parent[start] = -1; // Sin padre
+            
+            bool found = false;
+            
+            while (queue.Count &gt; 0 &amp;&amp; !found)
+            {
+                int current = queue.Dequeue();
+                
+                if (current == end)
+                {
+                    found = true;
+                    break;
+                }
+                
+                if (adjacencyList.ContainsKey(current))
+                {
+                    foreach (int neighbor in adjacencyList[current])
+                    {
+                        if (!visited.Contains(neighbor))
+                        {
+                            visited.Add(neighbor);
+                            parent[neighbor] = current;
+                            queue.Enqueue(neighbor);
+                        }
+                    }
+                }
+            }
+            
+            if (!found) return null;
+            
+            // Reconstruir camino desde end hasta start
+            var path = new List&lt;int&gt;();
+            int node = end;
+            while (node != -1)
+            {
+                path.Add(node);
+                node = parent[node];
+            }
+            
+            path.Reverse();
+            return path;
+        }
+        
+        // ========================================
+        // BÚSQUEDA EN PROFUNDIDAD (DFS)
+        // ========================================
+        
+        /// &lt;summary&gt;
+        /// DFS recursivo desde un nodo inicial.
+        /// &lt;/summary&gt;
+        /// &lt;exception cref="ArgumentException"&gt;Si el nodo inicial no existe en el grafo&lt;/exception&gt;
+        public List&lt;int&gt; DFSRecursive(int start)
+        {
+            // Validación de caso límite: nodo inexistente
+            if (!adjacencyList.ContainsKey(start))
+                throw new ArgumentException($"El nodo {start} no existe en el grafo");
+            
+            var visited = new HashSet&lt;int&gt;();
+            var result = new List&lt;int&gt;();
+            
+            DFSRecursiveHelper(start, visited, result);
+            
+            return result;
+        }
+        
+        private void DFSRecursiveHelper(int node, HashSet&lt;int&gt; visited, List&lt;int&gt; result)
+        {
+            visited.Add(node);
+            result.Add(node);
+            
+            if (adjacencyList.ContainsKey(node))
+            {
+                foreach (int neighbor in adjacencyList[node])
+                {
+                    if (!visited.Contains(neighbor))
+                    {
+                        DFSRecursiveHelper(neighbor, visited, result);
+                    }
+                }
+            }
+        }
+        
+        /// &lt;summary&gt;
+        /// DFS iterativo usando pila explícita.
+        /// Más seguro para grafos muy profundos (evita stack overflow).
+        /// &lt;/summary&gt;
+        /// &lt;exception cref="ArgumentException"&gt;Si el nodo inicial no existe en el grafo&lt;/exception&gt;
+        public List&lt;int&gt; DFSIterative(int start)
+        {
+            // Validación de caso límite: nodo inexistente
+            if (!adjacencyList.ContainsKey(start))
+                throw new ArgumentException($"El nodo {start} no existe en el grafo");
+            
+            var visited = new HashSet&lt;int&gt;();
+            var result = new List&lt;int&gt;();
+            var stack = new Stack&lt;int&gt;();
+            
+            stack.Push(start);
+            
+            while (stack.Count &gt; 0)
+            {
+                int current = stack.Pop();
+                
+                if (visited.Contains(current))
+                    continue;
+                
+                visited.Add(current);
+                result.Add(current);
+                
+                // Apilar vecinos en orden inverso para mantener orden alfabético
+                if (adjacencyList.ContainsKey(current))
+                {
+                    var neighbors = adjacencyList[current].ToList();
+                    neighbors.Reverse();
+                    
+                    foreach (int neighbor in neighbors)
+                    {
+                        if (!visited.Contains(neighbor))
+                        {
+                            stack.Push(neighbor);
+                        }
+                    }
+                }
+            }
+            
+            return result;
+        }
+        
+        // ========================================
+        // APLICACIONES AVANZADAS
+        // ========================================
+        
+        /// &lt;summary&gt;
+        /// Detecta si existe un ciclo en un grafo DIRIGIDO usando DFS.
+        /// &lt;/summary&gt;
+        public bool HasCycleDirected()
+        {
+            var state = new Dictionary&lt;int, NodeState&gt;();
+            
+            // Inicializar todos los nodos como NO_VISITADO
+            foreach (var node in adjacencyList.Keys)
+            {
+                state[node] = NodeState.NotVisited;
+            }
+            
+            // Intentar DFS desde cada nodo no visitado
+            foreach (var node in adjacencyList.Keys)
+            {
+                if (state[node] == NodeState.NotVisited)
+                {
+                    if (HasCycleDirectedDFS(node, state))
+                        return true;
+                }
+            }
+            
+            return false;
+        }
+        
+        private bool HasCycleDirectedDFS(int node, Dictionary&lt;int, NodeState&gt; state)
+        {
+            state[node] = NodeState.InProgress;
+            
+            if (adjacencyList.ContainsKey(node))
+            {
+                foreach (int neighbor in adjacencyList[node])
+                {
+                    if (state[neighbor] == NodeState.InProgress)
+                        return true; // ¡Ciclo detectado!
+                    
+                    if (state[neighbor] == NodeState.NotVisited)
+                    {
+                        if (HasCycleDirectedDFS(neighbor, state))
+                            return true;
+                    }
+                }
+            }
+            
+            state[node] = NodeState.Completed;
+            return false;
+        }
+        
+        /// &lt;summary&gt;
+        /// Realiza ordenamiento topológico en un grafo dirigido acíclico (DAG).
+        /// Retorna null si el grafo tiene ciclos.
+        /// &lt;/summary&gt;
+        public List&lt;int&gt; TopologicalSort()
+        {
+            if (HasCycleDirected())
+                return null; // No se puede hacer ordenamiento topológico con ciclos
+            
+            var visited = new HashSet&lt;int&gt;();
+            var stack = new Stack&lt;int&gt;();
+            
+            foreach (var node in adjacencyList.Keys)
+            {
+                if (!visited.Contains(node))
+                {
+                    TopologicalSortDFS(node, visited, stack);
+                }
+            }
+            
+            return stack.ToList();
+        }
+        
+        private void TopologicalSortDFS(int node, HashSet&lt;int&gt; visited, Stack&lt;int&gt; stack)
+        {
+            visited.Add(node);
+            
+            if (adjacencyList.ContainsKey(node))
+            {
+                foreach (int neighbor in adjacencyList[node])
+                {
+                    if (!visited.Contains(neighbor))
+                    {
+                        TopologicalSortDFS(neighbor, visited, stack);
+                    }
+                }
+            }
+            
+            stack.Push(node); // Agregar después de procesar todos los vecinos
+        }
+        
+        /// &lt;summary&gt;
+        /// Encuentra todas las componentes conectadas en un grafo no dirigido.
+        /// &lt;/summary&gt;
+        public List&lt;List&lt;int&gt;&gt; FindConnectedComponents()
+        {
+            var visited = new HashSet&lt;int&gt;();
+            var components = new List&lt;List&lt;int&gt;&gt;();
+            
+            foreach (var node in adjacencyList.Keys)
+            {
+                if (!visited.Contains(node))
+                {
+                    var component = new List&lt;int&gt;();
+                    DFSForComponent(node, visited, component);
+                    components.Add(component);
+                }
+            }
+            
+            return components;
+        }
+        
+        private void DFSForComponent(int node, HashSet&lt;int&gt; visited, List&lt;int&gt; component)
+        {
+            visited.Add(node);
+            component.Add(node);
+            
+            if (adjacencyList.ContainsKey(node))
+            {
+                foreach (int neighbor in adjacencyList[node])
+                {
+                    if (!visited.Contains(neighbor))
+                    {
+                        DFSForComponent(neighbor, visited, component);
+                    }
+                }
+            }
+        }
+    }
+    
+    /// &lt;summary&gt;
+    /// Estados de nodo para detección de ciclos en grafos dirigidos.
+    /// &lt;/summary&gt;
+    public enum NodeState
+    {
+        NotVisited,   // Nodo no explorado
+        InProgress,   // Nodo en proceso (en pila de recursión)
+        Completed     // Nodo completamente procesado
+    }
+}
+</code></pre>
+
+            <h3>Programa de Prueba</h3>
+            <pre><code>class Program
+{
+    static void Main(string[] args)
+    {
+        Console.WriteLine("=== DEMOSTRACIÓN BFS Y DFS ===\n");
+        
+        // Crear grafo de ejemplo (red social simplificada)
+        var graph = new GraphTraversal();
+        graph.AddEdge(1, 2);
+        graph.AddEdge(1, 3);
+        graph.AddEdge(2, 4);
+        graph.AddEdge(2, 5);
+        graph.AddEdge(3, 6);
+        graph.AddEdge(5, 7);
+        
+        Console.WriteLine("Grafo: 1-2, 1-3, 2-4, 2-5, 3-6, 5-7");
+        Console.WriteLine();
+        
+        // BFS
+        Console.WriteLine("--- BFS desde nodo 1 ---");
+        var bfsResult = graph.BFS(1);
+        Console.WriteLine("Orden: " + string.Join(" → ", bfsResult));
+        
+        var distances = graph.BFSDistances(1);
+        Console.WriteLine("Distancias desde 1:");
+        foreach (var kvp in distances.OrderBy(x => x.Key))
+        {
+            Console.WriteLine($"  Nodo {kvp.Key}: {kvp.Value} aristas");
+        }
+        Console.WriteLine();
+        
+        // DFS
+        Console.WriteLine("--- DFS desde nodo 1 ---");
+        var dfsRecResult = graph.DFSRecursive(1);
+        Console.WriteLine("Recursivo: " + string.Join(" → ", dfsRecResult));
+        
+        var dfsIterResult = graph.DFSIterative(1);
+        Console.WriteLine("Iterativo: " + string.Join(" → ", dfsIterResult));
+        Console.WriteLine();
+        
+        // Camino más corto
+        Console.WriteLine("--- Camino más corto de 1 a 7 ---");
+        var path = graph.BFSShortestPath(1, 7);
+        Console.WriteLine("Camino: " + string.Join(" → ", path));
+        Console.WriteLine($"Longitud: {path.Count - 1} aristas");
+        Console.WriteLine();
+        
+        // Detección de ciclos (grafo dirigido)
+        Console.WriteLine("--- Detección de Ciclos ---");
+        var digraph = new GraphTraversal();
+        digraph.AddDirectedEdge(1, 2);
+        digraph.AddDirectedEdge(2, 3);
+        digraph.AddDirectedEdge(3, 1); // Ciclo: 1→2→3→1
+        digraph.AddDirectedEdge(3, 4);
+        
+        Console.WriteLine("Grafo dirigido: 1→2, 2→3, 3→1, 3→4");
+        Console.WriteLine($"¿Tiene ciclo? {(digraph.HasCycleDirected() ? "SÍ" : "NO")}");
+        Console.WriteLine();
+        
+        // Ordenamiento topológico (DAG)
+        var dag = new GraphTraversal();
+        dag.AddDirectedEdge(1, 2);
+        dag.AddDirectedEdge(1, 3);
+        dag.AddDirectedEdge(2, 4);
+        dag.AddDirectedEdge(3, 4);
+        
+        Console.WriteLine("--- Ordenamiento Topológico ---");
+        Console.WriteLine("DAG: 1→2, 1→3, 2→4, 3→4");
+        var topoSort = dag.TopologicalSort();
+        Console.WriteLine("Orden topológico: " + string.Join(" → ", topoSort));
+        Console.WriteLine();
+        
+        // Componentes conectadas
+        var disconnected = new GraphTraversal();
+        disconnected.AddEdge(1, 2);
+        disconnected.AddEdge(2, 3);
+        disconnected.AddEdge(4, 5);
+        disconnected.AddEdge(6, 7);
+        disconnected.AddEdge(7, 8);
+        
+        Console.WriteLine("--- Componentes Conectadas ---");
+        Console.WriteLine("Grafo: {1-2-3}, {4-5}, {6-7-8}");
+        var components = disconnected.FindConnectedComponents();
+        Console.WriteLine($"Número de componentes: {components.Count}");
+        for (int i = 0; i < components.Count; i++)
+        {
+            Console.WriteLine($"  Componente {i + 1}: [{string.Join(", ", components[i].OrderBy(x => x))}]");
+        }
+    }
+}
+</code></pre>
+
+            <p><a href="#solution-py">Continuar → Implementación Python</a></p>
+        </section>
+
+        <!-- IMPLEMENTACIÓN PYTHON -->
+        <section id="solution-py" class="section">
+            <h2>🐍 Implementación en Python</h2>
+            
+            <h3>Módulo graph_traversal.py Completo</h3>
+            <pre><code>"""
+Módulo de algoritmos de exploración y búsqueda en grafos.
+Incluye implementaciones de BFS, DFS y aplicaciones avanzadas.
+
+Autor: Curso Estructuras de Datos Avanzadas
+Fecha: 2025
+"""
+
+from collections import deque, defaultdict
+from enum import Enum
+from typing import List, Dict, Set, Optional, Tuple
+
+
+class NodeState(Enum):
+    """Estados de nodo para detección de ciclos en grafos dirigidos."""
+    NOT_VISITED = 0
+    IN_PROGRESS = 1
+    COMPLETED = 2
+
+
+class GraphTraversal:
+    """
+    Clase que implementa algoritmos de exploración y búsqueda en grafos.
+    Soporta grafos dirigidos y no dirigidos.
+    """
+    
+    def __init__(self, directed: bool = False):
+        """
+        Inicializa el grafo.
+        
+        Args:
+            directed: True si el grafo es dirigido, False en caso contrario.
+        """
+        self.adjacency_list: Dict[int, List[int]] = defaultdict(list)
+        self.directed = directed
+    
+    def add_edge(self, u: int, v: int) -> None:
+        """
+        Agrega una arista al grafo.
+        
+        Args:
+            u: Nodo origen
+            v: Nodo destino
+        """
+        self.adjacency_list[u].append(v)
+        if not self.directed:
+            self.adjacency_list[v].append(u)
+    
+    # ========================================
+    # BÚSQUEDA EN AMPLITUD (BFS)
+    # ========================================
+    
+    def bfs(self, start: int) -> List[int]:
+        """
+        Realiza BFS desde un nodo inicial.
+        
+        Args:
+            start: Nodo inicial
+            
+        Returns:
+            Lista de nodos en orden de visita BFS
+            
+        Raises:
+            ValueError: Si el nodo inicial no existe en el grafo
+            
+        Complejidad: O(V + E)
+        """
+        # Validación de caso límite: nodo inexistente
+        if start not in self.adjacency_list:
+            raise ValueError(f"El nodo {start} no existe en el grafo")
+        
+        visited: Set[int] = set()
+        result: List[int] = []
+        queue = deque([start])
+        
+        visited.add(start)
+        
+        while queue:
+            current = queue.popleft()
+            result.append(current)
+            
+            # Explorar vecinos no visitados
+            for neighbor in self.adjacency_list[current]:
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    queue.append(neighbor)
+        
+        return result
+    
+    def bfs_distances(self, start: int) -> Dict[int, int]:
+        """
+        Calcula distancias desde el nodo inicial usando BFS.
+        
+        Args:
+            start: Nodo inicial
+            
+        Returns:
+            Diccionario {nodo: distancia} desde start
+        """
+        distances: Dict[int, int] = {start: 0}
+        queue = deque([start])
+        
+        while queue:
+            current = queue.popleft()
+            
+            for neighbor in self.adjacency_list[current]:
+                if neighbor not in distances:
+                    distances[neighbor] = distances[current] + 1
+                    queue.append(neighbor)
+        
+        return distances
+    
+    def bfs_shortest_path(self, start: int, end: int) -> Optional[List[int]]:
+        """
+        Encuentra el camino más corto entre dos nodos usando BFS.
+        
+        Args:
+            start: Nodo inicial
+            end: Nodo destino
+            
+        Returns:
+            Lista representando el camino, o None si no existe
+        """
+        parent: Dict[int, Optional[int]] = {start: None}
+        visited: Set[int] = {start}
+        queue = deque([start])
+        
+        found = False
+        
+        while queue and not found:
+            current = queue.popleft()
+            
+            if current == end:
+                found = True
+                break
+            
+            for neighbor in self.adjacency_list[current]:
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    parent[neighbor] = current
+                    queue.append(neighbor)
+        
+        if not found:
+            return None
+        
+        # Reconstruir camino
+        path: List[int] = []
+        node = end
+        while node is not None:
+            path.append(node)
+            node = parent[node]
+        
+        path.reverse()
+        return path
+    
+    def bfs_levels(self, start: int) -> Dict[int, List[int]]:
+        """
+        Agrupa nodos por nivel de distancia desde el inicio.
+        Útil para análisis de redes sociales (grados de separación).
+        
+        Args:
+            start: Nodo inicial
+            
+        Returns:
+            Diccionario {nivel: [nodos en ese nivel]}
+        """
+        levels: Dict[int, List[int]] = defaultdict(list)
+        visited: Set[int] = {start}
+        queue = deque([(start, 0)])  # (nodo, nivel)
+        
+        while queue:
+            current, level = queue.popleft()
+            levels[level].append(current)
+            
+            for neighbor in self.adjacency_list[current]:
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    queue.append((neighbor, level + 1))
+        
+        return dict(levels)
+    
+    # ========================================
+    # BÚSQUEDA EN PROFUNDIDAD (DFS)
+    # ========================================
+    
+    def dfs_recursive(self, start: int) -> List[int]:
+        """
+        DFS recursivo desde un nodo inicial.
+        
+        Args:
+            start: Nodo inicial
+            
+        Returns:
+            Lista de nodos en orden de visita DFS
+            
+        Raises:
+            ValueError: Si el nodo inicial no existe en el grafo
+        """
+        # Validación de caso límite: nodo inexistente
+        if start not in self.adjacency_list:
+            raise ValueError(f"El nodo {start} no existe en el grafo")
+        
+        visited: Set[int] = set()
+        result: List[int] = []
+        
+        def dfs_helper(node: int) -> None:
+            visited.add(node)
+            result.append(node)
+            
+            for neighbor in self.adjacency_list[node]:
+                if neighbor not in visited:
+                    dfs_helper(neighbor)
+        
+        dfs_helper(start)
+        return result
+    
+    def dfs_iterative(self, start: int) -> List[int]:
+        """
+        DFS iterativo usando pila explícita.
+        Más seguro para grafos profundos (evita stack overflow).
+        
+        Args:
+            start: Nodo inicial
+            
+        Returns:
+            Lista de nodos en orden de visita DFS
+            
+        Raises:
+            ValueError: Si el nodo inicial no existe en el grafo
+        """
+        # Validación de caso límite: nodo inexistente
+        if start not in self.adjacency_list:
+            raise ValueError(f"El nodo {start} no existe en el grafo")
+        
+        visited: Set[int] = set()
+        result: List[int] = []
+        stack = [start]
+        
+        while stack:
+            current = stack.pop()
+            
+            if current in visited:
+                continue
+            
+            visited.add(current)
+            result.append(current)
+            
+            # Apilar vecinos en orden inverso
+            neighbors = list(self.adjacency_list[current])
+            neighbors.reverse()
+            
+            for neighbor in neighbors:
+                if neighbor not in visited:
+                    stack.append(neighbor)
+        
+        return result
+    
+    # ========================================
+    # APLICACIONES AVANZADAS
+    # ========================================
+    
+    def has_cycle_directed(self) -> bool:
+        """
+        Detecta si existe un ciclo en un grafo DIRIGIDO.
+        
+        Returns:
+            True si hay ciclo, False en caso contrario
+        """
+        if not self.directed:
+            raise ValueError("Este método requiere un grafo dirigido")
+        
+        state: Dict[int, NodeState] = {
+            node: NodeState.NOT_VISITED 
+            for node in self.adjacency_list.keys()
+        }
+        
+        def dfs_cycle(node: int) -> bool:
+            state[node] = NodeState.IN_PROGRESS
+            
+            for neighbor in self.adjacency_list[node]:
+                if state.get(neighbor, NodeState.NOT_VISITED) == NodeState.IN_PROGRESS:
+                    return True  # ¡Ciclo detectado!
+                
+                if state.get(neighbor, NodeState.NOT_VISITED) == NodeState.NOT_VISITED:
+                    if dfs_cycle(neighbor):
+                        return True
+            
+            state[node] = NodeState.COMPLETED
+            return False
+        
+        for node in self.adjacency_list.keys():
+            if state[node] == NodeState.NOT_VISITED:
+                if dfs_cycle(node):
+                    return True
+        
+        return False
+    
+    def topological_sort(self) -> Optional[List[int]]:
+        """
+        Realiza ordenamiento topológico en un DAG.
+        
+        Returns:
+            Lista de nodos en orden topológico, o None si hay ciclos
+        """
+        if not self.directed:
+            raise ValueError("Ordenamiento topológico requiere grafo dirigido")
+        
+        if self.has_cycle_directed():
+            return None
+        
+        visited: Set[int] = set()
+        stack: List[int] = []
+        
+        def dfs_topo(node: int) -> None:
+            visited.add(node)
+            
+            for neighbor in self.adjacency_list[node]:
+                if neighbor not in visited:
+                    dfs_topo(neighbor)
+            
+            stack.append(node)  # Agregar después de procesar vecinos
+        
+        for node in self.adjacency_list.keys():
+            if node not in visited:
+                dfs_topo(node)
+        
+        stack.reverse()
+        return stack
+    
+    def find_connected_components(self) -> List[List[int]]:
+        """
+        Encuentra todas las componentes conectadas en un grafo no dirigido.
+        
+        Returns:
+            Lista de componentes, cada una es una lista de nodos
+        """
+        if self.directed:
+            raise ValueError("Este método requiere un grafo no dirigido")
+        
+        visited: Set[int] = set()
+        components: List[List[int]] = []
+        
+        def dfs_component(node: int, component: List[int]) -> None:
+            visited.add(node)
+            component.append(node)
+            
+            for neighbor in self.adjacency_list[node]:
+                if neighbor not in visited:
+                    dfs_component(neighbor, component)
+        
+        for node in self.adjacency_list.keys():
+            if node not in visited:
+                component: List[int] = []
+                dfs_component(node, component)
+                components.append(component)
+        
+        return components
+    
+    def has_cycle_undirected(self) -> bool:
+        """
+        Detecta si existe un ciclo en un grafo NO DIRIGIDO.
+        
+        Returns:
+            True si hay ciclo, False en caso contrario
+        """
+        if self.directed:
+            raise ValueError("Este método requiere un grafo no dirigido")
+        
+        visited: Set[int] = set()
+        
+        def dfs_cycle(node: int, parent: Optional[int]) -> bool:
+            visited.add(node)
+            
+            for neighbor in self.adjacency_list[node]:
+                if neighbor not in visited:
+                    if dfs_cycle(neighbor, node):
+                        return True
+                elif neighbor != parent:
+                    return True  # Encontramos un vecino visitado que no es el padre
+            
+            return False
+        
+        for node in self.adjacency_list.keys():
+            if node not in visited:
+                if dfs_cycle(node, None):
+                    return True
+        
+        return False
+
+
+# ========================================
+# PROGRAMA DE DEMOSTRACIÓN
+# ========================================
+
+def main():
+    """Función principal de demostración."""
+    print("=== DEMOSTRACIÓN BFS Y DFS ===\n")
+    
+    # Crear grafo no dirigido (red social)
+    graph = GraphTraversal(directed=False)
+    edges = [(1, 2), (1, 3), (2, 4), (2, 5), (3, 6), (5, 7)]
+    for u, v in edges:
+        graph.add_edge(u, v)
+    
+    print("Grafo: 1-2, 1-3, 2-4, 2-5, 3-6, 5-7")
+    print()
+    
+    # BFS
+    print("--- BFS desde nodo 1 ---")
+    bfs_result = graph.bfs(1)
+    print(f"Orden: {' → '.join(map(str, bfs_result))}")
+    
+    distances = graph.bfs_distances(1)
+    print("Distancias desde 1:")
+    for node in sorted(distances.keys()):
+        print(f"  Nodo {node}: {distances[node]} aristas")
+    
+    levels = graph.bfs_levels(1)
+    print("Nodos por nivel:")
+    for level in sorted(levels.keys()):
+        print(f"  Nivel {level}: {levels[level]}")
+    print()
+    
+    # DFS
+    print("--- DFS desde nodo 1 ---")
+    dfs_rec = graph.dfs_recursive(1)
+    print(f"Recursivo: {' → '.join(map(str, dfs_rec))}")
+    
+    dfs_iter = graph.dfs_iterative(1)
+    print(f"Iterativo: {' → '.join(map(str, dfs_iter))}")
+    print()
+    
+    # Camino más corto
+    print("--- Camino más corto de 1 a 7 ---")
+    path = graph.bfs_shortest_path(1, 7)
+    if path:
+        print(f"Camino: {' → '.join(map(str, path))}")
+        print(f"Longitud: {len(path) - 1} aristas")
+    print()
+    
+    # Detección de ciclos (grafo dirigido)
+    print("--- Detección de Ciclos (Dirigido) ---")
+    digraph = GraphTraversal(directed=True)
+    digraph.add_edge(1, 2)
+    digraph.add_edge(2, 3)
+    digraph.add_edge(3, 1)  # Ciclo: 1→2→3→1
+    digraph.add_edge(3, 4)
+    
+    print("Grafo dirigido: 1→2, 2→3, 3→1, 3→4")
+    print(f"¿Tiene ciclo? {'SÍ' if digraph.has_cycle_directed() else 'NO'}")
+    print()
+    
+    # Ordenamiento topológico
+    print("--- Ordenamiento Topológico ---")
+    dag = GraphTraversal(directed=True)
+    dag.add_edge(1, 2)
+    dag.add_edge(1, 3)
+    dag.add_edge(2, 4)
+    dag.add_edge(3, 4)
+    
+    print("DAG: 1→2, 1→3, 2→4, 3→4")
+    topo_sort = dag.topological_sort()
+    if topo_sort:
+        print(f"Orden topológico: {' → '.join(map(str, topo_sort))}")
+    print()
+    
+    # Componentes conectadas
+    print("--- Componentes Conectadas ---")
+    disconnected = GraphTraversal(directed=False)
+    disconnected.add_edge(1, 2)
+    disconnected.add_edge(2, 3)
+    disconnected.add_edge(4, 5)
+    disconnected.add_edge(6, 7)
+    disconnected.add_edge(7, 8)
+    
+    print("Grafo: {1-2-3}, {4-5}, {6-7-8}")
+    components = disconnected.find_connected_components()
+    print(f"Número de componentes: {len(components)}")
+    for i, comp in enumerate(components, 1):
+        print(f"  Componente {i}: {sorted(comp)}")
+
+
+if __name__ == "__main__":
+    main()
+</code></pre>
+
+            <p><a href="#applications">Continuar → Aplicaciones Prácticas</a></p>
+        </section>
+
+        <!-- APLICACIONES PRÁCTICAS -->
+        <section id="applications" class="section">
+            <h2>🌟 Aplicaciones Prácticas Detalladas</h2>
+            
+            <div class="application">
+                <h3>Caso Práctico 1: Sistema de Recomendación de Amigos</h3>
+                <p><strong>Contexto:</strong> Red social como LinkedIn</p>
+                <p><strong>Objetivo:</strong> Sugerir conexiones relevantes al usuario</p>
+                
+                <h4>Algoritmo Completo</h4>
+                <pre><code>def recomendar_amigos(grafo, usuario, max_recomendaciones=10):
+    """
+    Recomienda amigos basándose en conexiones mutuas.
+    
+    Estrategia:
+    1. BFS hasta nivel 2 (amigos de amigos)
+    2. Filtrar: excluir amigos directos y el usuario mismo
+    3. Contar conexiones mutuas para cada candidato
+    4. Ordenar por número de conexiones mutuas (descendente)
+    5. Retornar top N candidatos
+    """
+    amigos_directos = set(grafo.adjacency_list[usuario])
+    amigos_directos.add(usuario)  # No recomendarse a sí mismo
+    
+    # BFS hasta nivel 2
+    candidatos = {}  # {candidato: [amigos_mutuos]}
+    
+    for amigo in grafo.adjacency_list[usuario]:
+        for amigo_del_amigo in grafo.adjacency_list[amigo]:
+            if amigo_del_amigo not in amigos_directos:
+                if amigo_del_amigo not in candidatos:
+                    candidatos[amigo_del_amigo] = []
+                candidatos[amigo_del_amigo].append(amigo)
+    
+    # Ordenar por número de conexiones mutuas
+    recomendaciones = sorted(
+        candidatos.items(),
+        key=lambda x: len(x[1]),
+        reverse=True
+    )[:max_recomendaciones]
+    
+    return [
+        {
+            'usuario': candidato,
+            'amigos_mutuos': mutuos,
+            'num_mutuos': len(mutuos)
+        }
+        for candidato, mutuos in recomendaciones
+    ]
+</code></pre>
+                
+                <p><strong>Complejidad:</strong> O(k·d) donde k = grado promedio, d = max_recomendaciones</p>
+            </div>
+
+            <div class="application">
+                <h3>Caso Práctico 2: Análisis de Dependencias en Software</h3>
+                <p><strong>Contexto:</strong> Sistema de gestión de paquetes (npm, pip, Maven)</p>
+                <p><strong>Objetivo:</strong> Detectar dependencias circulares y calcular orden de instalación</p>
+                
+                <h4>Implementación</h4>
+                <pre><code>class DependencyAnalyzer:
+    def __init__(self):
+        self.dependencies = GraphTraversal(directed=True)
+    
+    def add_dependency(self, package, depends_on):
+        """package depende de depends_on."""
+        self.dependencies.add_edge(package, depends_on)
+    
+    def check_circular_dependencies(self):
+        """Detecta dependencias circulares."""
+        if self.dependencies.has_cycle_directed():
+            print("⚠️ ERROR: Dependencias circulares detectadas")
+            return False
+        print("✅ No hay dependencias circulares")
+        return True
+    
+    def get_installation_order(self):
+        """Calcula orden de instalación usando ordenamiento topológico."""
+        if not self.check_circular_dependencies():
+            return None
+        
+        order = self.dependencies.topological_sort()
+        print("📦 Orden de instalación:")
+        for i, package in enumerate(order, 1):
+            print(f"  {i}. Instalar {package}")
+        
+        return order
+
+# Ejemplo de uso
+analyzer = DependencyAnalyzer()
+analyzer.add_dependency("app", "react")
+analyzer.add_dependency("app", "redux")
+analyzer.add_dependency("react", "react-dom")
+analyzer.add_dependency("redux", "react-dom")
+
+analyzer.get_installation_order()
+# Salida: react-dom → react → redux → app
+</code></pre>
+            </div>
+
+            <div class="application">
+                <h3>Caso Práctico 3: Navegación en Laberinto con DFS</h3>
+                <p><strong>Contexto:</strong> Juegos, robótica, planificación de rutas</p>
+                <p><strong>Objetivo:</strong> Encontrar salida de un laberinto</p>
+                
+                <h4>Representación</h4>
+                <pre><code>def resolver_laberinto(laberinto, inicio, salida):
+    """
+    Resuelve laberinto usando DFS con backtracking.
+    
+    laberinto: matriz 2D donde 0=camino, 1=pared
+    inicio: (fila, columna) inicial
+    salida: (fila, columna) objetivo
+    """
+    filas, cols = len(laberinto), len(laberinto[0])
+    visitado = set()
+    camino = []
+    
+    def es_valido(fila, col):
+        return (0 <= fila < filas and 
+                0 <= col < cols and 
+                laberinto[fila][col] == 0 and 
+                (fila, col) not in visitado)
+    
+    def dfs(fila, col):
+        if (fila, col) == salida:
+            camino.append((fila, col))
+            return True
+        
+        visitado.add((fila, col))
+        camino.append((fila, col))
+        
+        # Explorar 4 direcciones: arriba, derecha, abajo, izquierda
+        movimientos = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+        
+        for df, dc in movimientos:
+            nueva_fila, nueva_col = fila + df, col + dc
+            
+            if es_valido(nueva_fila, nueva_col):
+                if dfs(nueva_fila, nueva_col):
+                    return True
+        
+        camino.pop()  # Backtracking
+        return False
+    
+    if dfs(inicio[0], inicio[1]):
+        return camino
+    return None  # No hay solución
+
+# Ejemplo
+laberinto = [
+    [0, 1, 0, 0, 0],
+    [0, 1, 0, 1, 0],
+    [0, 0, 0, 1, 0],
+    [1, 1, 0, 0, 0],
+    [0, 0, 0, 1, 0]
+]
+
+solucion = resolver_laberinto(laberinto, (0, 0), (4, 4))
+print("Camino encontrado:", solucion)
+</code></pre>
+            </div>
+
+            <div class="application" style="background: #f0f8ff; border-left: 5px solid #4a90e2;">
+                <h3>Caso Práctico 4: BFS en Redes Biológicas (Interdisciplinario)</h3>
+                <p><strong>Contexto:</strong> Bioinformática - Análisis de redes de interacción proteína-proteína</p>
+                <p><strong>Objetivo:</strong> Identificar propagación de mutaciones genéticas</p>
+                
+                <h4>Modelado del Problema</h4>
+                <p>Las proteínas se modelan como nodos, y las interacciones bioquímicas como aristas. Una mutación en una proteína puede afectar a proteínas conectadas.</p>
+                
+                <pre><code>class ProteinNetworkAnalyzer:
+    """
+    Análisis de redes de interacción proteína-proteína usando BFS.
+    Aplicable a: propagación de mutaciones, cascadas de señalización celular.
+    """
+    
+    def __init__(self):
+        self.network = GraphTraversal(directed=False)
+        self.protein_info = {}  # {id: {'nombre': str, 'función': str}}
+    
+    def add_interaction(self, protein1, protein2):
+        """Agrega interacción entre dos proteínas."""
+        self.network.add_edge(protein1, protein2)
+    
+    def analyze_mutation_spread(self, mutated_protein, max_distance=3):
+        """
+        Analiza qué proteínas podrían verse afectadas por una mutación.
+        
+        Args:
+            mutated_protein: ID de la proteína mutada
+            max_distance: Distancia máxima de propagación (niveles BFS)
+        
+        Returns:
+            Dict con proteínas afectadas organizadas por "distancia de impacto"
+        """
+        # BFS por niveles
+        levels = self.network.bfs_levels(mutated_protein)
+        
+        affected_proteins = {}
+        for level, proteins in levels.items():
+            if level == 0:
+                affected_proteins[level] = {
+                    'impacto': 'DIRECTO (proteína mutada)',
+                    'proteínas': proteins
+                }
+            elif level <= max_distance:
+                impact_type = ['ALTO', 'MEDIO', 'BAJO'][min(level-1, 2)]
+                affected_proteins[level] = {
+                    'impacto': f'{impact_type} (nivel {level})',
+                    'proteínas': proteins
+                }
+        
+        return affected_proteins
+    
+    def find_protein_pathway(self, source_protein, target_protein):
+        """
+        Encuentra la vía de señalización más corta entre dos proteínas.
+        Útil para diseño de fármacos: ¿cómo llega una señal de A a B?
+        """
+        path = self.network.bfs_shortest_path(source_protein, target_protein)
+        
+        if path:
+            print(f"Vía de señalización encontrada ({len(path)-1} pasos):")
+            for i, protein in enumerate(path):
+                print(f"  {i+1}. {self.protein_info.get(protein, {}).get('nombre', f'Proteína {protein}')}")
+        else:
+            print("No hay vía directa de señalización entre estas proteínas")
+        
+        return path
+
+# Ejemplo de uso
+analyzer = ProteinNetworkAnalyzer()
+analyzer.protein_info = {
+    1: {'nombre': 'p53', 'función': 'supresor tumoral'},
+    2: {'nombre': 'MDM2', 'función': 'regulador p53'},
+    3: {'nombre': 'ATM', 'función': 'sensor daño ADN'},
+    4: {'nombre': 'Chk2', 'función': 'checkpoint celular'},
+    # ... más proteínas
+}
+
+# Agregar interacciones conocidas
+analyzer.add_interaction(1, 2)  # p53 ↔ MDM2
+analyzer.add_interaction(2, 3)  # MDM2 ↔ ATM
+analyzer.add_interaction(3, 4)  # ATM ↔ Chk2
+
+# Analizar impacto de mutación en p53
+print("=== Análisis de Mutación en p53 ===")
+affected = analyzer.analyze_mutation_spread(mutated_protein=1, max_distance=3)
+for level, info in affected.items():
+    print(f"Nivel {level} - {info['impacto']}: {len(info['proteínas'])} proteínas")
+</code></pre>
+                
+                <p><strong>Aplicaciones Reales:</strong></p>
+                <ul>
+                    <li><strong>Farmacología:</strong> Identificar objetivos terapéuticos (proteínas clave en cascadas de enfermedad)</li>
+                    <li><strong>Genética:</strong> Predecir efectos de mutaciones genéticas en redes metabólicas</li>
+                    <li><strong>Inmunología:</strong> Modelar propagación de señales inmunes (citoquinas)</li>
+                    <li><strong>Neurociencia:</strong> Analizar conectividad neuronal (BFS desde neuronas sensoriales)</li>
+                </ul>
+                
+                <p><em>💡 Para estudiantes no-ingenieros: BFS aquí funciona igual que en redes sociales, pero en lugar de "amigos", conectas proteínas que interactúan químicamente. La "distancia" representa cuántos pasos moleculares hay entre dos eventos biológicos.</em></p>
+            </div>
+
+            <div class="application" style="background: #fff5e6; border-left: 5px solid #ff9800;">
+                <h3>Caso Práctico 5: BFS para Turistas (Ejemplo Accesible)</h3>
+                <p><strong>Contexto:</strong> Sistema de metro/transporte público</p>
+                <p><strong>Problema:</strong> Soy turista y quiero ir de la estación A a la estación B con el mínimo número de transbordos.</p>
+                
+                <h4>Por qué BFS es Perfecto Aquí</h4>
+                <ul>
+                    <li>Cada estación = nodo</li>
+                    <li>Conexión directa entre estaciones = arista</li>
+                    <li>BFS garantiza encontrar la ruta con <strong>menos transbordos</strong> (no necesariamente menos tiempo, pero más simple)</li>
+                </ul>
+                
+                <pre><code>class MetroNavigator:
+    def __init__(self):
+        self.metro = GraphTraversal(directed=False)
+        self.station_names = {}
+    
+    def find_route_for_tourist(self, start_station, end_station):
+        """
+        Encuentra la ruta más simple (menos transbordos) para un turista.
+        """
+        path = self.metro.bfs_shortest_path(start_station, end_station)
+        
+        if not path:
+            print("❌ No hay ruta directa. Necesitas tomar taxi o autobús.")
+            return
+        
+        num_stops = len(path) - 1
+        print(f"✅ Ruta encontrada con {num_stops} paradas:")
+        print()
+        
+        for i, station in enumerate(path):
+            station_name = self.station_names.get(station, f"Estación {station}")
+            
+            if i == 0:
+                print(f"🚇 INICIO: {station_name}")
+            elif i == len(path) - 1:
+                print(f"🎯 DESTINO: {station_name}")
+            else:
+                print(f"   ↓ Parada {i}: {station_name}")
+        
+        print(f"\n⏱️ Tiempo estimado: {num_stops * 3} minutos (3 min por parada)")
+
+# Ejemplo: Metro de Ciudad de México (simplificado)
+navigator = MetroNavigator()
+navigator.station_names = {
+    1: "Observatorio",
+    2: "Tacubaya",
+    3: "Balderas",
+    4: "Pino Suárez",
+    5: "Pantitlán",
+    # ... más estaciones
+}
+
+navigator.metro.add_edge(1, 2)  # Observatorio ↔ Tacubaya
+navigator.metro.add_edge(2, 3)  # Tacubaya ↔ Balderas
+navigator.metro.add_edge(3, 4)  # Balderas ↔ Pino Suárez
+navigator.metro.add_edge(4, 5)  # Pino Suárez ↔ Pantitlán
+
+navigator.find_route_for_tourist(start_station=1, end_station=5)
+</code></pre>
+                
+                <p><strong>Extensión:</strong> ¿Qué pasa si queremos la ruta <em>más rápida</em> (considerando tiempo, no solo paradas)? Eso requiere algoritmos de camino más corto <strong>ponderado</strong> como Dijkstra (Semana 6-7).</p>
+            </div>
+
+            <div class="application" style="background: #fff0f5; border-left: 5px solid #dc143c;">
+                <h3>Caso Práctico 6: BFS en Epidemiología (Post-COVID-19)</h3>
+                <p><strong>Contexto:</strong> Modelado de propagación de enfermedades infecciosas en redes de contacto</p>
+                <p><strong>Relevancia:</strong> Aplicación actual (2020-2025) de teoría de grafos en salud pública</p>
+                
+                <h4>Modelado del Problema</h4>
+                <ul>
+                    <li><strong>Nodos:</strong> Personas en una comunidad</li>
+                    <li><strong>Aristas:</strong> Contactos cercanos (trabajo, familia, amigos)</li>
+                    <li><strong>Nodo inicial (paciente cero):</strong> Primera persona infectada</li>
+                    <li><strong>Niveles BFS:</strong> "Generaciones" de contagio (nivel 1 = contactos directos, nivel 2 = contactos de contactos, etc.)</li>
+                </ul>
+                
+                <h4>Aplicación de BFS</h4>
+                <pre><code>class EpidemicModel:
+    """
+    Modelo simplificado de propagación epidémica usando BFS.
+    Conecta con 2.1.1: Modelado de problemas del mundo real como grafos.
+    """
+    
+    def __init__(self):
+        self.contact_network = GraphTraversal(directed=False)
+    
+    def simulate_outbreak(self, patient_zero, infection_rate=0.3, max_generations=5):
+        """
+        Simula propagación de enfermedad desde paciente cero.
+        
+        Args:
+            patient_zero: ID del primer caso
+            infection_rate: Probabilidad de contagio (0-1)
+            max_generations: Máximo de "saltos" de contagio a simular
+        
+        Returns:
+            Dict con estadísticas de propagación por generación
+        """
+        import random
+        
+        # BFS por niveles (generaciones de contagio)
+        generations = self.contact_network.bfs_levels(patient_zero)
+        
+        outbreak_stats = {
+            'total_exposed': 0,
+            'total_infected': 0,
+            'generations': {}
+        }
+        
+        infected = {patient_zero}  # Paciente cero siempre infectado
+        
+        for gen_num, people in generations.items():
+            if gen_num > max_generations:
+                break
+            
+            gen_exposed = len(people)
+            gen_infected = 0
+            
+            for person in people:
+                if gen_num == 0:  # Paciente cero
+                    gen_infected = 1
+                else:
+                    # Simular probabilidad de infección
+                    if random.random() < infection_rate:
+                        infected.add(person)
+                        gen_infected += 1
+            
+            outbreak_stats['generations'][gen_num] = {
+                'exposed': gen_exposed,
+                'infected': gen_infected,
+                'attack_rate': gen_infected / gen_exposed if gen_exposed > 0 else 0
+            }
+            
+            outbreak_stats['total_exposed'] += gen_exposed
+            outbreak_stats['total_infected'] += gen_infected
+        
+        return outbreak_stats
+    
+    def identify_superspreaders(self, top_n=5):
+        """
+        Identifica "superpropagadores" potenciales (nodos con alto grado).
+        Útil para priorizar vacunación o cuarentena.
+        """
+        degree_centrality = {}
+        for person, contacts in self.contact_network.adjacency_list.items():
+            degree_centrality[person] = len(contacts)
+        
+        # Ordenar por grado (más contactos = mayor riesgo de propagación)
+        superspreaders = sorted(
+            degree_centrality.items(),
+            key=lambda x: x[1],
+            reverse=True
+        )[:top_n]
+        
+        print(f"🔴 Top {top_n} Superpropagadores Potenciales:")
+        for rank, (person, num_contacts) in enumerate(superspreaders, 1):
+            print(f"  {rank}. Persona {person}: {num_contacts} contactos cercanos")
+        
+        return superspreaders
+
+# Ejemplo de uso
+print("=== Simulación de Brote Epidémico ===\n")
+model = EpidemicModel()
+
+# Crear red de contactos (simplificada)
+contacts = [
+    (1, 2), (1, 3), (1, 4),  # Persona 1 tiene muchos contactos (superpropagador)
+    (2, 5), (3, 6), (4, 7),
+    (5, 8), (6, 8), (7, 9), (7, 10)
+]
+
+for a, b in contacts:
+    model.contact_network.add_edge(a, b)
+
+# Simular brote desde persona 1 (paciente cero)
+stats = model.simulate_outbreak(patient_zero=1, infection_rate=0.3)
+
+print("Resultados de simulación:")
+for gen, data in stats['generations'].items():
+    print(f"  Generación {gen}: {data['exposed']} expuestos, "
+          f"{data['infected']} infectados (tasa: {data['attack_rate']:.1%})")
+
+print(f"\n📊 Total: {stats['total_infected']}/{stats['total_exposed']} "
+      f"infectados ({stats['total_infected']/stats['total_exposed']:.1%})\n")
+
+# Identificar superpropagadores
+model.identify_superspreaders(top_n=3)
+</code></pre>
+                
+                <h4>Insights Epidemiológicos</h4>
+                <ul>
+                    <li><strong>Intervención Temprana:</strong> BFS nivel 1 = contactos directos. Rastrearlos y aislarlos previene generaciones 2, 3, ...</li>
+                    <li><strong>Priorización de Recursos:</strong> Vacunar/testear primero a nodos con alto grado (superpropagadores)</li>
+                    <li><strong>Distancia Social:</strong> Eliminar aristas (reducir contactos) aumenta distancia BFS → más lento el contagio</li>
+                    <li><strong>Análisis de Brotes:</strong> Si BFS desde paciente cero alcanza todo el grafo → red muy conectada, alto riesgo</li>
+                </ul>
+                
+                <p><strong>🔗 Conexión con 2.1.1:</strong> Este es un ejemplo perfecto de <em>"Modelado de problemas del mundo real como grafos"</em>. La pandemia de COVID-19 demostró la importancia crítica de la teoría de grafos en salud pública.</p>
+                
+                <p><em>💡 Para estudiantes de ciencias de la salud: Los algoritmos que estudian en ciencias de la computación no son solo teóricos. BFS salvó vidas durante COVID-19 al ayudar a rastrear contactos y modelar propagación.</em></p>
+            </div>
+
+            <p><a href="#test-cases">Continuar → Casos de Prueba</a></p>
+        </section>
+
+        <!-- CASOS DE PRUEBA -->
+        <section id="test-cases" class="section">
+            <h2>🧪 Casos de Prueba Oficiales</h2>
+            
+            <h3>Suite de Pruebas para BFS</h3>
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Descripción</th>
+                    <th>Input</th>
+                    <th>Salida Esperada</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Grafo lineal simple</td>
+                    <td>Aristas: [(1,2), (2,3), (3,4)]<br>Start: 1</td>
+                    <td>BFS: [1, 2, 3, 4]<br>Distancias: {1:0, 2:1, 3:2, 4:3}</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Grafo árbol binario</td>
+                    <td>Aristas: [(1,2), (1,3), (2,4), (2,5)]<br>Start: 1</td>
+                    <td>BFS: [1, 2, 3, 4, 5]<br>Nivel 0: [1], Nivel 1: [2,3], Nivel 2: [4,5]</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Grafo con ciclo</td>
+                    <td>Aristas: [(1,2), (2,3), (3,1), (3,4)]<br>Start: 1</td>
+                    <td>BFS: [1, 2, 3, 4]<br>(No repite nodos ya visitados)</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Grafo desconectado</td>
+                    <td>Aristas: [(1,2), (3,4)]<br>Start: 1</td>
+                    <td>BFS: [1, 2]<br>(No alcanza 3, 4)</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Camino más corto</td>
+                    <td>Aristas: [(1,2), (1,3), (2,4), (3,4), (4,5)]<br>Start: 1, End: 5</td>
+                    <td>Camino: [1, 2, 4, 5] o [1, 3, 4, 5]<br>Longitud: 3</td>
+                </tr>
+            </table>
+
+            <h3>Suite de Pruebas para DFS</h3>
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Descripción</th>
+                    <th>Input</th>
+                    <th>Salida Esperada</th>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>DFS en grafo lineal</td>
+                    <td>Aristas: [(1,2), (2,3), (3,4)]<br>Start: 1</td>
+                    <td>DFS: [1, 2, 3, 4]</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>DFS con múltiples caminos</td>
+                    <td>Aristas: [(1,2), (1,3), (2,4), (3,5)]<br>Start: 1</td>
+                    <td>DFS: [1, 2, 4, 3, 5] (depende del orden)</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>Detección ciclo dirigido</td>
+                    <td>Dirigido: [(1,2), (2,3), (3,1)]</td>
+                    <td>has_cycle: True</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>DAG sin ciclos</td>
+                    <td>Dirigido: [(1,2), (1,3), (2,4), (3,4)]</td>
+                    <td>has_cycle: False<br>Topo Sort: [1, 2, 3, 4] o [1, 3, 2, 4]</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>Componentes conectadas</td>
+                    <td>Aristas: [(1,2), (3,4), (5,6)]</td>
+                    <td>Componentes: [[1,2], [3,4], [5,6]]</td>
+                </tr>
+            </table>
+
+            <h3>Tests Unitarios en C#</h3>
+            <pre><code>using Xunit;
+
+public class GraphTraversalTests
+{
+    [Fact]
+    public void BFS_SimpleGraph_ReturnsCorrectOrder()
+    {
+        var graph = new GraphTraversal();
+        graph.AddEdge(1, 2);
+        graph.AddEdge(1, 3);
+        graph.AddEdge(2, 4);
+        
+        var result = graph.BFS(1);
+        
+        Assert.Equal(new[] { 1, 2, 3, 4 }, result);
+    }
+    
+    [Fact]
+    public void BFS_FindsShortestPath()
+    {
+        var graph = new GraphTraversal();
+        graph.AddEdge(1, 2);
+        graph.AddEdge(1, 3);
+        graph.AddEdge(2, 4);
+        graph.AddEdge(3, 4);
+        graph.AddEdge(4, 5);
+        
+        var path = graph.BFSShortestPath(1, 5);
+        
+        Assert.NotNull(path);
+        Assert.Equal(4, path.Count);  // Longitud 3 aristas
+        Assert.Equal(1, path[0]);
+        Assert.Equal(5, path[^1]);
+    }
+    
+    [Fact]
+    public void DFS_DetectsCycleInDirectedGraph()
+    {
+        var graph = new GraphTraversal();
+        graph.AddDirectedEdge(1, 2);
+        graph.AddDirectedEdge(2, 3);
+        graph.AddDirectedEdge(3, 1);  // Ciclo
+        
+        Assert.True(graph.HasCycleDirected());
+    }
+    
+    [Fact]
+    public void TopologicalSort_OnDAG_ReturnsValidOrder()
+    {
+        var graph = new GraphTraversal();
+        graph.AddDirectedEdge(1, 2);
+        graph.AddDirectedEdge(1, 3);
+        graph.AddDirectedEdge(2, 4);
+        graph.AddDirectedEdge(3, 4);
+        
+        var order = graph.TopologicalSort();
+        
+        Assert.NotNull(order);
+        Assert.Equal(1, order[0]);  // 1 debe ser primero
+        Assert.Equal(4, order[^1]); // 4 debe ser último
+    }
+    
+    [Fact]
+    public void FindConnectedComponents_ThreeComponents()
+    {
+        var graph = new GraphTraversal();
+        graph.AddEdge(1, 2);
+        graph.AddEdge(3, 4);
+        graph.AddEdge(5, 6);
+        
+        var components = graph.FindConnectedComponents();
+        
+        Assert.Equal(3, components.Count);
+    }
+    
+    // ========================================
+    // TESTS PARA CASOS LÍMITE (EDGE CASES)
+    // ========================================
+    
+    [Fact]
+    public void BFS_NonExistentNode_ThrowsException()
+    {
+        var graph = new GraphTraversal();
+        graph.AddEdge(1, 2);
+        
+        Assert.Throws<ArgumentException>(() => graph.BFS(99));
+    }
+    
+    [Fact]
+    public void DFS_NonExistentNode_ThrowsException()
+    {
+        var graph = new GraphTraversal();
+        graph.AddEdge(1, 2);
+        
+        Assert.Throws<ArgumentException>(() => graph.DFSRecursive(99));
+        Assert.Throws<ArgumentException>(() => graph.DFSIterative(99));
+    }
+    
+    [Fact]
+    public void BFS_EmptyGraph_ThrowsException()
+    {
+        var graph = new GraphTraversal();
+        
+        Assert.Throws<ArgumentException>(() => graph.BFS(1));
+    }
+    
+    [Fact]
+    public void BFS_SingleNode_ReturnsOneNode()
+    {
+        var graph = new GraphTraversal();
+        // Agregar nodo aislado
+        graph.AddEdge(1, 1); // Self-loop (o simplemente crear nodo manualmente)
+        
+        var result = graph.BFS(1);
+        
+        Assert.Single(result);
+        Assert.Equal(1, result[0]);
+    }
+    
+    [Fact]
+    public void DFS_IsolatedNode_ReturnsOneNode()
+    {
+        var graph = new GraphTraversal();
+        graph.AddEdge(1, 1); // Nodo aislado con self-loop
+        
+        var result = graph.DFSRecursive(1);
+        
+        Assert.Single(result);
+    }
+    
+    [Fact]
+    public void BFS_DisconnectedGraph_VisitsOnlyReachableNodes()
+    {
+        var graph = new GraphTraversal();
+        graph.AddEdge(1, 2);
+        graph.AddEdge(3, 4);
+        
+        var result = graph.BFS(1);
+        
+        Assert.Equal(2, result.Count);
+        Assert.Contains(1, result);
+        Assert.Contains(2, result);
+        Assert.DoesNotContain(3, result);
+        Assert.DoesNotContain(4, result);
+    }
+}
+</code></pre>
+
+            <div class="concepts" style="background: #e8f8f5; padding: 15px; border-left: 5px solid #1abc9c; margin: 20px 0;">
+                <h4>▶️ Cómo Ejecutar los Tests</h4>
+                
+                <h5>En C# (usando xUnit):</h5>
+                <pre><code># Opción 1: Visual Studio
+1. Abrir Test Explorer (Test → Test Explorer)
+2. Click en "Run All" o seleccionar tests específicos
+
+# Opción 2: Terminal/CMD
+cd GraphTraversalProject
+dotnet test
+
+# Opción 3: Ejecutar tests específicos
+dotnet test --filter "FullyQualifiedName~BFS"
+
+# Opción 4: Con cobertura de código
+dotnet test /p:CollectCoverage=true
+
+# Salida esperada:
+# Passed!  - Failed:     0, Passed:    12, Skipped:     0, Total:    12
+</code></pre>
+                
+                <h5>En Python (usando pytest):</h5>
+                <pre><code># Opción 1: Ejecutar todos los tests
+pytest test_graph_traversal.py -v
+
+# Opción 2: Ejecutar tests específicos
+pytest test_graph_traversal.py::test_bfs_simple_graph -v
+
+# Opción 3: Con cobertura de código
+pytest test_graph_traversal.py --cov=graph_traversal --cov-report=html
+
+# Opción 4: Detener en primer error
+pytest test_graph_traversal.py -x
+
+# Opción 5: Ver output de prints (útil para debugging)
+pytest test_graph_traversal.py -s
+
+# Salida esperada:
+# ========================= 12 passed in 0.15s =========================
+</code></pre>
+
+                <p><strong>💡 Tip Profesional:</strong> Integra tests en tu flujo de trabajo con pre-commit hooks o CI/CD (GitHub Actions, GitLab CI). Ejemplo de GitHub Actions:</p>
+                <pre><code># .github/workflows/test.yml
+name: Run Tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+      - name: Run tests
+        run: dotnet test</code></pre>
+            </div>
+
+            <h3>Tests en Python (pytest)</h3>
+            <pre><code>import pytest
+from graph_traversal import GraphTraversal
+
+def test_bfs_simple_graph():
+    graph = GraphTraversal()
+    graph.add_edge(1, 2)
+    graph.add_edge(1, 3)
+    graph.add_edge(2, 4)
+    
+    result = graph.bfs(1)
+    
+    assert result == [1, 2, 3, 4]
+
+def test_bfs_shortest_path():
+    graph = GraphTraversal()
+    edges = [(1,2), (1,3), (2,4), (3,4), (4,5)]
+    for u, v in edges:
+        graph.add_edge(u, v)
+    
+    path = graph.bfs_shortest_path(1, 5)
+    
+    assert path is not None
+    assert len(path) == 4  # 3 aristas
+    assert path[0] == 1
+    assert path[-1] == 5
+
+def test_dfs_detects_cycle():
+    graph = GraphTraversal(directed=True)
+    graph.add_edge(1, 2)
+    graph.add_edge(2, 3)
+    graph.add_edge(3, 1)  # Ciclo
+    
+    assert graph.has_cycle_directed() == True
+
+def test_topological_sort_dag():
+    graph = GraphTraversal(directed=True)
+    graph.add_edge(1, 2)
+    graph.add_edge(1, 3)
+    graph.add_edge(2, 4)
+    graph.add_edge(3, 4)
+    
+    order = graph.topological_sort()
+    
+    assert order is not None
+    assert order[0] == 1
+    assert order[-1] == 4
+
+def test_connected_components():
+    graph = GraphTraversal()
+    graph.add_edge(1, 2)
+    graph.add_edge(3, 4)
+    graph.add_edge(5, 6)
+    
+    components = graph.find_connected_components()
+    
+    assert len(components) == 3
+
+# ========================================
+# TESTS PARA CASOS LÍMITE (EDGE CASES)
+# ========================================
+
+def test_bfs_non_existent_node():
+    graph = GraphTraversal()
+    graph.add_edge(1, 2)
+    
+    with pytest.raises(ValueError, match="El nodo 99 no existe"):
+        graph.bfs(99)
+
+def test_dfs_non_existent_node():
+    graph = GraphTraversal()
+    graph.add_edge(1, 2)
+    
+    with pytest.raises(ValueError, match="El nodo 99 no existe"):
+        graph.dfs_recursive(99)
+    
+    with pytest.raises(ValueError, match="El nodo 99 no existe"):
+        graph.dfs_iterative(99)
+
+def test_bfs_empty_graph():
+    graph = GraphTraversal()
+    
+    with pytest.raises(ValueError):
+        graph.bfs(1)
+
+def test_bfs_single_node():
+    graph = GraphTraversal()
+    graph.add_edge(1, 1)  # Nodo con self-loop
+    
+    result = graph.bfs(1)
+    
+    assert len(result) == 1
+    assert result[0] == 1
+
+def test_dfs_isolated_node():
+    graph = GraphTraversal()
+    graph.add_edge(1, 1)  # Nodo aislado
+    
+    result = graph.dfs_recursive(1)
+    
+    assert len(result) == 1
+
+def test_bfs_disconnected_graph():
+    graph = GraphTraversal()
+    graph.add_edge(1, 2)
+    graph.add_edge(3, 4)
+    
+    result = graph.bfs(1)
+    
+    assert len(result) == 2
+    assert 1 in result
+    assert 2 in result
+    assert 3 not in result
+    assert 4 not in result
+
+if __name__ == "__main__":
+    pytest.main([__file__, "-v"])
+</code></pre>
+
+            <p><a href="#ia-activities">Continuar → Actividades con IA</a></p>
+        </section>
+
+        <!-- ACTIVIDADES IA -->
+        <section id="ia-activities" class="section">
+            <h2>🤖 Actividades con Inteligencia Artificial</h2>
+            
+            <div class="ia-activity">
+                <h3><span class="prompt-number">PROMPT #1</span> Análisis Comparativo Personalizado</h3>
+                <h4>Objetivo: Profundizar entendimiento de BFS vs DFS</h4>
+                
+                <div class="ia-prompt">Contexto: Soy estudiante de estructuras de datos y acabo de implementar BFS y DFS en C#/Python.
+
+Tarea: Genera 5 escenarios de problemas del mundo real (ej. rutas GPS, redes sociales, compiladores) y para cada uno:
+1. Describe brevemente el problema
+2. Explica si usarías BFS o DFS y POR QUÉ
+3. Justifica tu elección con propiedades específicas del algoritmo (complejidad, garantías, etc.)
+4. Menciona una desventaja de usar el otro algoritmo
+
+Formato: Tabla comparativa concisa.</div>
+                
+                <p><strong>Reflexión Post-IA:</strong></p>
+                <ul>
+                    <li>¿Los escenarios del IA coinciden con tu intuición?</li>
+                    <li>¿Identificaste algún caso donde ambos algoritmos son igualmente válidos?</li>
+                    <li>¿Qué criterio adicional no mencionó la IA que consideras importante?</li>
+                </ul>
+            </div>
+
+            <div class="ia-activity">
+                <h3><span class="prompt-number">PROMPT #2</span> Optimización de Código</h3>
+                <h4>Objetivo: Mejorar implementaciones</h4>
+                
+                <div class="ia-prompt">Aquí está mi implementación de BFS en [C#/Python]:
+
+[PEGA TU CÓDIGO AQUÍ]
+
+Tarea: Analiza mi código y sugiere mejoras en:
+1. **Eficiencia:** ¿Hay operaciones redundantes? ¿Se puede optimizar complejidad espacial?
+2. **Claridad:** ¿El código es legible? ¿Los nombres de variables son descriptivos?
+3. **Robustez:** ¿Maneja casos límite (grafo vacío, nodo inexistente, ciclos)?
+4. **Extensibilidad:** ¿Qué funcionalidad adicional sería útil? (ej. BFS bidireccional)
+
+Formato: Enumera mejoras con código de ejemplo para cada una.</div>
+                
+                <p><strong>Actividad de Validación:</strong></p>
+                <ol>
+                    <li>Implementa <strong>al menos 2</strong> de las mejoras sugeridas</li>
+                    <li>Ejecuta tests antes y después para verificar que funcionan</li>
+                    <li>Documenta el cambio en comentarios: <code>// Optimización sugerida por IA: [descripción]</code></li>
+                </ol>
+            </div>
+
+            <div class="ia-activity">
+                <h3><span class="prompt-number">PROMPT #3</span> Depuración con IA</h3>
+                <h4>Objetivo: Resolver bugs usando IA como asistente</h4>
+                
+                <div class="ia-prompt">Mi implementación de DFS para detección de ciclos en grafos dirigidos está fallando el siguiente test:
+
+**Input:** Grafo: 1→2, 2→3, 3→4, 4→2 (debería detectar ciclo 2→3→4→2)
+**Resultado esperado:** True (hay ciclo)
+**Resultado obtenido:** False
+
+Mi código:
+[PEGA TU CÓDIGO DE has_cycle_directed AQUÍ]
+
+Tarea: 
+1. Identifica el bug explicando la lógica incorrecta
+2. Sugiere la corrección específica
+3. Explica por qué esa corrección funciona
+4. Proporciona una traza paso a paso del algoritmo corregido con el input de ejemplo</div>
+                
+                <p><strong>Proceso de Aprendizaje:</strong></p>
+                <ul>
+                    <li>Antes de ver la respuesta de IA, intenta depurar manualmente por 10 minutos</li>
+                    <li>Compara tu diagnóstico con el de la IA</li>
+                    <li>Aplica la corrección y valida con tests adicionales</li>
+                </ul>
+            </div>
+
+            <div class="ia-activity">
+                <h3><span class="prompt-number">PROMPT #4</span> Generación de Visualizaciones</h3>
+                <h4>Objetivo: Crear diagramas Mermaid para documentar</h4>
+                
+                <div class="ia-prompt">Necesito visualizar la ejecución de BFS en el siguiente grafo para mi reporte del proyecto:
+
+**Grafo (lista de adyacencia):**
+{
+  1: [2, 3],
+  2: [1, 4, 5],
+  3: [1, 6],
+  4: [2],
+  5: [2, 7],
+  6: [3],
+  7: [5]
+}
+
+**Nodo inicial:** 1
+
+Tarea: Genera:
+1. Diagrama Mermaid del grafo con aristas etiquetadas
+2. Tabla HTML paso a paso de ejecución BFS mostrando: [Iteración | Cola | Nodo Actual | Visitados | Nivel]
+3. Sugerencias de cómo colorear nodos por nivel en Mermaid
+
+Formato: Código Mermaid listo para copiar + tabla HTML.</div>
+                
+                <p><strong>Post-Procesamiento:</strong></p>
+                <ol>
+                    <li>Copia el código Mermaid y verifica que renderiza correctamente</li>
+                    <li>Si hay errores de sintaxis, pide correcciones específicas a la IA</li>
+                    <li>Personaliza colores/estilos para que coincidan con tu reporte</li>
+                    <li><strong>Documenta:</strong> "Visualización generada con IA (PROMPT #4), estilos personalizados manualmente"</li>
+                </ol>
+            </div>
+
+            <div class="ia-activity">
+                <h3><span class="prompt-number">PROMPT #5</span> Caso de Estudio Avanzado</h3>
+                <h4>Objetivo: Aplicar BFS/DFS a problema complejo</h4>
+                
+                <div class="ia-prompt">**Problema:** Sistema de pre-requisitos de materias universitarias
+
+Contexto: Mi universidad tiene 20 materias con pre-requisitos complejos. Algunas materias tienen múltiples pre-requisitos, y hay que evitar dependencias circulares.
+
+Tarea: Diseña un sistema que:
+1. Modele las materias como grafo dirigido (materia → pre-requisitos)
+2. Detecte si existe una configuración inválida (dependencias circulares)
+3. Genere un plan de estudios óptimo (ordenamiento topológico)
+4. Identifique qué materias se pueden tomar en paralelo (mismo nivel en BFS)
+5. Sugiera el semestre mínimo para graduarse
+
+Entregables:
+- Pseudocódigo de las 5 funcionalidades
+- Estructura de datos recomendada
+- Análisis de complejidad
+- Ejemplo con 10 materias reales de tu carrera</div>
+                
+                <p><strong>Proyecto Mini:</strong></p>
+                <ul>
+                    <li>Implementa el sistema propuesto por la IA en tu lenguaje preferido</li>
+                    <li>Usa datos reales de tu universidad (o inventa 10 materias coherentes)</li>
+                    <li>Genera un reporte PDF con: grafo de materias, plan de estudios sugerido, análisis</li>
+                    <li><strong>Reflexión crítica:</strong> ¿La solución de IA es óptima? ¿Qué mejorarías?</li>
+                </ul>
+            </div>
+
+            <div class="checklist">
+                <h3>✅ Rúbrica de Uso Ético de IA</h3>
+                <p><strong>Para aprobar las actividades con IA, debes demostrar:</strong></p>
+                <ul>
+                    <li><input type="checkbox" aria-label="Atribución"> <strong>Atribución:</strong> Cada uso de IA está documentado con número de prompt (ej. PROMPT #2)</li>
+                    <li><input type="checkbox" aria-label="Comprensión"> <strong>Comprensión:</strong> Puedes explicar verbalmente cualquier código/idea generada por IA</li>
+                    <li><input type="checkbox" aria-label="Modificación"> <strong>Modificación:</strong> Has personalizado o mejorado las respuestas de IA (no copiar-pegar ciego)</li>
+                    <li><input type="checkbox" aria-label="Validación"> <strong>Validación:</strong> Has verificado la corrección de las sugerencias de IA con tests</li>
+                    <li><input type="checkbox" aria-label="Reflexión"> <strong>Reflexión:</strong> Incluyes análisis crítico: ¿qué hizo bien la IA? ¿qué faltó?</li>
+                </ul>
+                
+                <p><strong>❌ Uso No Ético de IA (resulta en 0 puntos):</strong></p>
+                <ul>
+                    <li>Copiar código de IA sin entender cómo funciona</li>
+                    <li>No poder explicar o reproducir tu solución en vivo</li>
+                    <li>No documentar el uso de IA en el reporte/código</li>
+                    <li>Usar IA para resolver todo sin esfuerzo propio significativo</li>
+                </ul>
+            </div>
+
+            <p><a href="#project">Continuar → Proyecto Integrador</a></p>
+        </section>
+
+        <!-- PROYECTO INTEGRADOR -->
+        <section id="project" class="section project">
+            <h2>🚀 Proyecto Integrador: Avance 3 - Algoritmos de Exploración</h2>
+            
+            <h3>Semana 5: Exploración y Análisis del Grafo Urbano</h3>
+            <p><strong>Fecha límite:</strong> Fin de Semana 5 | <strong>Valor:</strong> 25% del proyecto total</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+                <div>
+                    <h4>📋 Requisitos Funcionales</h4>
+                    <ol>
+                        <li><strong>Implementar BFS Completo:</strong>
+                            <ul>
+                                <li>Distancias desde intersección origen</li>
+                                <li>Camino más corto entre 2 puntos</li>
+                                <li>Identificación de nodos por nivel de distancia</li>
+                            </ul>
+                        </li>
+                        <li><strong>Implementar DFS Completo:</strong>
+                            <ul>
+                                <li>Versión recursiva e iterativa</li>
+                                <li>Detección de componentes conectadas</li>
+                                <li>Análisis de ciclos (si aplica a tu mapa)</li>
+                            </ul>
+                        </li>
+                        <li><strong>Análisis Práctico:</strong>
+                            <ul>
+                                <li>¿Cuántas componentes conectadas tiene tu ciudad? (deberían estar todas conectadas)</li>
+                                <li>Distancia máxima entre dos puntos</li>
+                                <li>Identificar intersecciones "centrales" (menor distancia promedio a todas las demás)</li>
+                            </ul>
+                        </li>
+                        <li><strong>Aplicación de Caso de Uso:</strong>
+                            <ul>
+                                <li>Elige 1 aplicación: Sistema de recomendación de rutas, Análisis de accesibilidad, o Planificación de rutas de transporte</li>
+                                <li>Implementa la aplicación usando BFS/DFS</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+                <div>
+                    <h4>📄 Entregables</h4>
+                    <ul>
+                        <li><strong>Código:</strong>
+                            <ul>
+                                <li>Integración de algoritmos BFS/DFS al proyecto</li>
+                                <li>Clases: <code>GraphTraversal</code>, <code>PathFinder</code></li>
+                                <li>Tests unitarios (mínimo 8 tests)</li>
+                            </ul>
+                        </li>
+                        <li><strong>Reporte PDF (6-8 páginas):</strong>
+                            <ul>
+                                <li>Análisis de conectividad del mapa</li>
+                                <li>Tabla comparativa: 5 pares de nodos con camino BFS y distancia</li>
+                                <li>Visualización: Grafo con niveles BFS desde nodo central</li>
+                                <li>Caso de uso implementado: descripción + resultados</li>
+                                <li>Análisis comparativo BFS vs DFS en tu contexto específico</li>
+                                <li>Reflexión: ¿Qué algoritmo es más útil para tu ciudad y por qué?</li>
+                            </ul>
+                        </li>
+                        <li><strong>(Opcional) Demo Interactivo:</strong>
+                            <ul>
+                                <li>Visualización animada de BFS/DFS en tu grafo</li>
+                                <li>Interfaz para consultar caminos</li>
+                                <li>+10% bonus en este avance</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="warning">
+                <h4>⚠️ Errores Comunes a Evitar en el Avance 3</h4>
+                <ul>
+                    <li>No integrar con el código de semanas previas (partir desde cero)</li>
+                    <li>Implementar BFS/DFS genérico pero no aplicarlo al mapa real</li>
+                    <li>No verificar que el grafo esté conectado (componentes desconectadas)</li>
+                    <li>Usar DFS para buscar caminos más cortos (BFS es correcto)</li>
+                    <li>No manejar grafos dirigidos correctamente en DFS de ciclos</li>
+                    <li>Presentar análisis sin visualizaciones (dificulta comprensión)</li>
+                    <li>No documentar decisiones de diseño (¿por qué elegiste BFS aquí?)</li>
+                </ul>
+            </div>
+
+            <div class="concepts">
+                <h4>💡 Sugerencias de Caso de Uso Sobresaliente</h4>
+                
+                <p><strong>Opción 1: Sistema de Análisis de Accesibilidad</strong></p>
+                <ul>
+                    <li>Dado un conjunto de "servicios esenciales" (hospitales, escuelas, supermercados)</li>
+                    <li>Usa BFS para calcular qué % de la ciudad está a <5, 10, 15 intersecciones de cada servicio</li>
+                    <li>Identifica "zonas desatendidas" con baja accesibilidad</li>
+                    <li>Genera mapa de calor visual</li>
+                </ul>
+                
+                <p><strong>Opción 2: Planificador de Rutas de Transporte Público</strong></p>
+                <ul>
+                    <li>Implementa BFS para encontrar ruta con mínimo número de transbordos</li>
+                    <li>Modela diferentes líneas de autobús como "colores" de aristas</li>
+                    <li>Sugiere ubicaciones óptimas para nuevas paradas (nodos con alta centralidad)</li>
+                </ul>
+                
+                <p><strong>Opción 3: Análisis de Redundancia de Rutas</strong></p>
+                <ul>
+                    <li>Identifica "puentes críticos" (aristas cuya eliminación desconecta el grafo)</li>
+                    <li>Usa DFS modificado para encontrar puntos de articulación</li>
+                    <li>Sugiere nuevas calles para aumentar resiliencia</li>
+                </ul>
+            </div>
+
+            <div class="checklist">
+                <h3>✅ Checklist de Pre-Entrega (Avance 3)</h3>
+                <ul>
+                    <li><input type="checkbox" aria-label="BFS implementado"> BFS implementado con distancias y camino más corto</li>
+                    <li><input type="checkbox" aria-label="DFS implementado"> DFS recursivo e iterativo funcionando</li>
+                    <li><input type="checkbox" aria-label="Integración"> Código integrado con Semanas 3-4 (un solo proyecto cohesivo)</li>
+                    <li><input type="checkbox" aria-label="Tests"> Mínimo 8 tests unitarios pasando (4 BFS + 4 DFS)</li>
+                    <li><input type="checkbox" aria-label="Análisis conectividad"> Análisis de conectividad completado (componentes, distancias máximas)</li>
+                    <li><input type="checkbox" aria-label="Caso de uso"> Caso de uso implementado y documentado</li>
+                    <li><input type="checkbox" aria-label="Visualizaciones"> Al menos 2 visualizaciones en el reporte (grafo + resultados)</li>
+                    <li><input type="checkbox" aria-label="Tabla comparativa"> Tabla comparativa con 5 pares de nodos y caminos</li>
+                    <li><input type="checkbox" aria-label="Análisis BFS vs DFS"> Análisis crítico de cuándo usar BFS vs DFS en tu contexto</li>
+                    <li><input type="checkbox" aria-label="Atribución IA"> (Si aplica) Uso de IA documentado con números de prompt</li>
+                </ul>
+            </div>
+
+            <h4>📊 Criterios de Evaluación del Avance 3</h4>
+            <table>
+                <tr>
+                    <th>Componente</th>
+                    <th>Puntos</th>
+                    <th>Criterio de Excelencia</th>
+                </tr>
+                <tr>
+                    <td><strong>Implementación BFS</strong></td>
+                    <td>20</td>
+                    <td>Funcional, eficiente, con distancias y reconstrucción de caminos</td>
+                </tr>
+                <tr>
+                    <td><strong>Implementación DFS</strong></td>
+                    <td>20</td>
+                    <td>Recursivo + iterativo, detección de componentes, robusto</td>
+                </tr>
+                <tr>
+                    <td><strong>Aplicación al Mapa Real</strong></td>
+                    <td>20</td>
+                    <td>Análisis completo de conectividad, resultados coherentes</td>
+                </tr>
+                <tr>
+                    <td><strong>Caso de Uso Práctico</strong></td>
+                    <td>15</td>
+                    <td>Implementación original, útil, bien justificada</td>
+                </tr>
+                <tr>
+                    <td><strong>Reporte Técnico</strong></td>
+                    <td>15</td>
+                    <td>Visualizaciones claras, análisis profundo, conclusiones sólidas</td>
+                </tr>
+                <tr>
+                    <td><strong>Tests y Calidad</strong></td>
+                    <td>10</td>
+                    <td>Tests exhaustivos, código limpio, bien documentado</td>
+                </tr>
+                <tr>
+                    <td><strong>Bonus: Demo Interactivo</strong></td>
+                    <td>+10</td>
+                    <td>Visualización animada, interfaz intuitiva, funcionamiento fluido</td>
+                </tr>
+            </table>
+
+            <div class="concepts" style="margin-top: 20px;">
+                <p><strong>🎓 Conexión Pedagógica:</strong> Este avance es el corazón del proyecto. Los algoritmos que implementas hoy (BFS/DFS) son las bases sobre las cuales construirás:</p>
+                <ul>
+                    <li><strong>Semana 6-7:</strong> Algoritmos de camino más corto ponderado (Dijkstra, Bellman-Ford)</li>
+                    <li><strong>Semana 8-9:</strong> Árboles de expansión mínima (Prim, Kruskal)</li>
+                    <li><strong>Semana 10+:</strong> Flujo máximo, emparejamiento, problemas NP</li>
+                </ul>
+                <p>Invierte tiempo en entender BFS/DFS a profundidad. Son herramientas que usarás constantemente en tu carrera profesional.</p>
+            </div>
+
+            <p style="text-align: center; margin-top: 30px; font-size: 1.1em;">
+                <a href="#intro" style="margin: 0 15px;">✓ Marcar Semana 5 como Completada</a> | 
+                <a href="#intro" style="margin: 0 15px;">🔄 Volver al Inicio</a>
+            </p>
+        </section>
+
+        <!-- FOOTER -->
+        <footer style="margin-top: 60px; padding-top: 30px; border-top: 3px solid #3498db; text-align: center; color: #7f8c8d;">
+            <p><strong style="color: #2c3e50;">Estructuras de Datos Avanzadas - Semana 5</strong></p>
+            <p><em>Algoritmos de Exploración y Búsqueda: BFS y DFS © 2025</em></p>
+            <p style="font-size: 0.9em; margin-top: 10px;">
+                "La diferencia entre BFS y DFS no es solo técnica, es filosófica: ¿exploras amplitud o profundidad? La respuesta depende del problema que enfrentas."
+            </p>
+        </footer>
+
+    </div>
+</body>
+</html>

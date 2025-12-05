@@ -1,0 +1,14 @@
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 5\RecorridoGrafos\bin\Debug\net9.0\RecorridoGrafos.exe
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 5\RecorridoGrafos\bin\Debug\net9.0\RecorridoGrafos.deps.json
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 5\RecorridoGrafos\bin\Debug\net9.0\RecorridoGrafos.runtimeconfig.json
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 5\RecorridoGrafos\bin\Debug\net9.0\RecorridoGrafos.dll
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 5\RecorridoGrafos\bin\Debug\net9.0\RecorridoGrafos.pdb
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 5\RecorridoGrafos\obj\Debug\net9.0\RecorridoGrafos.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 5\RecorridoGrafos\obj\Debug\net9.0\RecorridoGrafos.AssemblyInfoInputs.cache
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 5\RecorridoGrafos\obj\Debug\net9.0\RecorridoGrafos.AssemblyInfo.cs
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 5\RecorridoGrafos\obj\Debug\net9.0\RecorridoGrafos.csproj.CoreCompileInputs.cache
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 5\RecorridoGrafos\obj\Debug\net9.0\RecorridoGrafos.dll
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 5\RecorridoGrafos\obj\Debug\net9.0\refint\RecorridoGrafos.dll
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 5\RecorridoGrafos\obj\Debug\net9.0\RecorridoGrafos.pdb
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 5\RecorridoGrafos\obj\Debug\net9.0\RecorridoGrafos.genruntimeconfig.cache
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 5\RecorridoGrafos\obj\Debug\net9.0\ref\RecorridoGrafos.dll

@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puente Conceptual: De Recursividad a DP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            font-size: 2.2em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #7f8c8d;
+            font-weight: 300;
+        }
+
+        nav {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #34495e;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        nav a:hover, nav a.active {
+            background: #3498db;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .section {
+            background: white;
+            margin-bottom: 25px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 18px;
+            font-size: 1.6em;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 8px;
+        }
+
+        .concept-box {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #fff;
+        }
+
+        .concept-box h3 {
+            margin-bottom: 12px;
+            font-size: 1.2em;
+        }
+
+        .analogy {
+            background: #fff5f5;
+            border-left: 5px solid #e74c3c;
+            padding: 18px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .analogy h4 {
+            color: #c0392b;
+            margin-bottom: 10px;
+        }
+
+        .code-snippet {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        .visual-demo {
+            background: #f8f9fa;
+            border: 2px dashed #3498db;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 18px 0;
+        }
+
+        .step-by-step {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .step-by-step h4 {
+            color: #27ae60;
+            margin-bottom: 8px;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 12px 0;
+            border-left: 4px solid #f39c12;
+        }
+
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            margin: 8px 4px;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+        }
+
+        .tree-visual {
+            font-family: monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        .repeated {
+            background: #ffebee;
+            padding: 2px 4px;
+            border-radius: 3px;
+            border: 1px solid #e57373;
+        }
+
+        .memoized {
+            background: #e8f5e8;
+            padding: 2px 4px;
+            border-radius: 3px;
+            border: 1px solid #66bb6a;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            h1 { font-size: 1.8em; }
+            nav ul { flex-direction: column; align-items: center; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌉 Puente Conceptual</h1>
+            <p class="subtitle">De la Recursividad Básica a la Programación Dinámica</p>
+            <p><em>Material de Refuerzo - Estructuras de Datos Avanzadas</em></p>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="#" onclick="showSection('anatomia')" class="nav-link active">Anatomía Recursiva</a></li>
+                <li><a href="#" onclick="showSection('deteccion')" class="nav-link">Detectar Repetición</a></li>
+                <li><a href="#" onclick="showSection('intuicion')" class="nav-link">Intuición DP</a></li>
+                <li><a href="#" onclick="showSection('transicion')" class="nav-link">Transición</a></li>
+                <li><a href="#" onclick="showSection('errores')" class="nav-link">Errores Comunes</a></li>
+                <li><a href="#" onclick="showSection('practica')" class="nav-link">Práctica Guiada</a></li>
+            </ul>
+        </nav>
+
+        <!-- ANATOMÍA RECURSIVA -->
+        <section id="anatomia" class="section active fade-in">
+            <h2>🔬 Anatomía de una Llamada Recursiva</h2>
+            
+            <div class="concept-box">
+                <h3>¿Qué realmente sucede cuando llamamos una función recursiva?</h3>
+                <p>Cada llamada recursiva crea un "marco" en la pila de ejecución. Vamos a visualizar esto paso a paso.</p>
+            </div>
+
+            <div class="analogy">
+                <h4>💡 Analogía: Las muñecas rusas</h4>
+                <p>Imagina que cada llamada recursiva es como abrir una muñeca rusa. Para llegar al centro (caso base), debes abrir cada capa. Para armar la respuesta final, debes cerrar cada capa en orden inverso.</p>
+            </div>
+
+            <div class="visual-demo">
+                <h3>Ejemplo: factorial(4)</h3>
+                <div class="tree-visual">
+factorial(4)
+├─ necesita factorial(3)
+   ├─ necesita factorial(2)
+      ├─ necesita factorial(1)
+         └─ retorna 1 ✓
+      └─ calcula 2 * 1 = 2 ✓
+   └─ calcula 3 * 2 = 6 ✓
+└─ calcula 4 * 6 = 24 ✓
+                </div>
+            </div>
+
+            <div class="step-by-step">
+                <h4>🎯 Elementos Clave de Toda Recursión</h4>
+                <ol>
+                    <li><strong>Caso Base:</strong> La condición que detiene la recursión</li>
+                    <li><strong>Llamada Recursiva:</strong> La función se llama a sí misma con un problema más pequeño</li>
+                    <li><strong>Construcción de la Respuesta:</strong> Cómo se combina el resultado recursivo</li>
+                </ol>
+            </div>
+
+            <div class="code-snippet">
+int factorial(int n) {
+    // 1. Caso base
+    if (n <= 1) return 1;
+    
+    // 2. Llamada recursiva + 3. Construcción
+    return n * factorial(n - 1);
+}
+            </div>
+
+            <button class="btn" onclick="showSection('deteccion')">Siguiente: Detectar Repetición →</button>
+        </section>
+
+        <!-- DETECCIÓN DE REPETICIÓN -->
+        <section id="deteccion" class="section">
+            <h2>🕵️ Detectar Cuándo Algo Se Repite</h2>
+            
+            <div class="concept-box">
+                <h3>La Clave del Problema</h3>
+                <p>Algunos problemas recursivos resuelven el mismo subproblema múltiples veces. Esto es ineficiente y es donde brilla la programación dinámica.</p>
+            </div>
+
+            <div class="visual-demo">
+                <h3>Fibonacci: El Caso Clásico</h3>
+                <div class="tree-visual">
+fibonacci(5)
+├─ fibonacci(4)
+│  ├─ fibonacci(3)
+│  │  ├─ <span class="repeated">fibonacci(2)</span>
+│  │  └─ fibonacci(1)
+│  └─ <span class="repeated">fibonacci(2)</span>
+└─ fibonacci(3)
+   ├─ <span class="repeated">fibonacci(2)</span>
+   └─ fibonacci(1)
+                </div>
+                <p><strong>¿Ves el patrón?</strong> fibonacci(2) se calcula 3 veces, fibonacci(3) se calcula 2 veces.</p>
+            </div>
+
+            <div class="analogy">
+                <h4>💡 Analogía: El estudiante olvidadizo</h4>
+                <p>Es como un estudiante que resuelve el mismo problema de matemáticas una y otra vez porque se olvida de la respuesta. Si escribiera las respuestas en un cuaderno, podría consultarlas en lugar de resolverlas de nuevo.</p>
+            </div>
+
+            <div class="step-by-step">
+                <h4>🎯 ¿Cómo Identificar Subproblemas Repetidos?</h4>
+                <ol>
+                    <li><strong>Dibuja el árbol de llamadas</strong> para casos pequeños (n=4, n=5)</li>
+                    <li><strong>Marca con colores</strong> las llamadas que aparecen más de una vez</li>
+                    <li><strong>Pregúntate:</strong> "¿El resultado de f(k) siempre es el mismo independientemente del contexto?"</li>
+                </ol>
+            </div>
+
+            <div class="warning">
+                <strong>⚠️ No todos los problemas recursivos tienen repetición!</strong><br>
+                factorial(n) NO tiene subproblemas repetidos. Cada factorial(k) se calcula exactamente una vez.
+            </div>
+
+            <button class="btn" onclick="showSection('intuicion')">Siguiente: Intuición DP →</button>
+        </section>
+
+        <!-- INTUICIÓN DP -->
+        <section id="intuicion" class="section">
+            <h2>💡 Intuición: ¿Qué es la Programación Dinámica?</h2>
+            
+            <div class="concept-box">
+                <h3>La Idea Central</h3>
+                <p>La Programación Dinámica es simplemente <strong>"recordar lo que ya calculaste"</strong> para no tener que calcularlo de nuevo.</p>
+            </div>
+
+            <div class="analogy">
+                <h4>💡 Analogía: El cuaderno de apuntes</h4>
+                <p><strong>Sin DP:</strong> Cada vez que necesitas una fórmula, buscas en todo el libro de texto.<br>
+                <strong>Con DP:</strong> Escribes las fórmulas importantes en un cuaderno y las consultas ahí primero.</p>
+            </div>
+
+            <div class="visual-demo">
+                <h3>Dos Enfoques de DP</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left;">
+                    <div style="background: #e3f2fd; padding: 15px; border-radius: 8px;">
+                        <h4>🔼 Top-Down (Memoización)</h4>
+                        <p>• Empiezas con el problema original</p>
+                        <p>• Divides en subproblemas</p>
+                        <p>• Guardas resultados en una tabla</p>
+                        <p>• Parece recursión normal + memoria</p>
+                    </div>
+                    <div style="background: #f3e5f5; padding: 15px; border-radius: 8px;">
+                        <h4>🔽 Bottom-Up (Tabulación)</h4>
+                        <p>• Empiezas con los casos más simples</p>
+                        <p>• Construyes hacia el problema original</p>
+                        <p>• Llenas una tabla sistemáticamente</p>
+                        <p>• Parece un bucle con una tabla</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-by-step">
+                <h4>🎯 Proceso Mental para Aplicar DP</h4>
+                <ol>
+                    <li><strong>Identifica:</strong> ¿Hay subproblemas que se repiten?</li>
+                    <li><strong>Define:</strong> ¿Qué representa cada entrada de la tabla?</li>
+                    <li><strong>Establece:</strong> ¿Cuál es la relación de recurrencia?</li>
+                    <li><strong>Inicializa:</strong> ¿Cuáles son los casos base?</li>
+                    <li><strong>Ordena:</strong> ¿En qué orden debo llenar la tabla?</li>
+                </ol>
+            </div>
+
+            <div class="code-snippet">
+// Fibonacci con memoización (Top-Down)
+Dictionary&lt;int, int&gt; memo = new Dictionary&lt;int, int&gt;();
+
+int fibMemo(int n) {
+    if (n <= 1) return n;
+    if (memo.ContainsKey(n)) return memo[n]; // ¡Ya lo calculé!
+    memo[n] = fibMemo(n-1) + fibMemo(n-2);
+    return memo[n];
+}
+            </div>
+
+            <button class="btn" onclick="showSection('transicion')">Siguiente: Transición →</button>
+        </section>
+
+        <!-- TRANSICIÓN -->
+        <section id="transicion" class="section">
+            <h2>🔄 Transición: De Recursivo a DP</h2>
+            
+            <div class="concept-box">
+                <h3>Proceso de Transformación</h3>
+                <p>Vamos a transformar paso a paso un código recursivo ingenuo en una solución con DP.</p>
+            </div>
+
+            <div class="step-by-step">
+                <h4>🎯 Paso 1: Código Recursivo Original</h4>
+                <div class="code-snippet">
+// Fibonacci ingenuo - O(2^n)
+int fib(int n) {
+    if (n <= 1) return n;
+    return fib(n-1) + fib(n-2);
+}
+                </div>
+            </div>
+
+            <div class="step-by-step">
+                <h4>🎯 Paso 2: Agregar Memoización</h4>
+                <div class="code-snippet">
+// Agregar tabla de memoria
+Dictionary&lt;int, int&gt; tabla = new Dictionary&lt;int, int&gt;();
+
+int fibMemo(int n) {
+    if (n <= 1) return n;
+    
+    // ¿Ya lo calculé antes?
+    if (tabla.ContainsKey(n)) {
+        return tabla[n]; // ¡Sí! Lo devuelvo
+    }
+    
+    // No lo había calculado, lo calculo y lo guardo
+    int resultado = fibMemo(n-1) + fibMemo(n-2);
+    tabla[n] = resultado;
+    return resultado;
+}
+                </div>
+            </div>
+
+            <div class="step-by-step">
+                <h4>🎯 Paso 3: Versión Bottom-Up</h4>
+                <div class="code-snippet">
+// Llenar la tabla desde abajo hacia arriba
+int fibTabla(int n) {
+    if (n <= 1) return n;
+    
+    int[] dp = new int[n + 1];
+    dp[0] = 0;  // caso base
+    dp[1] = 1;  // caso base
+    
+    // Llenar la tabla en orden
+    for (int i = 2; i <= n; i++) {
+        dp[i] = dp[i-1] + dp[i-2];
+    }
+    
+    return dp[n];
+}
+                </div>
+            </div>
+
+            <div class="visual-demo">
+                <h3>Comparación de Eficiencia</h3>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr style="background: #3498db; color: white;">
+                        <th style="padding: 10px; border: 1px solid #ddd;">n</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Recursivo Ingenuo</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Con DP</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;">10</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">177 llamadas</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">10 operaciones</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td style="padding: 8px; border: 1px solid #ddd;">20</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">21,891 llamadas</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">20 operaciones</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;">30</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">2,692,537 llamadas</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">30 operaciones</td>
+                    </tr>
+                </table>
+            </div>
+
+            <button class="btn" onclick="showSection('errores')">Siguiente: Errores Comunes →</button>
+        </section>
+
+        <!-- ERRORES COMUNES -->
+        <section id="errores" class="section">
+            <h2>⚠️ Errores Comunes y Cómo Evitarlos</h2>
+            
+            <div class="concept-box">
+                <h3>Aprender de los Errores Típicos</h3>
+                <p>Estos son los errores más frecuentes que cometen los estudiantes al aprender DP, junto con sus soluciones.</p>
+            </div>
+
+            <div class="warning">
+                <h4>❌ Error 1: Confundir índices</h4>
+                <div class="code-snippet">
+// MAL: Confundir el índice con el valor
+int[] dp = new int[n];  // ¡Muy pequeño!
+dp[n] = ...;  // ¡Fuera de límites!
+
+// BIEN: Reservar espacio suficiente
+int[] dp = new int[n + 1];  // Incluye posición n
+dp[n] = ...;  // Ahora sí cabe
+                </div>
+            </div>
+
+            <div class="warning">
+                <h4>❌ Error 2: No inicializar casos base</h4>
+                <div class="code-snippet">
+// MAL: Olvidar los casos base
+int[] dp = new int[n + 1];  // Todo en 0 por defecto
+for (int i = 2; i <= n; i++) {
+    dp[i] = dp[i-1] + dp[i-2];  // ¡dp[0] y dp[1] están en 0!
+}
+
+// BIEN: Establecer casos base explícitamente
+int[] dp = new int[n + 1];
+dp[0] = 0;  // Caso base explícito
+dp[1] = 1;  // Caso base explícito
+for (int i = 2; i <= n; i++) {
+    dp[i] = dp[i-1] + dp[i-2];
+}
+                </div>
+            </div>
+
+            <div class="warning">
+                <h4>❌ Error 3: Orden incorrecto en bottom-up</h4>
+                <div class="code-snippet">
+// MAL: Llenar en orden incorrecto
+for (int i = n; i >= 0; i--) {  // ¡Al revés!
+    dp[i] = dp[i-1] + dp[i-2];  // Usa valores no calculados
+}
+
+// BIEN: Llenar desde casos pequeños a grandes
+for (int i = 2; i <= n; i++) {  // Orden correcto
+    dp[i] = dp[i-1] + dp[i-2];  // Usa valores ya calculados
+}
+                </div>
+            </div>
+
+            <div class="step-by-step">
+                <h4>🎯 Checklist de Validación</h4>
+                <ol>
+                    <li>✅ <strong>¿Definí correctamente qué significa dp[i]?</strong></li>
+                    <li>✅ <strong>¿Inicialicé todos los casos base?</strong></li>
+                    <li>✅ <strong>¿El tamaño del arreglo es suficiente?</strong></li>
+                    <li>✅ <strong>¿Lleno la tabla en el orden correcto?</strong></li>
+                    <li>✅ <strong>¿La recurrencia usa solo valores ya calculados?</strong></li>
+                </ol>
+            </div>
+
+            <button class="btn" onclick="showSection('practica')">Siguiente: Práctica Guiada →</button>
+        </section>
+
+        <!-- PRÁCTICA GUIADA -->
+        <section id="practica" class="section">
+            <h2>🏋️ Práctica Guiada</h2>
+            
+            <div class="concept-box">
+                <h3>Ejercicio: Subir Escaleras</h3>
+                <p>Tienes una escalera de n escalones. Puedes subir 1 o 2 escalones a la vez. ¿De cuántas formas diferentes puedes llegar al escalón n?</p>
+            </div>
+
+            <div class="step-by-step">
+                <h4>🎯 Paso 1: Entender el Problema</h4>
+                <p><strong>Casos pequeños:</strong></p>
+                <ul>
+                    <li>n=1: Solo 1 forma (1 paso)</li>
+                    <li>n=2: 2 formas (1+1 o 2)</li>
+                    <li>n=3: 3 formas (1+1+1, 1+2, 2+1)</li>
+                    <li>n=4: 5 formas... ¡Parece Fibonacci!</li>
+                </ul>
+            </div>
+
+            <div class="step-by-step">
+                <h4>🎯 Paso 2: Identificar la Recurrencia</h4>
+                <div class="analogy">
+                    <h4>💡 Razonamiento</h4>
+                    <p>Para llegar al escalón n, debo haber llegado desde:</p>
+                    <ul>
+                        <li>El escalón (n-1) dando 1 paso, O</li>
+                        <li>El escalón (n-2) dando 2 pasos</li>
+                    </ul>
+                    <p>Por tanto: <code>formas(n) = formas(n-1) + formas(n-2)</code></p>
+                </div>
+            </div>
+
+            <div class="step-by-step">
+                <h4>🎯 Paso 3: Implementar</h4>
+                <div class="code-snippet">
+// Versión recursiva con memoización
+Dictionary&lt;int, int&gt; memo = new Dictionary&lt;int, int&gt;();
+
+int escalerasMemo(int n) {
+    if (n <= 1) return 1;
+    if (n == 2) return 2;
+    
+    if (memo.ContainsKey(n)) return memo[n];
+    
+    memo[n] = escalerasMemo(n-1) + escalerasMemo(n-2);
+    return memo[n];
+}
+
+// Versión bottom-up
+int escalerasTabla(int n) {
+    if (n <= 1) return 1;
+    if (n == 2) return 2;
+    
+    int[] dp = new int[n + 1];
+    dp[1] = 1;
+    dp[2] = 2;
+    
+    for (int i = 3; i <= n; i++) {
+        dp[i] = dp[i-1] + dp[i-2];
+    }
+    
+    return dp[n];
+}
+                </div>
+            </div>
+
+            <div class="visual-demo">
+                <h3>¡Ahora es Tu Turno!</h3>
+                <p><strong>Reto:</strong> Modifica el problema para que puedas subir 1, 2 o 3 escalones a la vez.</p>
+                <p><strong>Pista:</strong> La recurrencia sería <code>f(n) = f(n-1) + f(n-2) + f(n-3)</code></p>
+                <p><strong>Pregunta:</strong> ¿Cómo cambiarían los casos base?</p>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn" onclick="resetLesson()" style="background: #27ae60;">🔄 Repasar desde el Inicio</button>
+                <button class="btn" onclick="window.open('#', '_blank')">🚀 Continuar con Material Principal</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        let currentSection = 'anatomia';
+        const sections = ['anatomia', 'deteccion', 'intuicion', 'transicion', 'errores', 'practica'];
+
+        function showSection(sectionName) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            document.getElementById(sectionName).classList.add('active');
+            document.getElementById(sectionName).classList.add('fade-in');
+            
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`[onclick="showSection('${sectionName}')"]`).classList.add('active');
+            
+            currentSection = sectionName;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetLesson() {
+            showSection('anatomia');
+        }
+
+        // Navegación con teclado
+        document.addEventListener('keydown', function(event) {
+            const currentIndex = sections.indexOf(currentSection);
+            
+            if (event.key === 'ArrowRight' && currentIndex < sections.length - 1) {
+                showSection(sections[currentIndex + 1]);
+            } else if (event.key === 'ArrowLeft' && currentIndex > 0) {
+                showSection(sections[currentIndex - 1]);
+            }
+        });
+    </script>
+</body>
+</html>

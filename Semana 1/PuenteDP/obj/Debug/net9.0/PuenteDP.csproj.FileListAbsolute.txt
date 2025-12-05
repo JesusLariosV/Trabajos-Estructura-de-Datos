@@ -1,0 +1,14 @@
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\PuenteDP\bin\Debug\net9.0\PuenteDP.exe
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\PuenteDP\bin\Debug\net9.0\PuenteDP.deps.json
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\PuenteDP\bin\Debug\net9.0\PuenteDP.runtimeconfig.json
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\PuenteDP\bin\Debug\net9.0\PuenteDP.dll
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\PuenteDP\bin\Debug\net9.0\PuenteDP.pdb
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\PuenteDP\obj\Debug\net9.0\PuenteDP.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\PuenteDP\obj\Debug\net9.0\PuenteDP.AssemblyInfoInputs.cache
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\PuenteDP\obj\Debug\net9.0\PuenteDP.AssemblyInfo.cs
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\PuenteDP\obj\Debug\net9.0\PuenteDP.csproj.CoreCompileInputs.cache
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\PuenteDP\obj\Debug\net9.0\PuenteDP.dll
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\PuenteDP\obj\Debug\net9.0\refint\PuenteDP.dll
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\PuenteDP\obj\Debug\net9.0\PuenteDP.pdb
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\PuenteDP\obj\Debug\net9.0\PuenteDP.genruntimeconfig.cache
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\PuenteDP\obj\Debug\net9.0\ref\PuenteDP.dll

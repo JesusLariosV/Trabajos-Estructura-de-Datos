@@ -1,0 +1,14 @@
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\TorresDeHanoi\bin\Debug\net9.0\TorresDeHanoi.exe
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\TorresDeHanoi\bin\Debug\net9.0\TorresDeHanoi.deps.json
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\TorresDeHanoi\bin\Debug\net9.0\TorresDeHanoi.runtimeconfig.json
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\TorresDeHanoi\bin\Debug\net9.0\TorresDeHanoi.dll
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\TorresDeHanoi\bin\Debug\net9.0\TorresDeHanoi.pdb
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\TorresDeHanoi\obj\Debug\net9.0\TorresDeHanoi.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\TorresDeHanoi\obj\Debug\net9.0\TorresDeHanoi.AssemblyInfoInputs.cache
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\TorresDeHanoi\obj\Debug\net9.0\TorresDeHanoi.AssemblyInfo.cs
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\TorresDeHanoi\obj\Debug\net9.0\TorresDeHanoi.csproj.CoreCompileInputs.cache
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\TorresDeHanoi\obj\Debug\net9.0\TorresDeHanoi.dll
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\TorresDeHanoi\obj\Debug\net9.0\refint\TorresDeHanoi.dll
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\TorresDeHanoi\obj\Debug\net9.0\TorresDeHanoi.pdb
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\TorresDeHanoi\obj\Debug\net9.0\TorresDeHanoi.genruntimeconfig.cache
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 1\TorresDeHanoi\obj\Debug\net9.0\ref\TorresDeHanoi.dll

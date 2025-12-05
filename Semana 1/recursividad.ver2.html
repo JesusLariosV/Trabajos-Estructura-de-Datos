@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torres de Hanoi: Recursividad vs Iteración</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #7f8c8d;
+            font-weight: 300;
+        }
+
+        nav {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #34495e;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        nav a:hover, nav a.active {
+            background: #3498db;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .section {
+            background: white;
+            margin-bottom: 30px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .challenge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .challenge h3 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .activity {
+            background: #f8f9fa;
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .activity h4 {
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+
+        .code-container {
+            background: #2c3e50;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .code-header {
+            background: #34495e;
+            color: white;
+            padding: 10px 20px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .code-content {
+            padding: 20px;
+            color: #ecf0f1;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        .keyword { color: #3498db; }
+        .string { color: #e74c3c; }
+        .comment { color: #95a5a6; font-style: italic; }
+        .number { color: #f39c12; }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .comparison-table th {
+            background: #3498db;
+            color: white;
+            font-weight: 600;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .progress-bar {
+            background: #ecf0f1;
+            height: 6px;
+            border-radius: 3px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-success {
+            background: #27ae60;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+        }
+
+        .visual-demo {
+            background: #f8f9fa;
+            border: 2px dashed #3498db;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .towers {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .tower {
+            text-align: center;
+            position: relative;
+        }
+
+        .tower-container {
+            position: relative;
+            height: 200px;
+            width: 120px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .base {
+            width: 120px;
+            height: 8px;
+            background: #8b4513;
+            border-radius: 4px;
+            margin-bottom: 5px;
+        }
+
+        .peg {
+            width: 8px;
+            height: 160px;
+            background: #8b4513;
+            position: absolute;
+            bottom: 8px;
+            border-radius: 4px;
+        }
+
+        .disks-stack {
+            position: absolute;
+            bottom: 8px;
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+        }
+
+        .disk {
+            height: 18px;
+            border-radius: 9px;
+            margin: 1px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 11px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .disk-1 { width: 50px; background: #e74c3c; }
+        .disk-2 { width: 70px; background: #f39c12; }
+        .disk-3 { width: 90px; background: #2ecc71; }
+        .disk-4 { width: 110px; background: #3498db; }
+
+        .reflection-box {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #e17055;
+        }
+
+        .reflection-box h4 {
+            color: #d63031;
+            margin-bottom: 10px;
+        }
+
+        .timer {
+            background: #2c3e50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            font-family: monospace;
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .towers {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            
+            .comparison-table {
+                font-size: 14px;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🗼 Torres de Hanoi</h1>
+            <p class="subtitle">Explorando Recursividad vs Iteración</p>
+			<p>Estructuras de Datos Avanzadas (c) 2025</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="#" onclick="showSection('introduccion')" class="nav-link active">Introducción</a></li>
+                <li><a href="#" onclick="showSection('exploracion')" class="nav-link">Exploración</a></li>
+                <li><a href="#" onclick="showSection('patron')" class="nav-link">Patrón</a></li>
+                <li><a href="#" onclick="showSection('recursivo')" class="nav-link">Recursivo</a></li>
+                <li><a href="#" onclick="showSection('iterativo')" class="nav-link">Iterativo</a></li>
+                <li><a href="#" onclick="showSection('comparacion')" class="nav-link">Comparación</a></li>
+                <li><a href="#" onclick="showSection('reflexion')" class="nav-link">Reflexión</a></li>
+            </ul>
+        </nav>
+
+        <!-- INTRODUCCIÓN -->
+        <section id="introduccion" class="section active fade-in">
+            <h2>🎯 Introducción al Problema</h2>
+            
+            <div class="visual-demo">
+                <h3>Las Torres de Hanoi</h3>
+                <p>Un monje tiene 3 torres y varios discos de diferentes tamaños.</p>
+                
+                <div class="towers">
+                    <div class="tower">
+                        <div class="tower-container">
+                            <div class="peg"></div>
+                            <div class="disks-stack">
+                                <div class="disk disk-4">4</div>
+                                <div class="disk disk-3">3</div>
+                                <div class="disk disk-2">2</div>
+                                <div class="disk disk-1">1</div>
+                            </div>
+                            <div class="base"></div>
+                        </div>
+                        <h4>Torre A (Origen)</h4>
+                    </div>
+                    <div class="tower">
+                        <div class="tower-container">
+                            <div class="peg"></div>
+                            <div class="disks-stack">
+                                <!-- Vacía -->
+                            </div>
+                            <div class="base"></div>
+                        </div>
+                        <h4>Torre B (Auxiliar)</h4>
+                    </div>
+                    <div class="tower">
+                        <div class="tower-container">
+                            <div class="peg"></div>
+                            <div class="disks-stack">
+                                <!-- Vacía -->
+                            </div>
+                            <div class="base"></div>
+                        </div>
+                        <h4>Torre C (Destino)</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="challenge">
+                <h3>🎮 El Desafío</h3>
+                <p><strong>Objetivo:</strong> Mover todos los discos de la Torre A a la Torre C</p>
+                <p><strong>Reglas:</strong></p>
+                <ul>
+                    <li>Solo puedes mover un disco a la vez</li>
+                    <li>Solo puedes tomar el disco superior de una torre</li>
+                    <li>Nunca puedes poner un disco grande encima de uno más pequeño</li>
+                </ul>
+            </div>
+
+            <div class="activity">
+                <h4>🤔 Pregunta Inicial</h4>
+                <p>Antes de continuar, piensa: ¿Cuántos movimientos mínimos necesitas para n=3 discos?</p>
+                <p>¿Y para n=4 discos? ¿Existe un patrón?</p>
+            </div>
+
+            <button class="btn" onclick="showSection('exploracion')">Comenzar Exploración →</button>
+        </section>
+
+        <!-- EXPLORACIÓN -->
+        <section id="exploracion" class="section">
+            <h2>🔍 Exploración Manual</h2>
+            
+            <div class="activity">
+                <h4>📝 Actividad 1: Casos Base</h4>
+                <p><strong>Tiempo estimado:</strong> <span class="timer">10 minutos</span></p>
+                <p>Resuelve manualmente estos casos y anota tus movimientos:</p>
+                
+                <div style="margin: 20px 0;">
+                    <h5>n = 1 disco:</h5>
+                    <p style="margin-left: 20px;">Movimientos: A → C</p>
+                    <p style="margin-left: 20px;">Total: <strong>1 movimiento</strong></p>
+                </div>
+
+                <div style="margin: 20px 0;">
+                    <h5>n = 2 discos:</h5>
+                    <p style="margin-left: 20px;">Movimientos: A → B, A → C, B → C</p>
+                    <p style="margin-left: 20px;">Total: <strong>3 movimientos</strong></p>
+                </div>
+
+                <div style="margin: 20px 0;">
+                    <h5>n = 3 discos:</h5>
+                    <p style="margin-left: 20px;">¡Tu turno! Intenta resolverlo paso a paso...</p>
+                    <p style="margin-left: 20px; color: #7f8c8d;"><em>(Pista: deberías necesitar 7 movimientos)</em></p>
+                </div>
+            </div>
+
+            <div class="reflection-box">
+                <h4>🤯 Momento "Aha"</h4>
+                <p>¿Notaste algo interesante en los números? 1, 3, 7...</p>
+                <p>¿Qué relación tienen con las potencias de 2?</p>
+                <ul>
+                    <li>n=1: 1 = 2¹ - 1</li>
+                    <li>n=2: 3 = 2² - 1</li>
+                    <li>n=3: 7 = 2³ - 1</li>
+                </ul>
+            </div>
+
+            <button class="btn" onclick="showSection('patron')">Descubrir el Patrón →</button>
+        </section>
+
+        <!-- PATRÓN -->
+        <section id="patron" class="section">
+            <h2>🧩 Descubriendo el Patrón</h2>
+            
+            <div class="challenge">
+                <h3>💡 La Estrategia Recursiva</h3>
+                <p>Para mover n discos de A a C usando B como auxiliar:</p>
+                <ol style="margin: 15px 0; padding-left: 20px;">
+                    <li><strong>Paso 1:</strong> Mover n-1 discos de A a B (usando C como auxiliar)</li>
+                    <li><strong>Paso 2:</strong> Mover el disco más grande de A a C</li>
+                    <li><strong>Paso 3:</strong> Mover n-1 discos de B a C (usando A como auxiliar)</li>
+                </ol>
+            </div>
+
+            <div class="activity">
+                <h4>🎯 Verificación del Patrón</h4>
+                <p>Apliquemos esta estrategia a n=3:</p>
+                
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <p><strong>Hanoi(3, A, C, B):</strong></p>
+                    <ul style="margin-left: 20px;">
+                        <li>Hanoi(2, A, B, C) → 3 movimientos</li>
+                        <li>A → C → 1 movimiento</li>
+                        <li>Hanoi(2, B, C, A) → 3 movimientos</li>
+                    </ul>
+                    <p><strong>Total: 3 + 1 + 3 = 7 movimientos ✓</strong></p>
+                </div>
+            </div>
+
+            <div class="reflection-box">
+                <h4>🔢 La Fórmula Mágica</h4>
+                <p><strong>Número mínimo de movimientos = 2ⁿ - 1</strong></p>
+                <p>Esto significa que para n=10 discos necesitarías <strong>1,023 movimientos</strong>!</p>
+                <p>¿Y para n=64? ¡Más de 18 quintillones de movimientos! 🤯</p>
+            </div>
+
+            <button class="btn" onclick="showSection('recursivo')">Ver Implementación Recursiva →</button>
+        </section>
+
+        <!-- CÓDIGO RECURSIVO -->
+        <section id="recursivo" class="section">
+            <h2>🔄 Implementación Recursiva</h2>
+            
+            <p>Ahora que entendemos el patrón, veamos cómo se traduce a código:</p>
+
+            <div class="code-container">
+                <div class="code-header">
+                    <span>💻 Versión Recursiva</span>
+                    <span>Elegante y Natural</span>
+                </div>
+                <div class="code-content"><span class="keyword">using</span> System;
+<span class="keyword">using</span> System.Collections.Generic;
+
+List&lt;<span class="keyword">string</span>&gt; HanoiRecursivo(<span class="keyword">int</span> n, <span class="keyword">char</span> origen, <span class="keyword">char</span> destino, <span class="keyword">char</span> auxiliar)
+{
+    <span class="keyword">var</span> moves = <span class="keyword">new</span> List&lt;<span class="keyword">string</span>&gt;();
+    
+    <span class="keyword">void</span> Solve(<span class="keyword">int</span> k, <span class="keyword">char</span> from, <span class="keyword">char</span> to, <span class="keyword">char</span> aux)
+    {
+        <span class="comment">// Caso base: si no hay discos, no hacer nada</span>
+        <span class="keyword">if</span> (k == <span class="number">0</span>) <span class="keyword">return</span>;
+        
+        <span class="comment">// Paso 1: Mover k-1 discos al auxiliar</span>
+        Solve(k - <span class="number">1</span>, from, aux, to);
+        
+        <span class="comment">// Paso 2: Mover el disco grande al destino</span>
+        moves.Add($<span class="string">"{from} -> {to}"</span>);
+        
+        <span class="comment">// Paso 3: Mover k-1 discos del auxiliar al destino</span>
+        Solve(k - <span class="number">1</span>, aux, to, from);
+    }
+    
+    Solve(n, origen, destino, auxiliar);
+    <span class="keyword">return</span> moves;
+}</div>
+            </div>
+
+            <div class="activity">
+                <h4>🎪 Simulación Mental</h4>
+                <p>Trazemos la ejecución para n=2:</p>
+                
+                <div style="background: #e8f5e8; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <p><code>HanoiRecursivo(2, 'A', 'C', 'B')</code></p>
+                    <ul style="margin-left: 20px; line-height: 1.8;">
+                        <li><code>Solve(2, A, C, B)</code></li>
+                        <li style="margin-left: 20px;"><code>Solve(1, A, B, C)</code> → "A -> B"</li>
+                        <li style="margin-left: 20px;">"A -> C"</li>
+                        <li style="margin-left: 20px;"><code>Solve(1, B, C, A)</code> → "B -> C"</li>
+                    </ul>
+                    <p><strong>Resultado:</strong> ["A -> B", "A -> C", "B -> C"]</p>
+                </div>
+            </div>
+
+            <div class="reflection-box">
+                <h4>🌟 Ventajas de la Recursión</h4>
+                <ul>
+                    <li><strong>Claridad:</strong> El código refleja directamente la estrategia mental</li>
+                    <li><strong>Elegancia:</strong> Pocas líneas, fácil de entender</li>
+                    <li><strong>Corrección:</strong> Si la lógica recursiva es correcta, el resultado también</li>
+                </ul>
+                
+                <h4>⚠️ Desventajas</h4>
+                <ul>
+                    <li><strong>Espacio:</strong> Usa O(n) memoria en la pila de llamadas</li>
+                    <li><strong>Límites:</strong> Stack overflow para n muy grandes (~20+ en algunos sistemas)</li>
+                </ul>
+            </div>
+
+            <button class="btn" onclick="showSection('iterativo')">Ver Versión Iterativa →</button>
+        </section>
+
+        <!-- CÓDIGO ITERATIVO -->
+        <section id="iterativo" class="section">
+            <h2>🔁 Implementación Iterativa</h2>
+            
+            <p>La versión iterativa es más compleja pero más eficiente en memoria:</p>
+
+            <div class="code-container">
+                <div class="code-header">
+                    <span>⚙️ Versión Iterativa</span>
+                    <span>Eficiente en Memoria</span>
+                </div>
+                <div class="code-content"><span class="comment">// Versión iterativa basada en patrones matemáticos</span>
+<span class="comment">// Para n impar: disco pequeño va A->C->B->A...</span>
+<span class="comment">// Para n par: disco pequeño va A->B->C->A...</span>
+
+List&lt;<span class="keyword">string</span>&gt; HanoiIterativo(<span class="keyword">int</span> n, <span class="keyword">char</span> A, <span class="keyword">char</span> B, <span class="keyword">char</span> C)
+{
+    <span class="keyword">var</span> moves = <span class="keyword">new</span> List&lt;<span class="keyword">string</span>&gt;();
+
+    <span class="comment">// Definir el ciclo del disco más pequeño según paridad</span>
+    <span class="keyword">var</span> cicloImpar = <span class="keyword">new</span> (<span class="keyword">char</span> from, <span class="keyword">char</span> to)[] { (A, C), (C, B), (B, A) };
+    <span class="keyword">var</span> cicloPar   = <span class="keyword">new</span> (<span class="keyword">char</span> from, <span class="keyword">char</span> to)[] { (A, B), (B, C), (C, A) };
+    <span class="keyword">var</span> ciclo = (n % <span class="number">2</span> == <span class="number">1</span>) ? cicloImpar : cicloPar;
+
+    <span class="comment">// Rastrear posición de cada disco</span>
+    <span class="keyword">var</span> pos = <span class="keyword">new</span> Dictionary&lt;<span class="keyword">int</span>, <span class="keyword">char</span>&gt;();
+    <span class="keyword">for</span> (<span class="keyword">int</span> d = <span class="number">1</span>; d &lt;= n; d++) pos[d] = A;
+
+    <span class="keyword">int</span> total = (<span class="number">1</span> &lt;&lt; n) - <span class="number">1</span>; <span class="comment">// 2^n - 1</span>
+    <span class="keyword">int</span> idxCiclo = <span class="number">0</span>;
+
+    <span class="comment">// Función para encontrar el disco superior en una torre</span>
+    <span class="keyword">int</span> TopDisk(<span class="keyword">char</span> peg)
+    {
+        <span class="keyword">int</span> best = <span class="keyword">int</span>.MaxValue;
+        <span class="keyword">for</span> (<span class="keyword">int</span> d = <span class="number">1</span>; d &lt;= n; d++)
+            <span class="keyword">if</span> (pos[d] == peg) { best = d; <span class="keyword">break</span>; }
+        <span class="keyword">return</span> best;
+    }
+
+    <span class="comment">// Función para hacer movimiento legal entre dos torres</span>
+    <span class="keyword">bool</span> MoverLegal(<span class="keyword">char</span> p1, <span class="keyword">char</span> p2)
+    {
+        <span class="keyword">int</span> top1 = TopDisk(p1), top2 = TopDisk(p2);
+        <span class="keyword">if</span> (top1 == <span class="keyword">int</span>.MaxValue && top2 == <span class="keyword">int</span>.MaxValue) <span class="keyword">return</span> <span class="keyword">false</span>;
+        
+        <span class="keyword">if</span> (top2 == <span class="keyword">int</span>.MaxValue || (top1 < top2))
+        {
+            pos[top1] = p2;
+            moves.Add($<span class="string">"{p1} -> {p2}"</span>);
+        }
+        <span class="keyword">else</span>
+        {
+            pos[top2] = p1;
+            moves.Add($<span class="string">"{p2} -> {p1}"</span>);
+        }
+        <span class="keyword">return</span> <span class="keyword">true</span>;
+    }
+
+    <span class="comment">// Algoritmo principal: alternar entre mover disco pequeño y otros</span>
+    <span class="keyword">for</span> (<span class="keyword">int</span> move = <span class="number">1</span>; move &lt;= total; move++)
+    {
+        <span class="keyword">if</span> (move % <span class="number">2</span> == <span class="number">1</span>)
+        {
+            <span class="comment">// Movimientos impares: mover disco más pequeño</span>
+            <span class="keyword">var</span> (from, to) = ciclo[idxCiclo];
+            idxCiclo = (idxCiclo + <span class="number">1</span>) % <span class="number">3</span>;
+            pos[<span class="number">1</span>] = to;
+            moves.Add($<span class="string">"{from} -> {to}"</span>);
+        }
+        <span class="keyword">else</span>
+        {
+            <span class="comment">// Movimientos pares: único movimiento legal sin disco pequeño</span>
+            <span class="keyword">var</span> pegs = <span class="keyword">new</span> HashSet&lt;<span class="keyword">char</span>&gt; { A, B, C };
+            pegs.Remove(pos[<span class="number">1</span>]);
+            <span class="keyword">var</span> it = pegs.GetEnumerator();
+            it.MoveNext(); <span class="keyword">char</span> pX = it.Current;
+            it.MoveNext(); <span class="keyword">char</span> pY = it.Current;
+            MoverLegal(pX, pY);
+        }
+    }
+
+    <span class="keyword">return</span> moves;
+}</div>
+            </div>
+
+            <div class="activity">
+                <h4>🧠 Entendiendo la Lógica Iterativa</h4>
+                <p>La versión iterativa usa un patrón matemático interesante:</p>
+                
+                <ul style="line-height: 1.8;">
+                    <li><strong>Movimientos impares:</strong> Siempre mueve el disco más pequeño</li>
+                    <li><strong>Movimientos pares:</strong> Mueve el único disco que se puede mover (sin tocar el pequeño)</li>
+                    <li><strong>Patrón del disco pequeño:</strong> Sigue un ciclo fijo según si n es par o impar</li>
+                </ul>
+            </div>
+
+            <div class="reflection-box">
+                <h4>🤔 ¿Por qué es tan Complejo?</h4>
+                <p>La versión iterativa requiere "simular" manualmente lo que la recursión hace naturalmente:</p>
+                <ul>
+                    <li>Rastrear el estado de cada disco</li>
+                    <li>Calcular qué movimientos son legales</li>
+                    <li>Seguir patrones matemáticos en lugar de lógica natural</li>
+                </ul>
+            </div>
+
+            <button class="btn" onclick="showSection('comparacion')">Comparar Ambas Versiones →</button>
+        </section>
+
+        <!-- COMPARACIÓN -->
+        <section id="comparacion" class="section">
+            <h2>⚖️ Comparación Exhaustiva</h2>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Aspecto</th>
+                        <th>Recursivo</th>
+                        <th>Iterativo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Legibilidad</strong></td>
+                        <td>⭐⭐⭐⭐⭐ Muy natural y clara</td>
+                        <td>⭐⭐ Compleja, requiere conocer el patrón</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Líneas de Código</strong></td>
+                        <td>~15 líneas</td>
+                        <td>~50 líneas</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Complejidad Espacial</strong></td>
+                        <td>O(n) - pila de recursión</td>
+                        <td>O(n) - diccionario de posiciones</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Complejidad Temporal</strong></td>
+                        <td>O(2ⁿ) - óptimo</td>
+                        <td>O(2ⁿ) - óptimo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Límite Práctico</strong></td>
+                        <td>n ≈ 20 (stack overflow)</td>
+                        <td>n ≈ 30+ (solo memoria)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Facilidad Debug</strong></td>
+                        <td>⭐⭐⭐ Fácil seguir llamadas</td>
+                        <td>⭐⭐⭐⭐ Estado visible todo el tiempo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mantenimiento</strong></td>
+                        <td>⭐⭐⭐⭐⭐ Muy fácil modificar</td>
+                        <td>⭐⭐ Frágil, cambios complejos</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="challenge">
+                <h3>🏃‍♂️ Prueba de Rendimiento</h3>
+                <p>Probemos ambas versiones con diferentes valores de n:</p>
+                
+                <div class="code-container">
+                    <div class="code-header">
+                        <span>📊 Benchmarking Profesional</span>
+                        <span>Medición Precisa de Rendimiento</span>
+                    </div>
+                    <div class="code-content"><span class="keyword">using</span> System;
+<span class="keyword">using</span> System.Diagnostics;
+
+<span class="keyword">static</span> <span class="keyword">void</span> AnalisisComparativo(<span class="keyword">int</span> n)
+{
+    <span class="keyword">const</span> <span class="keyword">int</span> Warmups = <span class="number">1</span>;
+    <span class="keyword">const</span> <span class="keyword">int</span> Runs = <span class="number">5</span>;
+    <span class="keyword">var</span> sw = <span class="keyword">new</span> Stopwatch();
+    
+    <span class="comment">// Warm-up (evita medir JIT/primer GC)</span>
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; Warmups; i++)
+    {
+        <span class="comment">// Calentar el JIT sin medir</span>
+        _ = HanoiRecursivo(n, <span class="string">'A'</span>, <span class="string">'C'</span>, <span class="string">'B'</span>);
+        _ = HanoiIterativo(n, <span class="string">'A'</span>, <span class="string">'C'</span>, <span class="string">'B'</span>);
+    }
+    
+    <span class="keyword">long</span> ticksRec = <span class="number">0</span>, ticksIte = <span class="number">0</span>;
+    
+    <span class="comment">// Múltiples ejecuciones para precisión estadística</span>
+    <span class="keyword">for</span> (<span class="keyword">int</span> r = <span class="number">0</span>; r &lt; Runs; r++)
+    {
+        <span class="comment">// Medir recursivo</span>
+        sw.Restart();
+        _ = HanoiRecursivo(n, <span class="string">'A'</span>, <span class="string">'C'</span>, <span class="string">'B'</span>);
+        ticksRec += sw.ElapsedTicks;
+        
+        <span class="comment">// Medir iterativo</span>
+        sw.Restart();
+        _ = HanoiIterativo(n, <span class="string">'A'</span>, <span class="string">'C'</span>, <span class="string">'B'</span>);
+        ticksIte += sw.ElapsedTicks;
+    }
+    
+    <span class="comment">// Convertir ticks a millisegundos con alta precisión</span>
+    <span class="keyword">double</span> msRec = (ticksRec / (<span class="keyword">double</span>)Runs) * <span class="number">1000.0</span> / Stopwatch.Frequency;
+    <span class="keyword">double</span> msIte = (ticksIte / (<span class="keyword">double</span>)Runs) * <span class="number">1000.0</span> / Stopwatch.Frequency;
+    
+    Console.WriteLine($<span class="string">"ANÁLISIS COMPARATIVO (n={n}):"</span>);
+    Console.WriteLine($<span class="string">"Recursivo: {msRec:F3} ms - {(1 << n) - 1} movimientos"</span>);
+    Console.WriteLine($<span class="string">"Iterativo: {msIte:F3} ms"</span>);
+    Console.WriteLine(<span class="string">"Complejidad temporal (ambas): O(2^n)"</span>);
+    Console.WriteLine(<span class="string">"Complejidad espacial: recursivo O(n); iterativo O(1) si es bitwise, O(n) si usa pila."</span>);
+}</div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h4>📈 Análisis de Escalabilidad</h4>
+                <p>Observa cómo crecen los tiempos de ejecución:</p>
+                
+                <table style="margin: 15px 0; width: 100%; text-align: center;">
+                    <tr style="background: #34495e; color: white;">
+                        <th>n</th><th>Movimientos</th><th>Tiempo Aprox.</th>
+                    </tr>
+                    <tr><td>10</td><td>1,023</td><td>&lt; 1ms</td></tr>
+                    <tr style="background: #f8f9fa;"><td>15</td><td>32,767</td><td>~10ms</td></tr>
+                    <tr><td>20</td><td>1,048,575</td><td>~300ms</td></tr>
+                    <tr style="background: #f8f9fa;"><td>25</td><td>33,554,431</td><td>~10s</td></tr>
+                    <tr><td>30</td><td>1,073,741,823</td><td>~5 minutos</td></tr>
+                </table>
+            </div>
+
+            <button class="btn" onclick="showSection('reflexion')">Reflexión Final →</button>
+        </section>
+
+        <!-- REFLEXIÓN -->
+        <section id="reflexion" class="section">
+            <h2>🎭 Reflexión y Síntesis</h2>
+            
+            <div class="reflection-box">
+                <h4>🌟 Lecciones Aprendidas</h4>
+                
+                <p><strong>1. La Recursión es Natural para Problemas Autoreferentes</strong></p>
+                <p style="margin-left: 20px;">Las Torres de Hanoi se definen naturalmente en términos de sí mismas. La recursión captura esta autorreferencialidad perfectamente.</p>
+                
+                <p><strong>2. La Elegancia Tiene un Costo</strong></p>
+                <p style="margin-left: 20px;">El código recursivo es hermoso pero consume más memoria. Para n=20 puede causar stack overflow.</p>
+                
+                <p><strong>3. Los Algoritmos Iterativos Requieren Más Ingenio</strong></p>
+                <p style="margin-left: 20px;">Convertir la lógica recursiva a iterativa requiere encontrar patrones matemáticos ocultos.</p>
+                
+                <p><strong>4. Ambos Enfoques Son Válidos</strong></p>
+                <p style="margin-left: 20px;">La elección depende del contexto: prototipado rápido vs. producción con grandes volúmenes.</p>
+            </div>
+
+            <div class="challenge">
+                <h3>🎯 Cuándo Usar Cada Uno</h3>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+                    <div style="background: #e8f5e8; padding: 15px; border-radius: 8px;">
+                        <h4 style="color: #27ae60;">✅ Usa Recursión Cuando:</h4>
+                        <ul>
+                            <li>El problema es naturalmente recursivo</li>
+                            <li>Priorizas claridad del código</li>
+                            <li>n es relativamente pequeño (&lt; 20)</li>
+                            <li>Estás prototipando o aprendiendo</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: #fff5f5; padding: 15px; border-radius: 8px;">
+                        <h4 style="color: #e74c3c;">⚡ Usa Iteración Cuando:</h4>
+                        <ul>
+                            <li>Necesitas manejar n muy grandes</li>
+                            <li>La memoria es crítica</li>
+                            <li>Estás en producción</li>
+                            <li>El rendimiento es prioritario</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity">
+                <h4>💭 Preguntas Para Reflexionar</h4>
+                
+                <ol style="line-height: 2;">
+                    <li>¿Por qué crees que la recursión se siente "más natural" para este problema?</li>
+                    <li>¿Qué otros problemas conoces que sean naturalmente recursivos?</li>
+                    <li>Si fueras a implementar esto en un sistema real, ¿qué versión elegirías y por qué?</li>
+                    <li>¿Cómo podrías optimizar la versión recursiva para manejar n más grandes?</li>
+                </ol>
+            </div>
+
+            <div class="visual-demo" style="text-align: center;">
+                <h3>🎉 ¡Felicitaciones!</h3>
+                <p>Has completado el análisis de Torres de Hanoi</p>
+                <p>Ahora comprendes tanto la belleza de la recursión como la eficiencia de la iteración</p>
+                
+                <div style="margin: 20px 0;">
+                    <button class="btn btn-success" onclick="resetLesson()">🔄 Recomenzar Lección</button>
+                    <button class="btn" onclick="showSection('introduccion')">📚 Revisar Conceptos</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        let currentSection = 'introduccion';
+        const sections = ['introduccion', 'exploracion', 'patron', 'recursivo', 'iterativo', 'comparacion', 'reflexion'];
+
+        function showSection(sectionName) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostrar la sección seleccionada
+            document.getElementById(sectionName).classList.add('active');
+            document.getElementById(sectionName).classList.add('fade-in');
+            
+            // Actualizar navegación
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`[onclick="showSection('${sectionName}')"]`).classList.add('active');
+            
+            // Actualizar progreso
+            updateProgress(sectionName);
+            
+            currentSection = sectionName;
+            
+            // Scroll al top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateProgress(sectionName) {
+            const sectionIndex = sections.indexOf(sectionName);
+            const progress = ((sectionIndex + 1) / sections.length) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+        }
+
+        function resetLesson() {
+            showSection('introduccion');
+        }
+
+        // Navegación con teclado
+        document.addEventListener('keydown', function(event) {
+            const currentIndex = sections.indexOf(currentSection);
+            
+            if (event.key === 'ArrowRight' && currentIndex < sections.length - 1) {
+                showSection(sections[currentIndex + 1]);
+            } else if (event.key === 'ArrowLeft' && currentIndex > 0) {
+                showSection(sections[currentIndex - 1]);
+            }
+        });
+
+        // Inicializar
+        updateProgress('introduccion');
+
+        // Easter egg: Konami code para mostrar datos curiosos
+        let konamiCode = [];
+        const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
+        
+        document.addEventListener('keydown', function(event) {
+            konamiCode.push(event.code);
+            if (konamiCode.length > konamiSequence.length) {
+                konamiCode.shift();
+            }
+            
+            if (konamiCode.join(',') === konamiSequence.join(',')) {
+                alert('🎮 Easter Egg Desbloqueado!\n\n¿Sabías que la leyenda dice que cuando los monjes terminen de mover las 64 torres originales, será el fin del mundo?\n\nCon 2^64-1 movimientos, ¡tardarían 585 mil millones de años! 🤯');
+                konamiCode = [];
+            }
+        });
+    </script>
+</body>
+</html>

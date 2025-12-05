@@ -1,0 +1,14 @@
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 2\LaboratorioDP\bin\Debug\net9.0\LaboratorioDP.exe
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 2\LaboratorioDP\bin\Debug\net9.0\LaboratorioDP.deps.json
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 2\LaboratorioDP\bin\Debug\net9.0\LaboratorioDP.runtimeconfig.json
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 2\LaboratorioDP\bin\Debug\net9.0\LaboratorioDP.dll
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 2\LaboratorioDP\bin\Debug\net9.0\LaboratorioDP.pdb
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 2\LaboratorioDP\obj\Debug\net9.0\LaboratorioDP.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 2\LaboratorioDP\obj\Debug\net9.0\LaboratorioDP.AssemblyInfoInputs.cache
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 2\LaboratorioDP\obj\Debug\net9.0\LaboratorioDP.AssemblyInfo.cs
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 2\LaboratorioDP\obj\Debug\net9.0\LaboratorioDP.csproj.CoreCompileInputs.cache
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 2\LaboratorioDP\obj\Debug\net9.0\LaboratorioDP.dll
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 2\LaboratorioDP\obj\Debug\net9.0\refint\LaboratorioDP.dll
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 2\LaboratorioDP\obj\Debug\net9.0\LaboratorioDP.pdb
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 2\LaboratorioDP\obj\Debug\net9.0\LaboratorioDP.genruntimeconfig.cache
+C:\Users\OEM USER\Downloads\HTML de las semanas\HTML de las semanas\Semana 2\LaboratorioDP\obj\Debug\net9.0\ref\LaboratorioDP.dll

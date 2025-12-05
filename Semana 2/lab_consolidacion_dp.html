@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio de Consolidación: DP Paso a Paso</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --secondary: #64748b;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-accent: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .nav {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            overflow-x: auto;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .nav-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .nav-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .exercise {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .exercise.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .exercise h2 {
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .exercise h3 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin: 1.5rem 0 0.75rem 0;
+            border-left: 4px solid var(--primary);
+            padding-left: 1rem;
+        }
+
+        .exercise h4 {
+            color: var(--text-primary);
+            font-size: 1rem;
+            margin: 1rem 0 0.5rem 0;
+            font-weight: 600;
+        }
+
+        .objective {
+            background: var(--bg-accent);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--success);
+        }
+
+        .objective strong {
+            color: var(--success);
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #f1f5f9;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Monaco', 'Cascadia Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            white-space: pre;
+        }
+
+        .code-inline {
+            background: var(--bg-accent);
+            color: var(--primary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+        }
+
+        .step-box {
+            background: var(--bg-secondary);
+            padding: 1.25rem;
+            border-radius: var(--radius);
+            margin: 1rem 0;
+            border: 1px solid var(--border);
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.5rem;
+            height: 1.5rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .question-box {
+            background: #fef3c7;
+            border: 1px solid #d97706;
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            margin: 1rem 0;
+        }
+
+        .question-box strong {
+            color: #92400e;
+        }
+
+        .error-box {
+            background: #fef2f2;
+            border: 1px solid #f87171;
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            margin: 1rem 0;
+        }
+
+        .error-box h4 {
+            color: var(--error);
+            margin-bottom: 0.5rem;
+        }
+
+        .checklist {
+            background: var(--bg-accent);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            margin: 1.5rem 0;
+        }
+
+        .checklist h4 {
+            color: var(--success);
+            margin-bottom: 1rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 1.2rem;
+            height: 1.2rem;
+            cursor: pointer;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            gap: 1rem;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin: 0.5rem 0;
+        }
+
+        .time-badge {
+            background: var(--warning);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 0.5rem;
+            text-align: left;
+        }
+
+        th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .header {
+                padding: 1.5rem;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .content {
+                padding: 1.5rem;
+            }
+            
+            .navigation {
+                flex-direction: column;
+            }
+            
+            .nav {
+                padding: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 Laboratorio de Consolidación</h1>
+            <p>De Recursión Ingenua a Programación Dinámica</p>
+        </div>
+
+        <div class="content">
+            <div class="objective">
+                <strong>Objetivo:</strong> Solidificar la transición de recursión ingenua a DP mediante práctica incremental y ejercicios apropiados para el nivel de la semana 2.
+            </div>
+
+            <div class="nav">
+                <button class="nav-btn active" onclick="showExercise(1)">Ejercicio 1</button>
+                <button class="nav-btn" onclick="showExercise(2)">Ejercicio 2</button>
+                <button class="nav-btn" onclick="showExercise(3)">Ejercicio 3</button>
+                <button class="nav-btn" onclick="showExercise(4)">Ejercicio 4</button>
+                <button class="nav-btn" onclick="showExercise(5)">Autoevaluación</button>
+            </div>
+
+            <!-- Ejercicio 1 -->
+            <div id="exercise1" class="exercise active">
+                <h2>🔍 Ejercicio 1: Detección de Patrones <span class="time-badge">15 min</span></h2>
+
+                <h3>Instrucciones</h3>
+                <p>Para cada función recursiva, dibuja el árbol de llamadas para <span class="code-inline">n=4</span> y marca con colores las repeticiones:</p>
+
+                <h4>Función A: Tribonacci</h4>
+                <div class="code-block">def misterio_A(n):
+    if n <= 0: return 0
+    if n == 1: return 1
+    if n == 2: return 1
+    return misterio_A(n-1) + misterio_A(n-2) + misterio_A(n-3)</div>
+
+                <h4>Función B: Suma acumulativa</h4>
+                <div class="code-block">def misterio_B(n):
+    if n <= 1: return n
+    return misterio_B(n-1) + n</div>
+
+                <h4>Función C: Factorial</h4>
+                <div class="code-block">def misterio_C(n):
+    if n <= 1: return 1
+    return n * misterio_C(n-1)</div>
+
+                <div class="question-box">
+                    <strong>Pregunta clave:</strong> ¿Cuáles tienen subproblemas repetidos? ¿Cuáles se beneficiarían de DP?
+                    <br><br>
+                    <strong>Tip:</strong> Dibuja los árboles en papel. Las funciones con repeticiones tendrán ramas que calculan los mismos valores múltiples veces.
+                </div>
+            </div>
+
+            <!-- Ejercicio 2 -->
+            <div id="exercise2" class="exercise">
+                <h2>🔧 Ejercicio 2: Transformación Guiada <span class="time-badge">25 min</span></h2>
+
+                <div class="step-box">
+                    <h4><span class="step-number">1</span>Versión ingenua (5 min)</h4>
+                    <p>Implementa esta función recursiva para contar formas de formar un número:</p>
+                    <ul>
+                        <li>Puedes usar pasos de 1 o 2</li>
+                        <li>¿De cuántas formas puedes formar el número n?</li>
+                        <li>Ejemplo: n=3 → 3 formas (1+1+1, 1+2, 2+1)</li>
+                    </ul>
+
+                    <div class="code-block">def formas_ingenuo(n):
+    # Casos base
+    if n <= 0: return 1
+    if n == 1: return 1
+    
+    # Tu código aquí - ¿cómo se relaciona n con n-1 y n-2?
+    pass</div>
+                </div>
+
+                <div class="step-box">
+                    <h4><span class="step-number">2</span>Identifica repeticiones (5 min)</h4>
+                    <p>Dibuja el árbol para <span class="code-inline">formas(4)</span>. ¿Qué subproblemas se calculan múltiples veces?</p>
+                    
+                    <div class="question-box">
+                        <strong>Reflexiona:</strong> Si para formas(4) necesitas formas(3) + formas(2), y para formas(3) necesitas formas(2) + formas(1), ¿no estás calculando formas(2) dos veces?
+                    </div>
+                </div>
+
+                <div class="step-box">
+                    <h4><span class="step-number">3</span>Agrega memoización (10 min)</h4>
+                    <div class="code-block">def formas_memo(n, memo={}):
+    # Casos base
+    if n <= 0: return 1
+    if n == 1: return 1
+    
+    # ¿Ya lo calculé antes?
+    if n in memo:
+        return memo[n]
+    
+    # Calcularlo y guardarlo
+    resultado = # Tu código aquí
+    memo[n] = resultado
+    return resultado</div>
+                </div>
+
+                <div class="step-box">
+                    <h4><span class="step-number">4</span>Convierte a bottom-up (5 min)</h4>
+                    <div class="code-block">def formas_tabla(n):
+    if n <= 1: return 1
+    
+    # Crear tabla
+    dp = [0] * (n + 1)
+    
+    # Casos base
+    dp[0] = 1
+    dp[1] = 1
+    
+    # Llenar tabla iterativamente
+    for i in range(2, n + 1):
+        # Tu código aquí
+        pass
+    
+    return dp[n]</div>
+                </div>
+            </div>
+
+            <!-- Ejercicio 3 -->
+            <div id="exercise3" class="exercise">
+                <h2>💰 Ejercicio 3: Problema Nuevo <span class="time-badge">20 min</span></h2>
+
+                <h3>El Cambio de Monedas Simplificado</h3>
+                <p>Tienes monedas de <span class="code-inline">[1, 3, 4]</span> centavos. ¿Cuál es el número <strong>mínimo</strong> de monedas para formar n centavos?</p>
+
+                <div class="step-box">
+                    <h4><span class="step-number">1</span>Casos manuales (5 min)</h4>
+                    <p>Resuelve a mano para n=1,2,3,4,5,6. Completa la tabla:</p>
+                    
+                    <table>
+                        <tr>
+                            <th>n</th>
+                            <th>Combinación óptima</th>
+                            <th>Número de monedas</th>
+                        </tr>
+                        <tr><td>1</td><td>1</td><td>1</td></tr>
+                        <tr><td>2</td><td>1+1</td><td>2</td></tr>
+                        <tr><td>3</td><td>?</td><td>?</td></tr>
+                        <tr><td>4</td><td>?</td><td>?</td></tr>
+                        <tr><td>5</td><td>?</td><td>?</td></tr>
+                        <tr><td>6</td><td>?</td><td>?</td></tr>
+                    </table>
+                </div>
+
+                <div class="step-box">
+                    <h4><span class="step-number">2</span>Recurrencia (5 min)</h4>
+                    <p>Para formar n centavos, puedes usar una moneda de 1, 3 o 4, y luego formar el resto óptimamente.</p>
+                    
+                    <div class="question-box">
+                        <strong>Fórmula:</strong> min_monedas(n) = 1 + min(min_monedas(n-1), min_monedas(n-3), min_monedas(n-4))
+                        <br><br>
+                        <strong>¿Por qué el "+1"?</strong> Porque usamos una moneda, más el óptimo para el resto.
+                    </div>
+                </div>
+
+                <div class="step-box">
+                    <h4><span class="step-number">3</span>Código DP (10 min)</h4>
+                    <div class="code-block">def min_monedas(n, monedas=[1,3,4]):
+    # Casos base
+    if n == 0: return 0
+    if n < 0: return float('inf')  # Imposible
+    
+    # Crear tabla DP
+    dp = [float('inf')] * (n + 1)
+    dp[0] = 0  # 0 monedas para formar 0
+    
+    # Llenar tabla
+    for i in range(1, n + 1):
+        for moneda in monedas:
+            if i >= moneda:
+                # Tu código aquí: 
+                # dp[i] = min(dp[i], ¿qué?)
+                pass
+    
+    return dp[n] if dp[n] != float('inf') else -1</div>
+                </div>
+            </div>
+
+            <!-- Ejercicio 4 -->
+            <div id="exercise4" class="exercise">
+                <h2>🐛 Ejercicio 4: Debugging DP <span class="time-badge">15 min</span></h2>
+
+                <p>Encuentra y corrige los errores en este código de Fibonacci:</p>
+
+                <div class="error-box">
+                    <h4>❌ Código con errores</h4>
+                    <div class="code-block">def fibonacci_dp_roto(n):
+    dp = [0] * n  # Error 1: ?
+    dp[1] = 1
+    for i in range(2, n):  # Error 2: ?
+        dp[i] = dp[i-1] + dp[i-2]
+    return dp[n]  # Error 3: ?</div>
+                </div>
+
+                <div class="step-box">
+                    <h4>🔍 Análisis de errores</h4>
+                    <ol>
+                        <li><strong>Error 1 (Tamaño de array):</strong> Si quieres acceder a dp[n], necesitas que el array tenga tamaño ___?</li>
+                        <li><strong>Error 2 (Rango del bucle):</strong> Si n=5, ¿el bucle debería ir hasta 4 o hasta 5?</li>
+                        <li><strong>Error 3 (Acceso fuera de límites):</strong> ¿Qué pasa si n=0 y intentas acceder dp[0]?</li>
+                    </ol>
+                </div>
+
+                <div class="step-box">
+                    <h4>✅ Versión corregida</h4>
+                    <p>Escribe la versión corregida:</p>
+                    <div class="code-block">def fibonacci_dp_correcto(n):
+    # Tu código corregido aquí
+    pass</div>
+                </div>
+
+                <div class="question-box">
+                    <strong>Reflexión:</strong> ¿Qué tipos de errores son más comunes en DP? ¿Cómo los puedes evitar en el futuro?
+                </div>
+            </div>
+
+            <!-- Ejercicio 5 -->
+            <div id="exercise5" class="exercise">
+                <h2>✅ Ejercicio 5: Checkpoint Final <span class="time-badge">5 min</span></h2>
+
+                <div class="checklist">
+                    <h4>Autoevaluación de Dominio</h4>
+                    <p>Marca con ✅ lo que ya dominas:</p>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="check1">
+                        <label for="check1">Puedo identificar cuándo un problema recursivo tiene subproblemas repetidos</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="check2">
+                        <label for="check2">Entiendo la diferencia entre top-down (memo) y bottom-up (tabla)</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="check3">
+                        <label for="check3">Puedo transformar código recursivo a DP paso a paso</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="check4">
+                        <label for="check4">Sé cómo inicializar correctamente los casos base en DP</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="check5">
+                        <label for="check5">Puedo debuggear errores comunes en implementaciones DP</label>
+                    </div>
+                </div>
+
+                <div class="question-box">
+                    <strong>Si tienes menos de 4 ✅:</strong> Programa tiempo adicional para repasar conceptos antes de continuar con material más avanzado.
+                </div>
+
+                <h3>Para Casa: Mini-Proyecto</h3>
+                <p>Elige uno de estos problemas y resuélvelo con ambos enfoques (memo + tabla):</p>
+                
+                <ol>
+                    <li><strong>Salto de Ranas:</strong> Una rana puede saltar 1, 2 o 3 casillas. ¿Cuántas formas hay de llegar a la casilla n?</li>
+                    <li><strong>Suma Máxima Sin Adyacentes:</strong> Dado un array, encuentra la suma máxima sin tomar elementos consecutivos.</li>
+                    <li><strong>Secuencia de Pasos:</strong> ¿De cuántas formas puedes formar n usando sumas de 1, 2 y 3?</li>
+                </ol>
+
+                <div class="question-box">
+                    <strong>Entregable:</strong> Código + explicación de 2-3 párrafos sobre cuál enfoque prefieres y por qué.
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="prevExercise()" id="prevBtn" style="display: none;">← Anterior</button>
+                <button class="btn" onclick="nextExercise()" id="nextBtn">Siguiente →</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentExercise = 1;
+        const totalExercises = 5;
+
+        function showExercise(num) {
+            // Hide all exercises
+            document.querySelectorAll('.exercise').forEach(ex => {
+                ex.classList.remove('active');
+            });
+            
+            // Show selected exercise
+            document.getElementById(`exercise${num}`).classList.add('active');
+            
+            // Update navigation buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`button[onclick="showExercise(${num})"]`).classList.add('active');
+            
+            currentExercise = num;
+            updateNavButtons();
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextExercise() {
+            if (currentExercise < totalExercises) {
+                showExercise(currentExercise + 1);
+            }
+        }
+
+        function prevExercise() {
+            if (currentExercise > 1) {
+                showExercise(currentExercise - 1);
+            }
+        }
+
+        function updateNavButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            prevBtn.style.display = currentExercise > 1 ? 'block' : 'none';
+            
+            if (currentExercise === totalExercises) {
+                nextBtn.textContent = '🎉 ¡Completado!';
+                nextBtn.onclick = () => alert('¡Excelente trabajo! Has completado el laboratorio de consolidación.');
+            } else {
+                nextBtn.textContent = 'Siguiente →';
+                nextBtn.onclick = nextExercise;
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' && currentExercise < totalExercises) {
+                nextExercise();
+            } else if (event.key === 'ArrowLeft' && currentExercise > 1) {
+                prevExercise();
+            }
+        });
+
+        // Initialize
+        updateNavButtons();
+    </script>
+</body>
+</html>
